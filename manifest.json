@@ -1,6 +1,6 @@
 {
-    "name": "none_sample",
-    "short_name": "none_sample",
+    "name": "url_nav",
+    "short_name": "url_nav",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
