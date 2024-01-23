@@ -96444,7 +96444,7 @@ if(s!=null)return A.be("Error: "+A.k(s),o,o,o,o,o,o)
 else{r=b.b
 if(r!=null){q=r.b
 p=r.d}else{q="Journal not found"
-p="journal_not_found.pdf"}return A.l8(A.ks(o,o,!0,B.c_,o,1,o,o,o,!1,o,!1,o,o,o,o,!0,o,o,o,o,o,A.be(q,o,o,o,o,o,o),o,o,o,1,o),o,A.aTo("journal_pdf/"+p),o,o)}}},
+p="journal_not_found.pdf"}return A.l8(A.ks(o,o,!0,B.c_,o,1,o,o,o,!1,o,!1,o,o,o,o,!0,o,o,o,o,o,A.be(q,o,o,o,o,o,o),o,o,o,1,o),o,A.aTo("assets/journal_pdf/"+p),o,o)}}},
 $S:525}
 A.jO.prototype={}
 A.aiM.prototype={
