@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Intro to Dart Programming Language",
+    "imagePath": "assets/images/the_bug.png",
+    "pdfPath": "TheDartLanguage.pdf"
+  },
+  {
+    "id": 2,
+    "title": "Intro to Shell Programming",
+    "imagePath": "assets/images/pre_shell_intro.png",
+    "pdfPath": "shell_intro.pdf"
+  },
+  {
+    "id": 3,
+    "title": "Space and time_3",
+    "imagePath": "assets/images/SimpleStaticMobilePage.png",
+    "pdfPath": "shell_intro.pdf"
+  }
+]
