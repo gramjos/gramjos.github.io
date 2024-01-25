@@ -96388,10 +96388,15 @@ p.f.Vr(B.Do)},
 $S:0}
 A.kM.prototype={}
 A.SU.prototype={
-O(a){var s,r=this,q=null,p=A.n3(16),o=A.iC(a,q),n=r.w,m=o.d
-m.toString
-s=t.p
-return new A.bs(B.K7,new A.OV(1.7777777777777777,A.aKP(p,A.ix(A.hG(q,A.fH(B.aS,A.b([new A.Rw(new A.alC(o,a,n,m),A.b5j(A.b([A.E6("assets/images/"+r.e,B.Fn,q,n,q)],s)),q),A.ap8(0,A.wP(q,new A.cD(q,q,q,q,q,new A.pE(B.cH,B.cG,B.cC,A.b([B.o,A.N(B.d.aT(178.5),0,0,0)],t.t_),B.Md,q),B.af),B.di)),A.mh(20,A.e_(A.b([A.bd(q,A.ba(r.f,q,q,q,B.Xe,q,q),B.j,B.l,q,q,q,q,q,q,q,q),A.bd(q,A.ba(r.r,q,q,q,B.ZH,q,q),B.j,B.l,q,q,q,q,q,q,q,q)],s),B.e3,q,B.a1,B.d1),q,q,20,q,q,q)],s),B.J,B.aO,q),B.aa,!1,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,new A.ajx(r,a),q,q,q,q,q,q,!1,B.b7),B.bU,q,q,q,q),B.cb),q),q)}}
+O(a){var s,r,q,p,o,n=this,m=null
+document.title="\ud83d\ude4c Art"
+s=A.n3(16)
+r=A.iC(a,m)
+q=n.w
+p=r.d
+p.toString
+o=t.p
+return new A.bs(B.K7,new A.OV(1.7777777777777777,A.aKP(s,A.ix(A.hG(m,A.fH(B.aS,A.b([new A.Rw(new A.alC(r,a,q,p),A.b5j(A.b([A.E6("assets/images/"+n.e,B.Fn,m,q,m)],o)),m),A.ap8(0,A.wP(m,new A.cD(m,m,m,m,m,new A.pE(B.cH,B.cG,B.cC,A.b([B.o,A.N(B.d.aT(178.5),0,0,0)],t.t_),B.Md,m),B.af),B.di)),A.mh(20,A.e_(A.b([A.bd(m,A.ba(n.f,m,m,m,B.Xe,m,m),B.j,B.l,m,m,m,m,m,m,m,m),A.bd(m,A.ba(n.r,m,m,m,B.ZH,m,m),B.j,B.l,m,m,m,m,m,m,m,m)],o),B.e3,m,B.a1,B.d1),m,m,20,m,m,m)],o),B.J,B.aO,m),B.aa,!1,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,new A.ajx(n,a),m,m,m,m,m,m,!1,B.b7),B.bU,m,m,m,m),B.cb),m),m)}}
 A.ajx.prototype={
 $0(){var s=this.a,r=t.N
 r=A.a4(["path",s.d,"title",s.c],r,r)
@@ -96471,8 +96476,11 @@ case 3:return A.F(null,r)}})
 return A.G($async$$0,r)},
 $S:25}
 A.XL.prototype={
-O(a){var s=null,r=A.aSR(a),q=r.i(0,"platform"),p=r.i(0,"pWidth"),o=r.i(0,"pHeight"),n=r.i(0,"pFontSize"),m=t.p,l=this.c
-return new A.Hc(l,A.l8(A.jF(A.b([new A.bs(B.JM,new A.Si(o,p,s),s)],m),s,!0,B.bF,s,1,!0,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.ba("Graham J. Joss",s,s,s,A.js(s,s,B.HJ,s,s,s,s,s,"Tourney",s,s,n,s,s,B.cS,s,s,!0,s,s,s,s,s,s,s,s),s,s),s,s,s,1,s),B.pr,A.v0(A.e_(A.b([B.Dh,A.h_(A.b([B.VS,A.e_(A.b([new A.OC(l,o,p,s)],m),B.R,s,B.a1,B.O),B.VR,new A.S_(l,s),B.VQ],m),B.R,s,B.a1,B.O),B.Dg,A.h7(A.bd(s,A.e_(A.b([A.ba(q,s,s,s,s,s,s),B.a0P],m),B.R,s,B.a1,B.O),B.j,B.bF,s,s,s,s,s,s,s,1/0),s,s),B.Dg],m),B.R,s,B.a1,B.O),s),A.Ru(B.bE,B.L1,!1,new A.auv(this),"Spread Love"),s),s,t.wT)}}
+O(a){var s,r,q=null,p=A.aSR(a),o=p.i(0,"platform"),n=p.i(0,"pWidth"),m=p.i(0,"pHeight"),l=p.i(0,"pFontSize")
+document.title="\ud83d\ude4c Graham J. Joss"
+s=t.p
+r=this.c
+return new A.Hc(r,A.l8(A.jF(A.b([new A.bs(B.JM,new A.Si(m,n,q),q)],s),q,!0,B.bF,q,1,!0,q,q,!1,q,!1,q,q,q,q,!0,q,q,q,q,q,A.ba("Graham J. Joss",q,q,q,A.js(q,q,B.HJ,q,q,q,q,q,"Tourney",q,q,l,q,q,B.cS,q,q,!0,q,q,q,q,q,q,q,q),q,q),q,q,q,1,q),B.pr,A.v0(A.e_(A.b([B.Dh,A.h_(A.b([B.VS,A.e_(A.b([new A.OC(r,m,n,q)],s),B.R,q,B.a1,B.O),B.VR,new A.S_(r,q),B.VQ],s),B.R,q,B.a1,B.O),B.Dg,A.h7(A.bd(q,A.e_(A.b([A.ba(o,q,q,q,q,q,q),B.a0P],s),B.R,q,B.a1,B.O),B.j,B.bF,q,q,q,q,q,q,q,1/0),q,q),B.Dg],s),B.R,q,B.a1,B.O),q),A.Ru(B.bE,B.L1,!1,new A.auv(this),"Spread Love"),q),q,t.wT)}}
 A.auv.prototype={
 $0(){var s=$.aYr().$0(),r=$.aYt().$0(),q=$.aYs().$0()
 s.mi()
