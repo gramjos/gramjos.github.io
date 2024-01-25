@@ -96329,7 +96329,7 @@ break
 case"/testing":o.toString
 p.a=new A.Ss(J.aC(o,"likes"),q)
 break
-case"/testing-journal":o.toString
+case"testing/testing-journal":o.toString
 p.a=new A.Sr(J.aC(o,"id"),q)
 break
 case"/maths-computation/article":o.toString
@@ -96532,7 +96532,7 @@ return this.a.avx(a,J.aC(s,b))},
 $S:79}
 A.aiI.prototype={
 $0(){var s=A.a4(["id",this.c.a],t.N,t.S)
-A.cr(this.b,!1).ns("/testing-journal",s,t.X)
+A.cr(this.b,!1).ns("testing/testing-journal",s,t.X)
 return null},
 $S:0}
 A.T1.prototype={
