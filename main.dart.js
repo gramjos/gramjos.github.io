@@ -96357,7 +96357,7 @@ else s.b=""
 this.al()}}
 A.YO.prototype={
 O(a){var s=null,r=this.d
-return A.l8(A.jF(s,s,!0,B.bF,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.ba(this.c+" gj",s,s,s,s,s,s),s,s,s,1,s),s,A.h7(A.aMp("journal_pdf/"+r),s,s),A.Ru(B.bE,B.qz,!1,new A.ax3(this,a,"https://github.com/gramjos/gramjos.github.io/blob/master/assets/assets/journal_pdf/"+r),"Download from Github"),s)}}
+return A.l8(A.jF(s,s,!0,B.bF,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.ba(this.c+" gj",s,s,s,s,s,s),s,s,s,1,s),s,A.h7(A.aMp("assets/journal_pdf/"+r),s,s),A.Ru(B.bE,B.qz,!1,new A.ax3(this,a,"https://github.com/gramjos/gramjos.github.io/blob/master/assets/assets/journal_pdf/"+r),"Download from Github"),s)}}
 A.ax3.prototype={
 $0(){var s=null
 A.vZ(s,s,!0,s,new A.ax2(this.a,this.c),this.b,s,!0,t.z)},
