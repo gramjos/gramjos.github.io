@@ -96357,7 +96357,7 @@ else s.b=""
 this.al()}}
 A.YO.prototype={
 O(a){var s=null,r=this.d
-return A.l8(A.jF(s,s,!0,B.bF,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.ba(this.c+" gj",s,s,s,s,s,s),s,s,s,1,s),s,A.h7(A.aMp("assets/journal_pdf/"+r),s,s),A.Rv(B.bE,B.qz,!1,new A.ax3(this,a,"https://github.com/gramjos/gramjos.github.io/blob/master/assets/assets/journal_pdf/"+r),"Download from Github"),s)}}
+return A.l8(A.jF(s,s,!0,B.bF,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.ba(this.c,s,s,s,s,s,s),s,s,s,1,s),s,A.h7(A.aMp("assets/journal_pdf/"+r),s,s),A.Rv(B.bE,B.qz,!1,new A.ax3(this,a,"https://github.com/gramjos/gramjos.github.io/blob/master/assets/assets/journal_pdf/"+r),"Download from Github"),s)}}
 A.ax3.prototype={
 $0(){var s=null
 A.vZ(s,s,!0,s,new A.ax2(this.a,this.c),this.b,s,!0,t.z)},
@@ -96411,7 +96411,8 @@ A.OD.prototype={
 O(a){var s=this,r=null,q=A.Pi(B.bE,19),p=A.n3(40)
 return A.ix(A.bd(r,A.E6("assets/images/pro_pic.jpg",B.eN,s.d,r,s.e),B.j,r,r,new A.cD(r,r,q,p,r,r,B.af),r,r,r,r,r,r),B.bv,r,new A.aa7(s),new A.aa8(s),r)}}
 A.aa7.prototype={
-$1(a){this.a.c.abL(0)},
+$1(a){this.a.c.abL(0)
+document.title="\ud83d\ude4c Graham J. Joss"},
 $S:56}
 A.aa8.prototype={
 $1(a){this.a.c.abL(0)},
