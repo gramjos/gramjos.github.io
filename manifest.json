@@ -1,11 +1,11 @@
 {
-    "name": "Graham Joss",
-    "short_name": "Graham Joss",
+    "name": "tour_co",
+    "short_name": "tour_co",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A portfolio site written in the Dart language with the Flutter Framework.",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
