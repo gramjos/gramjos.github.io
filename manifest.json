@@ -1,11 +1,11 @@
 {
-    "name": "tour_co",
-    "short_name": "tour_co",
+    "name": "grams_porto",
+    "short_name": "grams_porto",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A Project By G.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
