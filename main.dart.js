@@ -35080,7 +35080,7 @@ aTe(a){var s,r,q,p,o,n=A.bG(a,null,t.w).w.a.a
 if(n<=500){s=120
 r=120
 q=0
-p=30
+p=22
 o="Mobile Browser"}else{if(n<=690){s=260
 r=260
 q=0
