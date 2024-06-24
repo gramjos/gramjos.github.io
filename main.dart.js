@@ -100765,10 +100765,10 @@ return A.F($async$It,r)}}
 A.aqN.prototype={}
 A.CZ.prototype={
 T(a){var s=null
-return new A.G6("/",this.gaBu(),"\ud83d\ude4c",A.K_(B.Ga,s,B.a39,A.aWG(new A.cL(s,s,A.lT(B.yz,6),A.eg(8),s,B.O_,B.a8),s,s,s,s,s,s,B.a_n,s),s),!1,s)},
+return new A.G6("/homie",this.gaBu(),"\ud83d\ude4c",A.K_(B.Ga,s,B.a39,A.aWG(new A.cL(s,s,A.lT(B.yz,6),A.eg(8),s,B.O_,B.a8),s,s,s,s,s,s,B.a_n,s),s),!1,s)},
 aBv(a){var s=null,r={},q=t.nA.a(a.b)
 r.a=null
-switch(a.a){case"/":r.a=new A.Jo(new A.ou(new A.U0(),A.l0(t.R)),s)
+switch(a.a){case"/homie":r.a=new A.Jo(new A.ou(new A.U0(),A.l0(t.R)),s)
 break
 case"/maths-computation":q.toString
 r.a=new A.Q6(J.aq(q,"likes"),s)
