@@ -3,12 +3,13 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "ef61494612d3a82e08cf2346765291c7",
+const RESOURCES = {"flutter_bootstrap.js": "60472c0a4bd1db464185e87eaf70ac8d",
 "version.json": "bff1f673d6739a266b7213d18a3db0ab",
 "supinski_sqaure.favicon_16x16.png": "aa30f6e7a529d81ed05e01e95303ed5f",
 "index.html": "c001192d0345da5932db77d49cf26ebd",
 "/": "c001192d0345da5932db77d49cf26ebd",
-"main.dart.js": "96142cb7debc4a36b7c22088cda5fe03",
+"main.dart.js": "07e410ee6f193a86404d2544b19b5c4f",
+"404.html": "22aed08d22a89d4d9029603512f01109",
 "flutter.js": "383e55f7f3cce5be08fcf1f3881f585c",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
