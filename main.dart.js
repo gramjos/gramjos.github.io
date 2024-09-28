@@ -139663,7 +139663,7 @@ A.yt.prototype={
 HX(){var s=0,r=A.F(t.N),q
 var $async$HX=A.G(function(a,b){if(a===1)return A.C(b,r)
 while(true)switch(s){case 0:s=3
-return A.H($.PD().aMP("assets/articles/Shell_Intro.md"),$async$HX)
+return A.H($.PD().aMP("assets/images/articles/Shell_Intro.md"),$async$HX)
 case 3:q=b
 s=1
 break
