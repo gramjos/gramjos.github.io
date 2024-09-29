@@ -139683,7 +139683,7 @@ else s.b=""
 this.an()}}
 A.yy.prototype={
 U(a){var s=null,r=A.vL(s,s,s,B.fS,s,s,s)
-return A.aWg(!0,A.aPm(new A.aoe(),$.PD().aMO("images/articles/Shell_Intro.md"),t.N),s,s,r,"Markdown Demo")}}
+return A.aWg(!0,A.aPm(new A.aoe(),$.PD().aMO("assets/images/articles/Shell_Intro.md"),t.N),s,s,r,"Markdown Demo")}}
 A.aoe.prototype={
 $2(a,b){var s,r=null
 if(b.a===B.i3){s=b.b
