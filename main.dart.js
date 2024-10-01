@@ -139671,7 +139671,7 @@ if(s!=null)return A.aWf(s)
 return B.kr},
 $S:232}
 A.UC.prototype={
-U(a){return A.ais(new A.aoh(),$.Cq().aa6("assets/articles/Shell_Intro.md"),t.N)}}
+U(a){return A.ais(new A.aoh(),$.Cq().aa6("articles/Shell_Intro.md"),t.N)}}
 A.aoh.prototype={
 $2(a,b){var s=b.b
 if(s!=null)return A.aWf(s)
@@ -144712,7 +144712,7 @@ B.a1G=new A.dt("This is a portfolio website for Graham J. Joss.",null,B.hq,null,
 B.a1u=new A.dt("It is built with Flutter, and is a work in progress",null,B.hq,null,null,null,null,null,null,null)
 B.Oi=A.b(s([B.a1G,B.a1u]),t.p)
 B.IV=new A.xb(B.a7,B.Q,B.K,B.J,null,B.bS,null,B.Oi,null)
-B.a1v=new A.dt("Welcome to my portfolio!8:08pm",null,B.hq,null,null,null,null,null,null,null)
+B.a1v=new A.dt("Welcome to my portfolio!8:15pm",null,B.hq,null,null,null,null,null,null,null)
 B.a1A=new A.dt("I am a knowledge seeker with an insatiable curiosity.",null,null,null,null,null,null,null,null,null)
 B.Nd=A.b(s([B.a1v,B.a1A]),t.p)
 B.IW=new A.xb(B.a7,B.Q,B.K,B.J,null,B.bS,null,B.Nd,null)
