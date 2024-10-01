@@ -139963,7 +139963,7 @@ A.aEM.prototype={
 $0(){this.a.d="Error reading file: "+A.o(this.b)},
 $S:0}
 A.UL.prototype={
-U(a){return A.aPR(new A.aot(),$.PM().aMZ("articles/Shell_Intro.md"),t.N)}}
+U(a){return A.aPR(new A.aot(),$.PM().aMZ("articles/articles/Shell_Intro.md"),t.N)}}
 A.aot.prototype={
 $2(a,b){var s=null,r=b.b
 if(r!=null)return new A.UA(r,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,B.QX,B.QY,B.R8,!1,s)
@@ -145010,7 +145010,7 @@ B.a1G=new A.dt("This is a portfolio website for Graham J. Joss.",null,B.hq,null,
 B.a1u=new A.dt("It is built with Flutter, and is a work in progress",null,B.hq,null,null,null,null,null,null,null)
 B.Oj=A.b(s([B.a1G,B.a1u]),t.p)
 B.IV=new A.xe(B.a2,B.R,B.M,B.L,null,B.bS,null,B.Oj,null)
-B.a1v=new A.dt("Welcome to my portfolio!9:23pm",null,B.hq,null,null,null,null,null,null,null)
+B.a1v=new A.dt("Welcome to my portfolio!9:34pm",null,B.hq,null,null,null,null,null,null,null)
 B.a1A=new A.dt("I am a knowledge seeker with an insatiable curiosity.",null,null,null,null,null,null,null,null,null)
 B.Ne=A.b(s([B.a1v,B.a1A]),t.p)
 B.IW=new A.xe(B.a2,B.R,B.M,B.L,null,B.bS,null,B.Ne,null)
