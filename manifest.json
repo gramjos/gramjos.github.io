@@ -1,6 +1,6 @@
 {
-    "name": "md",
-    "short_name": "md",
+    "name": "tour_co",
+    "short_name": "tour_co",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
