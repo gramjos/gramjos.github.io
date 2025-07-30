@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Clients - G. Doc.</title>
+	<script src="js/app.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Our Clients</h1>
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="clients.html">Clients</a>
+  <a href="contact.html">Contact</a>
+</div>
+<div id="main">
+  <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button>
+  <h2>Who We Work With</h2>
+  <p>We are proud to work with a diverse range of clients across various industries, helping them achieve their goals through our expertise and dedication.</p>
+  
+  <h3>Industry Sectors</h3>
+  <ul>
+    <li><strong>Technology:</strong> Software companies, startups, and tech enterprises</li>
+    <li><strong>Healthcare:</strong> Medical practices, hospitals, and healthcare providers</li>
+    <li><strong>Education:</strong> Schools, universities, and educational institutions</li>
+    <li><strong>Retail:</strong> E-commerce businesses and traditional retail stores</li>
+    <li><strong>Non-Profit:</strong> Charitable organizations and community groups</li>
+  </ul>
+  
+  <h3>Client Success Stories</h3>
+  <div style="margin: 20px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #333;">
+    <p><em>"Working with this team transformed our digital presence. Their expertise and attention to detail exceeded our expectations."</em></p>
+    <p><strong>- TechStart Inc.</strong></p>
+  </div>
+  
+  <div style="margin: 20px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #333;">
+    <p><em>"The solutions provided helped streamline our operations and improved our customer satisfaction significantly."</em></p>
+    <p><strong>- HealthCare Plus</strong></p>
+  </div>
+  
+  <h3>Partnership Approach</h3>
+  <p>We believe in building long-term partnerships with our clients, understanding their unique challenges, and providing tailored solutions that drive real results.</p>
+  
+  <p><strong>Interested in becoming a client?</strong> <a href="contact.html">Get in touch</a> to discuss how we can help you.</p>
+  
+  <p><a href="index.html">← Back to Home</a></p>
+</div>
+<script>
+/* Navigation functions use CSS custom properties for consistent styling */
+function openNav() {
+  // Get the sidebar width from CSS custom property
+  const sidebarWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-expanded-width');
+  document.getElementById("mySidebar").style.width = sidebarWidth;
+  document.getElementById("main").style.marginLeft = sidebarWidth;
+}
+
+function closeNav() {
+  // Get the collapsed width from CSS custom property  
+  const collapsedWidth = getComputedStyle(document.documentElement).getPropertyValue('--sidebar-collapsed-width');
+  document.getElementById("mySidebar").style.width = collapsedWidth;
+  document.getElementById("main").style.marginLeft = collapsedWidth;
+}
+</script>
+</body>
+</html>
