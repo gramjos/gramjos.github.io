@@ -1,5 +1,5 @@
 //Directory of HTML files to be served
-const root = "../../try_hosting_Vault_ready_2_serve"; 
+const root = "../try_hosting_Vault_ready_2_serve"; 
 
 // iterate thru the `root` and print the all the file names 
 function listFiles(dir, container) {
