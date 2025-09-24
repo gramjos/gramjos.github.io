@@ -79,8 +79,4 @@ try_hosting_Vault_ready_2_serve
 
 3 directories, 11 files
 ```
-Given a directory like `try_hosting_Vault_raeady_2_serve` the `build.py` program creates the site. Note, `build.py` can handle any size directory as long as the structuring rules are followed. 
-```shell
-$ python build.py try_hosting_Vault_ready_2_serve 
-```
-`build.py` with output `HTML`, `Javascript`, and `CSS` files. This comprises a Single Page Web Application that can be host push right to Github to be hosted
+Given a directory like `try_hosting_Vault_raeady_2_serve` the `js/app.js` program creates the site. Note, `js/app.js` can handle any size directory as long as the structuring rules are followed. 
