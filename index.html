@@ -44,6 +44,9 @@
         <p>
             Go to a <a href="/details">list</a> or an <a href="/unknown">unknown page</a>.
         </p>
+        <p>
+            <a href="/about" role="button" style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">About Page</a>
+        </p>
     </view-route>
     <view-route path="/details">
         <h1>The details</h1>
@@ -61,6 +64,11 @@
             <p id="item"></p>
             <p><a href="/details">Back to list</a></p>
         </view-route>
+    </view-route>
+    <view-route path="/about">
+        <h1>About</h1>
+        <p>This is the about page.</p>
+        <p><a href="/">Go home</a></p>
     </view-route>
     <view-route path="*">
         <h1>404</h1>
