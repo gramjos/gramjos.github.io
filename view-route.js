@@ -1,3 +1,5 @@
+import { log } from './debug.js';
+
 export const routerEvents = new EventTarget();
 
 const baseURL = new URL(window.originalHref || document.URL);
@@ -6,14 +8,17 @@ const basePath = baseURL.pathname.slice(0, baseURL.pathname.lastIndexOf('/'));
 const handleLinkClick = (e) => {
     const a = e.target.closest('a');
     if (a && a.href) {
+        log('Link clicked:', a.href);
         e.preventDefault();
         const anchorUrl = new URL(a.href);
         const pageUrl = basePath + anchorUrl.pathname + anchorUrl.search + anchorUrl.hash;
+        log('Dispatching navigate event for URL:', pageUrl);
         routerEvents.dispatchEvent(new CustomEvent('navigate', { detail: { url: pageUrl, a }}));
     }
 }
 
 const handleNavigate = (e) => {
+    log('Handling navigate event:', e.detail.url);
     pushState(null, null, e.detail.url);
 }
 
@@ -34,6 +39,7 @@ export const interceptNavigation = (root) => {
  * @param {PopStateEvent} e 
  */
 export const handlePopState = (e) => {
+    log('Handling popstate event. New location:', location.pathname);
     routerEvents.dispatchEvent(new PopStateEvent('popstate', { state: e.state }));
 }
 window.addEventListener('popstate', handlePopState);
@@ -45,6 +51,7 @@ window.addEventListener('popstate', handlePopState);
  * @param {*} url 
  */
 export const pushState = (state, unused, url) => {
+    log('Pushing state:', url);
     history.pushState(state, unused, url);
     routerEvents.dispatchEvent(new PopStateEvent('popstate', { state }));
 }
@@ -59,7 +66,9 @@ export const matchesRoute = (path, exact) => {
     const fullPath = path.startsWith('/') ? basePath + '(' + path + ')' : '(' + path + ')';
     const regex = new RegExp(`^${fullPath.replaceAll('/', '\\/')}${exact ? '$' : ''}`, 'gi');
     const relativeUrl = location.pathname;
-    return regex.exec(relativeUrl);
+    const result = regex.exec(relativeUrl);
+    log(`Matching route: '${relativeUrl}' against '${path}' (exact: ${exact}). Result:`, result ? 'MATCH' : 'NO MATCH');
+    return result;
 }
 
 /**
@@ -87,6 +96,7 @@ customElements.define('view-route', class extends HTMLElement {
         this.#matches = v;
         this.style.display = this.isActive ? 'contents' : 'none';
         if (this.isActive) {
+            log('Route activated:', this.getAttribute('path'), 'Matches:', v);
             this.dispatchEvent(new CustomEvent('routechange', { detail: v, bubbles: true }));
         }
     }
@@ -115,6 +125,7 @@ customElements.define('view-route', class extends HTMLElement {
     update() {
         const path = this.getAttribute('path') || '/';
         const exact = this.hasAttribute('exact');
+        log('Updating route:', path);
         this.matches = this.matchesRoute(path, exact) || [];
     }
 
@@ -123,7 +134,10 @@ customElements.define('view-route', class extends HTMLElement {
         if (path === '*') {
             const activeRoutes = 
                 Array.from(this.parentNode.getElementsByTagName('view-route')).filter(_ => _.isActive);
-            if (!activeRoutes.length) return [location.pathname, '*'];
+            if (!activeRoutes.length) {
+                log('No other routes matched. Activating fallback route.');
+                return [location.pathname, '*'];
+            }
         // normal routes
         } else {
             return matchesRoute(path, exact);
