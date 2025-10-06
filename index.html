@@ -27,7 +27,7 @@
       onclick="toggleAttrTable()"
       title="Open Attribute Table"
     >
-      📊
+      🗄️
     </button>
 
     <!-- Floating Action Button - Charts -->
@@ -38,6 +38,18 @@
     >
       📈
     </button>
+
+    <!-- Floating Action Button - Info -->
+    <button
+      id="info-fab"
+      onclick="toggleInfoModal()"
+      title="How to use this website"
+    >
+      ℹ️
+    </button>
+
+    <!-- Info Modal Placeholder -->
+    <div id="info-modal-placeholder"></div>
 
     <!-- Attribute Table Panel -->
     <div id="attr-table-panel">
@@ -96,16 +108,19 @@
     <!-- Leaflet JS Library -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <!-- Modal Info Module -->
+    <script src="js/modal-info.js"></script>
+
     <!-- Table Resize Module -->
-    <script src="table-resize.js"></script>
+    <script src="js/table-resize.js"></script>
 
     <!-- Charts Panel Module -->
-    <script src="charts-panel.js"></script>
+    <script src="js/charts-panel.js"></script>
 
     <!-- Table Interactions Module -->
-    <script src="table-interactions.js"></script>
+    <script src="js/table-interactions.js"></script>
 
     <!-- Application Logic -->
-    <script src="app.js"></script>
+    <script src="js/app.js"></script>
   </body>
 </html>
