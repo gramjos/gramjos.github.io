@@ -1,0 +1,12 @@
+{
+  "name": "bnsf-rail-viewer",
+  "version": "1.0.0",
+  "description": "Interactive BNSF rail network map viewer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["gis", "rail", "mapping", "leaflet"],
+  "author": "",
+  "license": "MIT"
+}
