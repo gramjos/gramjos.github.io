@@ -1,244 +1,206 @@
-// Initialize map
-const map = L.map('map').setView([37.91, -104.66], 5);
+/**
+ * App.js - Main Application Entry Point
+ * Modular Map: Exploratory Data Analysis Tool
+ * Initializes map and all components
+ */
 
-// Add OpenStreetMap tiles
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
-    maxZoom: 20
-}).addTo(map);
+import { BaseLayer } from './BaseLayer.js';
+import { FAB } from './FAB.js';
+import { AttributeTable } from './AttributeTable.js';
+import { DataLayer } from './DataLayer.js';
+import { MarimoPanel } from './MarimoPanel.js';
 
-// Add scale control
-L.control.scale().addTo(map);
+class MapApplication {
+    constructor() {
+        this.map = null;
+        this.baseLayer = null;
+        this.dataLayer = null;
+        this.fab = null;
+        this.attributeTable = null;
+        this.marimoPanel = null;
+    }
 
-// Global variables for rail data and layers (accessible by other modules)
-let railData = null;
-let railLayer = null;
-let symbolLayer = null;
+    /**
+     * Initialize the map and all components
+     */
+    init() {
+        // Create map instance
+        this.map = L.map('map').setView([39.8283, -98.5795], 4); // Centered on USA
 
-// Make railData available globally for charts panel
-window.railData = null;
+        // Initialize base layers
+        this.baseLayer = new BaseLayer(this.map);
+        this.baseLayer.setBaseLayer('osm'); // Set default layer
+        this.baseLayer.addLayerControl(); // Add layer switcher control
 
-// Helper function to calculate midpoint of a LineString
-function getLineMidpoint(coordinates) {
-    if (!coordinates || coordinates.length === 0) return null;
-    
-    // For MultiLineString, use the first line
-    const coords = Array.isArray(coordinates[0][0]) ? coordinates[0] : coordinates;
-    
-    // Find the middle index
-    const midIndex = Math.floor(coords.length / 2);
-    return coords[midIndex];
-}
+        // Add scale bar control
+        this.addScaleBar();
 
-// Helper function to calculate rectangle dimensions based on Miles value
-// Returns [width, height] where height is 8x the width
-function getRectangleDimensions(miles, zoom) {
-    if (!miles || miles <= 0) return [0, 0];
-    
-    // Base width calculation: larger values get bigger rectangles
-    // Scale factor adjusts with zoom level for better visibility
-    const baseScale = 50; // Smaller base scale since we're using width
-    const zoomFactor = Math.pow(2, zoom - 10);
-    const width = Math.sqrt(miles) * baseScale * zoomFactor;
-    const height = width * 8; // 8:1 ratio (height:width)
-    
-    return [width, height];
-}
+        // Initialize data layer
+        this.initDataLayer();
 
-// Helper function to get pixel bounds for a rectangle marker
-function getRectangleBounds(lat, lng, width, height, map) {
-    const point = map.latLngToLayerPoint([lat, lng]);
-    
-    // Rectangle centered on the point, standing up on its short side
-    const bounds = L.bounds(
-        L.point(point.x - width / 2, point.y - height), // top-left (standing up)
-        L.point(point.x + width / 2, point.y)           // bottom-right
-    );
-    
-    return [
-        map.layerPointToLatLng(bounds.min),
-        map.layerPointToLatLng(bounds.max)
-    ];
-}
+        // Log available layers for debugging
+        console.log('Available base layers:', this.baseLayer.getAvailableLayers());
 
-// Load GeoJSON data
-fetch('data/bnsf_rail.geojson')
-    .then(response => response.json())
-    .then(data => {
-        railData = data;
-        window.railData = data; // Make available globally for charts panel
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('feature-count').textContent = data.features.length;
+        // Initialize Attribute Table
+        this.initAttributeTable();
+
+        // Initialize Marimo Panel
+        this.initMarimoPanel();
+
+        // Initialize Floating Action Button
+        this.initFAB();
+
+        console.log('Map application initialized');
+    }
+
+    /**
+     * Add scale bar to the map
+     */
+    addScaleBar() {
+        this.scaleControl = L.control.scale({
+            position: 'bottomleft',
+            metric: true,
+            imperial: true,
+            maxWidth: 200
+        }).addTo(this.map);
         
-        // Add rail lines to map
-        railLayer = L.geoJSON(data, {
+        // Add custom class for positioning control
+        setTimeout(() => {
+            const scaleElement = document.querySelector('.leaflet-control-scale');
+            if (scaleElement) {
+                scaleElement.classList.add('scale-bar-positioned');
+            }
+        }, 100);
+        
+        console.log('📏 Scale bar added to map');
+    }
+
+    /**
+     * Initialize data layer and load GeoJSON
+     */
+    async initDataLayer() {
+        this.dataLayer = new DataLayer(this.map, {
             style: {
-                color: 'darkblue',
+                color: '#2E86AB',
                 weight: 2,
                 opacity: 0.7
             },
-            onEachFeature: function(feature, layer) {
-                const props = feature.properties;
-                
-                // Tooltip (hover)
-                const tooltipText = `State: ${props.STATEAB || 'N/A'}<br>Type: ${props.BRANCH || 'N/A'}<br>Miles: ${props.MILES ? props.MILES.toFixed(2) : 'N/A'}`;
-                layer.bindTooltip(tooltipText);
-                
-                // Popup (click)
-                const popupHTML = `
-                    <div>
-                        <h4 style="margin: 0 0 10px 0; color: darkblue;">BNSF Rail Segment</h4>
-                        <table class="popup-table">
-                            <tr><td>Arc ID:</td><td>${props.FRAARCID || 'N/A'}</td></tr>
-                            <tr><td>State:</td><td>${props.STATEAB || 'N/A'}</td></tr>
-                            <tr><td>County FIPS:</td><td>${props.CNTYFIPS || 'N/A'}</td></tr>
-                            <tr><td>Owner:</td><td>${props.RROWNER1 || 'N/A'}</td></tr>
-                            <tr><td>Track Rights:</td><td>${props.TRKRGHTS1 || 'N/A'}</td></tr>
-                            <tr><td>Division:</td><td>${props.DIVISION || 'N/A'}</td></tr>
-                            <tr><td>Subdivision:</td><td>${props.SUBDIV || 'N/A'}</td></tr>
-                            <tr><td>Branch:</td><td>${props.BRANCH || 'N/A'}</td></tr>
-                            <tr><td>Tracks:</td><td>${props.TRACKS || 'N/A'}</td></tr>
-                            <tr><td>Miles:</td><td>${props.MILES ? props.MILES.toFixed(2) : 'N/A'}</td></tr>
-                            <tr><td>Network:</td><td>${props.NET || 'N/A'}</td></tr>
-                            <tr><td>Timezone:</td><td>${props.TIMEZONE || 'N/A'}</td></tr>
-                        </table>
-                    </div>
-                `;
-                layer.bindPopup(popupHTML, { maxWidth: 350 });
+            onFeatureClick: (feature, layer, e) => {
+                console.log('Rail line clicked:', feature.properties);
+            },
+            onDataLoaded: (data) => {
+                console.log(`✅ ${data.features.length} rail features loaded and displayed`);
             }
-        }).addTo(map);
-        
-        // Add rectangles at midpoints sized by Miles attribute
-        const rectangles = [];
-        data.features.forEach(feature => {
-            const miles = feature.properties.MILES;
-            if (!miles || miles <= 0) return;
-            
-            const midpoint = getLineMidpoint(feature.geometry.coordinates);
-            if (!midpoint) return;
-            
-            // Create rectangle marker at midpoint (standing vertically)
-            // Note: coordinates are [lng, lat], Leaflet expects [lat, lng]
-            const lat = midpoint[1];
-            const lng = midpoint[0];
-            
-            // Add popup with same info as line
-            const props = feature.properties;
-            const popupHTML = `
-                <div>
-                    <h4 style="margin: 0 0 10px 0; color: #ff6b6b;">Segment: ${miles.toFixed(2)} miles</h4>
-                    <table class="popup-table">
-                        <tr><td>State:</td><td>${props.STATEAB || 'N/A'}</td></tr>
-                        <tr><td>Branch:</td><td>${props.BRANCH || 'N/A'}</td></tr>
-                        <tr><td>Division:</td><td>${props.DIVISION || 'N/A'}</td></tr>
-                    </table>
-                </div>
-            `;
-            
         });
-        
-        // Group rectangles in a layer
-        symbolLayer = L.layerGroup(rectangles).addTo(map);
-        
-        // Populate attribute table (first 1000 features)
-        populateAttributeTable(data.features.slice(0, 1000));
-        
-        // Initialize table interactions for click-to-zoom functionality
-        if (typeof initializeTableInteractions === 'function') {
-            initializeTableInteractions(map, data, railLayer);
+
+        // Load BNSF rail data
+        try {
+            await this.dataLayer.loadGeoJSON('data/bnsf_rail.geojson');
+        } catch (error) {
+            console.error('Failed to load rail data:', error);
         }
-    })
-    .catch(error => {
-        document.getElementById('loading').innerHTML = 'Error loading data: ' + error.message;
-        console.error('Error:', error);
-    });
+    }
 
-// Populate attribute table
-function populateAttributeTable(features) {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '';
-    
-    features.forEach(feature => {
-        const props = feature.properties;
-        const row = document.createElement('tr');
-        
-        const values = [
-            props.FRAARCID,
-            props.STATEAB,
-            props.CNTYFIPS,
-            props.RROWNER1,
-            props.TRKRGHTS1,
-            props.DIVISION,
-            props.BRANCH,
-            props.TRACKS,
-            props.MILES ? props.MILES.toFixed(2) : '',
-            props.NET
-        ];
-        
-        values.forEach(val => {
-            const td = document.createElement('td');
-            td.textContent = val || '';
-            row.appendChild(td);
-        });
-        
-        tbody.appendChild(row);
-    });
-}
+    /**
+     * Initialize Floating Action Button
+     */
+    initFAB() {
+        this.fab = new FAB();
+        this.fab.init();
 
-// Toggle attribute table
-function toggleAttrTable() {
-    document.getElementById('attr-table-panel').classList.toggle('open');
-}
+        // Direct event handlers - no action registry needed
+        const layerBtn = this.fab.getButton('layer');
+        const searchBtn = this.fab.getButton('search');
+        const settingsBtn = this.fab.getButton('settings');
 
-// Filter table
-function filterTable() {
-    const filter = document.getElementById('search-box').value.toLowerCase();
-    const rows = document.getElementById('table-body').getElementsByTagName('tr');
-    
-    let visibleCount = 0;
-    let hiddenCount = 0;
-    
-    for (let i = 0; i < rows.length; i++) {
-        const text = rows[i].textContent.toLowerCase();
-        const isVisible = text.includes(filter);
-        
-        rows[i].style.display = isVisible ? '' : 'none';
-        
-        if (isVisible) {
-            visibleCount++;
+        // Layer button - toggle attribute table
+        if (layerBtn) {
+            layerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleAttributeTable();
+            });
+        }
+
+        // Search button - toggle marimo panel
+        if (searchBtn) {
+            searchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleMarimoPanel();
+            });
+        }
+
+        // Settings button - coming soon
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                console.log('Settings panel - Coming soon!');
+                // Future: this.openSettings();
+            });
+        }
+    }
+
+    /**
+     * Toggle attribute table (simplified - no abstraction layers)
+     */
+    async toggleAttributeTable() {
+        if (!this.attributeTable) return;
+
+        if (this.attributeTable.getIsOpen()) {
+            this.attributeTable.close();
         } else {
-            hiddenCount++;
+            // Load and display in one step
+            await this.attributeTable.loadFromFile('data/bnsf_rail.geojson');
+            this.attributeTable.open();
         }
     }
+
+    /**
+     * Initialize Attribute Table
+     */
+    initAttributeTable() {
+        this.attributeTable = new AttributeTable({
+            map: this.map,
+            dataLayer: this.dataLayer
+        });
+        this.attributeTable.init();
+    }
+
+    /**
+     * Initialize Marimo Panel
+     */
+    initMarimoPanel() {
+        this.marimoPanel = new MarimoPanel({
+            panelId: 'marimoPanel',
+            containerId: 'marimoPanelContainer',
+            closeButtonId: 'closeMarimoPanel',
+            resizeHandleId: 'marimoResizeHandle',
+            minWidth: 300,
+            maxWidth: window.innerWidth * 0.7,
+            onOpen: () => {
+                console.log('Marimo panel opened');
+            },
+            onClose: () => {
+                console.log('Marimo panel closed');
+            },
+            onResize: (width) => {
+                console.log('Marimo panel resized:', width);
+            }
+        });
+        this.marimoPanel.init();
+    }
+
+    /**
+     * Toggle Marimo panel open/closed
+     */
+    toggleMarimoPanel() {
+        if (!this.marimoPanel) return;
+        this.marimoPanel.toggle();
+    }
+
 }
 
-// Sort table
-function sortTable(colIndex) {
-    const table = document.getElementById('data-table');
-    const tbody = document.getElementById('table-body');
-    const rows = Array.from(tbody.rows);
-    const header = table.rows[0].cells[colIndex];
-    const isAsc = header.textContent.includes('▼');
-    
-    rows.sort((a, b) => {
-        const aVal = a.cells[colIndex].textContent;
-        const bVal = b.cells[colIndex].textContent;
-        const aNum = parseFloat(aVal);
-        const bNum = parseFloat(bVal);
-        
-        if (!isNaN(aNum) && !isNaN(bNum)) {
-            return isAsc ? aNum - bNum : bNum - aNum;
-        }
-        return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-    });
-    
-    rows.forEach(row => tbody.appendChild(row));
-    
-    // Update sort indicators
-    for (let i = 0; i < table.rows[0].cells.length; i++) {
-        const cell = table.rows[0].cells[i];
-        const text = cell.textContent.replace(/[▼▲]/, '');
-        cell.textContent = i === colIndex ? text + (isAsc ? ' ▲' : ' ▼') : text + ' ▼';
-    }
-}
+// Initialize application when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const app = new MapApplication();
+    app.init();
+});

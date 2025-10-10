@@ -1,12 +1,25 @@
 {
-  "name": "bnsf-rail-viewer",
+  "name": "modular-map",
   "version": "1.0.0",
-  "description": "Interactive BNSF rail network map viewer",
-  "main": "server.js",
+  "description": "A modular web mapping application with vanilla JavaScript",
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "dev": "python3 -m http.server 8000",
+    "start": "python3 -m http.server 8000"
   },
-  "keywords": ["gis", "rail", "mapping", "leaflet"],
-  "author": "",
-  "license": "MIT"
+  "keywords": [
+    "map",
+    "geojson",
+    "leaflet",
+    "vanilla-js",
+    "modular"
+  ],
+  "author": "gramjos",
+  "license": "MIT",
+  "devDependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2025.8.21"
+  },
+  "dependencies": {
+    "firecrawl": "^4.3.8"
+  }
 }
