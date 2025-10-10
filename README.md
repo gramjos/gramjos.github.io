@@ -35,55 +35,7 @@ Search functionality is completely isolated in `TableSearch.js` (307 lines), dem
 
 STRACNET (type: esriFieldTypeString, alias: STRACNET, SQL Type: sqlTypeOther, length: 1, nullable: true, editable: true, Coded Values: [S: STRACNET designated line], [C: Connector designated line]) [source - esri](https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/NTAD_North_American_Rail_Network_Lines/FeatureServer/)
 
-## 🐍 Interactive Analysis Panel
-
-The application includes a **Marimo notebook panel** for interactive Python-based data analysis. This panel provides rich visualizations and statistical analysis of the BNSF rail network data.
-
-### Features
-- **Interactive Visualizations**: Bar charts, pie charts, and geographic distributions using Altair
-- **Dynamic Filtering**: Dropdown controls to filter data by network type (STRACNET/Connector)
-- **Live Statistics**: Real-time updates showing segment counts and percentages
-- **Data Tables**: Sortable, filterable views of the rail network data
-- **Summary Metrics**: Key statistics including states covered, ownership patterns, and network composition
-
-### How It Works (GitHub Pages Compatible)
-
-The Marimo notebook is **exported as static HTML**, making it compatible with GitHub Pages and requiring **no server-side Python**:
-
-1. **Source File**: `interactive_analysis.py` - A Marimo notebook with Python analysis code
-2. **Export Process**: Run `marimo export html interactive_analysis.py -o notebooks/interactive_analysis.html -f`
-3. **Static Output**: Creates a standalone HTML file with all data, visualizations, and interactivity embedded
-4. **Client-Side Only**: The exported HTML runs entirely in the browser using JavaScript
-
-### Updating the Analysis
-
-To modify or update the analysis notebook:
-
-```bash
-# 1. Edit the Marimo notebook interactively
-marimo edit interactive_analysis.py
-
-# 2. Make your changes in the Marimo editor (opens in browser)
-# 3. Save your changes
-
-# 4. Re-export to static HTML for GitHub Pages
-marimo export html interactive_analysis.py -o notebooks/interactive_analysis.html -f
+## 🐍 Interactive Analysis Panel (Marimo)
+```shell
+uvx marimo edit --sandbox notebooks/interactive_analysis.py
 ```
-
-The export process:
-- Executes all Python cells
-- Generates visualizations
-- Embeds the results in standalone HTML
-- Includes Marimo's JavaScript runtime for interactivity
-- Produces a file that works without Python on the client side
-
-### Technical Details
-
-- **Notebook**: 305 lines of Python code across 20+ cells
-- **Export Size**: ~295 lines of HTML with embedded data
-- **Data Source**: Loads from `data/bnsf_rail.geojson` (21,004 features)
-- **Libraries**: pandas, altair, marimo (all bundled in export)
-- **Interactive Elements**: Dropdowns, filters, tooltips (all work in static HTML)
-
-This approach gives you the power of Python analysis with the simplicity of static hosting! 🚀
-
