@@ -65,13 +65,13 @@ export class SettingsDialog {
                 <!-- Developer Profile Section -->
                 <div class="about-profile">
                     <div class="profile-image-container">
-                        <img src="./assets/pro_pic.jpg" alt="Developer Profile" class="profile-image">
+                        <img src="assets/pro_pic.jpg" alt="Developer Profile" class="profile-image">
                     </div>
                     <div class="profile-info">
                         <h3>Developer</h3>
                         <p class="profile-name">Joshua Grams</p>
                         <a href="https://github.com/gramjos" target="_blank" rel="noopener noreferrer" class="github-link">
-                            <img src="./assets/Github-Logo-No-Background.webp" alt="GitHub" class="github-logo">
+                            <img src="assets/Github-Logo-No-Background.webp" alt="GitHub" class="github-logo">
                             <span>github.com/gramjos</span>
                         </a>
                     </div>

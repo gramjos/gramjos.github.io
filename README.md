@@ -3,38 +3,6 @@
 - A modern, component-based web mapping application built with vanilla JavaScript (minus Leaflet) and ES6 modules. 
 - Built to handle a dataset (38028259 bytes) for client side processing
 
-## 🌐 Live Demo
-**[View Live on GitHub Pages](https://gramjos.github.io/modular-map/)**
-
-## 📚 Documentation
-- **[Quick Fix Summary](QUICK_FIX_SUMMARY.md)** - If GitHub Pages deployment fails
-- **[Hosting Guide](HOSTING_GUIDE.md)** - Comprehensive deployment guide
-- **[Deployment Checklist](DEPLOYMENT_CHECKLIST.md)** - Step-by-step deployment
-
-## 🚀 Quick Start
-
-### Local Development
-```bash
-# Start local server
-python3 -m http.server 8000
-
-# Open in browser
-open http://localhost:8000
-```
-
-### Deploy to GitHub Pages
-```bash
-# Verify paths are correct
-./verify-paths.sh
-
-# Commit and push
-git add .
-git commit -m "Deploy to GitHub Pages"
-git push origin main
-
-# Enable GitHub Pages in repository Settings → Pages
-```
-
 
 ### Features
 #### Map
@@ -70,6 +38,6 @@ STRACNET (type: esriFieldTypeString, alias: STRACNET, SQL Type: sqlTypeOther, le
 ## 🐍 Interactive Analysis Panel (Marimo)
 ```shell
 uvx marimo edit --sandbox notebooks/interactive_analysis.py
-marimo export html-wasm notebooks/interactive_analysis.py -o output_dir --mode edit
+marimo export html-wasm notebooks/interactive_analysis.py -o notebooks/output_dir --mode edit
 ```
-output_dir/ directory will contain an index.html
+notebooks/output_dir/ directory with contain an index.html

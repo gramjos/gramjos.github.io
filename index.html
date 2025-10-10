@@ -11,22 +11,22 @@
         crossorigin=""/>
     
     <!-- Map Styles -->
-    <link rel="stylesheet" href="./css/map.css">
+    <link rel="stylesheet" href="css/map.css">
     
     <!-- Floating Action Button Styles -->
-    <link rel="stylesheet" href="./css/fab.css">
+    <link rel="stylesheet" href="css/fab.css">
     
     <!-- Attribute Table Styles -->
-    <link rel="stylesheet" href="./css/attribute-table.css">
+    <link rel="stylesheet" href="css/attribute-table.css">
     
     <!-- Data Layer Styles -->
-    <link rel="stylesheet" href="./css/data-layer.css">
+    <link rel="stylesheet" href="css/data-layer.css">
     
     <!-- Marimo Panel Styles -->
-    <link rel="stylesheet" href="./css/marimo-panel.css">
+    <link rel="stylesheet" href="css/marimo-panel.css">
     
     <!-- Settings Dialog Styles -->
-    <link rel="stylesheet" href="./css/settings-dialog.css">
+    <link rel="stylesheet" href="css/settings-dialog.css">
 </head>
 <body>
     <!-- Map container -->
@@ -60,13 +60,11 @@
         </div>
         <div class="marimo-panel-container" id="marimoPanelContainer">
             <!-- Marimo WASM notebook - Full Python execution in browser! -->
-            <!-- Exported with: marimo export html-wasm interactive_analysis.py -o output_dir --mode edit -->
-            <!-- Enable WASM on GitHub Pages (uncomment when ready to use) -->
-            <!-- <script src="https://unpkg.com/coi-serviceworker@0.1.7/coi-serviceworker.min.js"></script> -->
+            <!-- Exported with: marimo export html-wasm interactive_analysis.py -o notebooks --mode edit -->
             <!-- <iframe 
                 id="marimoFrame"
                 class="marimo-iframe"
-                src="./output_dir/index.html"
+                src="output_dir/index.html"
                 frameborder="0"
                 allow="cross-origin-isolated"
                 style="width: 100%; height: 100%; border: none;">
@@ -94,6 +92,6 @@
         crossorigin=""></script>
     
     <!-- Application Module (ES6) -->
-    <script type="module" src="./js/App.js"></script>
+    <script type="module" src="js/App.js"></script>
 </body>
 </html>
