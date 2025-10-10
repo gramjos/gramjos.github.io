@@ -38,4 +38,6 @@ STRACNET (type: esriFieldTypeString, alias: STRACNET, SQL Type: sqlTypeOther, le
 ## 🐍 Interactive Analysis Panel (Marimo)
 ```shell
 uvx marimo edit --sandbox notebooks/interactive_analysis.py
+marimo export html-wasm notebooks/interactive_analysis.py -o notebooks/output_dir --mode edit
 ```
+notebooks/output_dir/ directory with contain an index.html
