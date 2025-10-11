@@ -1,9 +1,3 @@
-/**
- * BaseLayer Module
- * Manages multiple base layer options for the map
- * Provides layer switching functionality
- */
-
 export class BaseLayer {
     constructor(map) {
         this.map = map;
@@ -12,10 +6,6 @@ export class BaseLayer {
         this.layerControl = null;
     }
 
-    /**
-     * Initialize all available base layers
-     * @returns {Object} Collection of base layer definitions
-     */
     initializeLayers() {
         return {
             osm: {
@@ -107,11 +97,5 @@ export class BaseLayer {
         return this.currentLayer;
     }
 
-    /**
-     * Get all available layer keys
-     * @returns {Array} Array of layer keys
-     */
-    getAvailableLayers() {
-        return Object.keys(this.layers);
-    }
 }
+

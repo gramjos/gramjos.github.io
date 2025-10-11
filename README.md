@@ -41,3 +41,10 @@ uvx marimo edit --sandbox notebooks/interactive_analysis.py
 marimo export html-wasm notebooks/interactive_analysis.py -o notebooks/output_dir --mode edit
 ```
 notebooks/output_dir/ directory with contain an index.html
+
+### tags navigation thru project structre
+```shell
+ctags -R --languages=JavaScript,HTML,CSS --exclude=node_modules --exclude=dist --exclude=.git --exclude='*.geojson' --exclude='*.jpg' .
+```
+_ctags: Warning: Enabling Cargo subparser may enable TOML parser._
+_ctags: Warning: The current implementation of the TOML parser is broken._

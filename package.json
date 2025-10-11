@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "A modular web mapping application with vanilla JavaScript",
   "type": "module",
-  "scripts": {
-    "dev": "python3 -m http.server 8000",
-    "start": "python3 -m http.server 8000"
-  },
   "keywords": [
     "map",
     "geojson",
@@ -17,9 +13,23 @@
   "author": "gramjos",
   "license": "MIT",
   "devDependencies": {
-    "@modelcontextprotocol/server-filesystem": "^2025.8.21"
+    "@modelcontextprotocol/server-filesystem": "^2025.8.21",
+    "live-server": "^1.2.0"
   },
   "dependencies": {
     "firecrawl": "^4.3.8"
-  }
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1", 
+	"start": "live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gramjos/gramjos.github.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gramjos/gramjos.github.io/issues"
+  },
+  "homepage": "https://github.com/gramjos/gramjos.github.io#readme"
 }
