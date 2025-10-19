@@ -211,7 +211,6 @@ function renderContent(page) {
   elements.pageTitle.textContent = page.title;
   elements.content.innerHTML = page.content;
   rewriteRelativeUrls(elements.content, page.basePath);
-  enhanceCodeBlocks(elements.content);
 }
 
 function renderPanels(page) {
@@ -343,72 +342,5 @@ function pageLabel(page) {
   const last = parts[parts.length - 1] || "";
   const stem = last.replace(/\.[^.]+$/, "");
   return stem || page.title;
-}
-
-function enhanceCodeBlocks(container) {
-  if (!container) {
-    return;
-  }
-  container.querySelectorAll(".copy-button").forEach((button) => {
-    if (button.dataset.bound === "true") {
-      return;
-    }
-    const targetId = button.getAttribute("data-target-id");
-    const target = targetId ? document.getElementById(targetId) : null;
-    if (!target) {
-      return;
-    }
-    button.dataset.bound = "true";
-    button.addEventListener("click", async () => {
-      const codeElement = target.querySelector("code") || target;
-      await copyCodeToClipboard(codeElement.textContent || "", button);
-    });
-  });
-}
-
-async function copyCodeToClipboard(text, button) {
-  if (!text) {
-    return;
-  }
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      legacyCopyToClipboard(text);
-    }
-    indicateCopied(button);
-  } catch (error) {
-    legacyCopyToClipboard(text);
-    indicateCopied(button);
-  }
-}
-
-function legacyCopyToClipboard(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "absolute";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand("copy");
-  } catch (error) {
-    console.warn("Legacy clipboard copy failed", error);
-  }
-  document.body.removeChild(textarea);
-}
-
-function indicateCopied(button) {
-  if (!button) {
-    return;
-  }
-  const previous = button.textContent;
-  button.textContent = "Copied";
-  button.classList.add("is-copied");
-  setTimeout(() => {
-    button.textContent = previous;
-    button.classList.remove("is-copied");
-  }, 1500);
 }
 

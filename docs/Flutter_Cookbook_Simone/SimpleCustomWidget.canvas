@@ -1,0 +1,9 @@
+{
+	"nodes":[
+		{"id":"90967dd578c4f8ef","type":"text","text":"```dart\nimport 'package:flutter/material.dart';\n\nimport 'package:basics/gradient_container.dart';\n\nvoid main() {\n  runApp(\n    const MaterialApp(\n      home: Scaffold(\n        body: GradientContainer(),\n      ),\n    ),\n  );\n}\n```","x":-406,"y":-670,"width":531,"height":412},
+		{"id":"223ee7ad3ad3186c","type":"text","text":"```dart\nimport 'package:flutter/material.dart';\n\nclass GradientContainer extends StatelessWidget {\n  const GradientContainer({super.key});\n\n  @override\n  Widget build(context) {\n    return Container(\n      decoration: const BoxDecoration(\n        gradient: LinearGradient(\n          colors: [\n            Color.fromARGB(255, 26, 2, 80),\n            Color.fromARGB(255, 45, 7, 98),\n          ],\n          begin: Alignment.topLeft,\n          end: Alignment.bottomRight,\n        ),\n      ),\n      child: const Center(\n        child: Text(\n          'Hello World!',\n          style: TextStyle(\n            color: Colors.white,\n            fontSize: 28,\n          ),\n        ),\n      ),\n    );\n  }\n}\n```","x":174,"y":-642,"width":560,"height":768}
+	],
+	"edges":[
+		{"id":"6a98acbd2ee1eba9","fromNode":"90967dd578c4f8ef","fromSide":"right","toNode":"223ee7ad3ad3186c","toSide":"left"}
+	]
+}

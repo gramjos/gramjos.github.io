@@ -203,34 +203,6 @@ body {
   margin-bottom: 0;
 }
 
-.copy-button {
-  position: absolute;
-  top: 0.65rem;
-  right: 0.75rem;
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid rgba(248, 250, 252, 0.7);
-  background: rgba(15, 23, 42, 0.85);
-  color: #f8fafc;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: background 0.15s ease-in-out, transform 0.15s ease-in-out;
-}
-
-.copy-button:hover,
-.copy-button:focus-visible {
-  outline: none;
-  background: rgba(15, 23, 42, 1);
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.15);
-}
-
-.copy-button.is-copied {
-  background: #22c55e;
-  border-color: #16a34a;
-  color: #0f172a;
-}
-
 .app-footer {
   display: flex;
   justify-content: center;

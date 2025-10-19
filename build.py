@@ -120,11 +120,8 @@ class MarkdownParser:
         lang_class = f" language-{language}" if language else ""
         pre_id = f"code-block-{self._code_counter}"
         language_attr = f' data-language="{html.escape(language)}"' if language else ""
-        button = (
-            f'<button type="button" class="copy-button" data-target-id="{pre_id}">Copy</button>'
-        )
         pre = f'<pre id="{pre_id}"{language_attr}><code class="code-block{lang_class}">{escaped}</code></pre>'
-        return f'<figure class="code-block">{button}{pre}</figure>'
+        return f'<figure class="code-block">{pre}</figure>'
 
     def _match_heading(self, line: str) -> Optional[Tuple[int, str]]:
         match = re.match(r"^(#{1,6})\s+(.*)$", line)

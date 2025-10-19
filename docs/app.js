@@ -179,7 +179,7 @@ function renderBreadcrumbs(page) {
       separator.textContent = " / ";
       frag.appendChild(separator);
     }
-    const label = getBreadcrumbLabel(crumb, index);
+    const label = pageLabel(crumb);
     if (index === trail.length - 1) {
       const span = document.createElement("span");
       span.className = "breadcrumb-current";
@@ -197,47 +197,6 @@ function renderBreadcrumbs(page) {
   replaceChildren(elements.breadcrumb, frag);
 }
 
-// Breadcrumb naming follows repo guidance: root is "Root", directories adopt their folder name.
-function getBreadcrumbLabel(page, index) {
-  if (index === 0) {
-    return "Root";
-  }
-  if (isReadmeSource(page.sourcePath)) {
-    const folderName = extractFolderName(page.sourcePath);
-    if (folderName) {
-      return humanizeSegment(folderName);
-    }
-  }
-  return page.title;
-}
-
-function isReadmeSource(path) {
-  if (!path) {
-    return false;
-  }
-  const lower = path.toLowerCase();
-  return lower.endsWith("readme.md") || lower.endsWith("readme.html");
-}
-
-function extractFolderName(path) {
-  const segments = path.split("/").filter(Boolean);
-  if (segments.length < 2) {
-    return "";
-  }
-  return segments[segments.length - 2];
-}
-
-function humanizeSegment(segment) {
-  if (!segment) {
-    return segment;
-  }
-  return segment
-    .split(/[-_\s]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
 function buildBreadcrumbTrail(page) {
   const trail = [];
   let cursor = page;
@@ -252,7 +211,6 @@ function renderContent(page) {
   elements.pageTitle.textContent = page.title;
   elements.content.innerHTML = page.content;
   rewriteRelativeUrls(elements.content, page.basePath);
-  enhanceCodeBlocks(elements.content);
 }
 
 function renderPanels(page) {
@@ -384,72 +342,5 @@ function pageLabel(page) {
   const last = parts[parts.length - 1] || "";
   const stem = last.replace(/\.[^.]+$/, "");
   return stem || page.title;
-}
-
-function enhanceCodeBlocks(container) {
-  if (!container) {
-    return;
-  }
-  container.querySelectorAll(".copy-button").forEach((button) => {
-    if (button.dataset.bound === "true") {
-      return;
-    }
-    const targetId = button.getAttribute("data-target-id");
-    const target = targetId ? document.getElementById(targetId) : null;
-    if (!target) {
-      return;
-    }
-    button.dataset.bound = "true";
-    button.addEventListener("click", async () => {
-      const codeElement = target.querySelector("code") || target;
-      await copyCodeToClipboard(codeElement.textContent || "", button);
-    });
-  });
-}
-
-async function copyCodeToClipboard(text, button) {
-  if (!text) {
-    return;
-  }
-  try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-    } else {
-      legacyCopyToClipboard(text);
-    }
-    indicateCopied(button);
-  } catch (error) {
-    legacyCopyToClipboard(text);
-    indicateCopied(button);
-  }
-}
-
-function legacyCopyToClipboard(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.setAttribute("readonly", "");
-  textarea.style.position = "absolute";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand("copy");
-  } catch (error) {
-    console.warn("Legacy clipboard copy failed", error);
-  }
-  document.body.removeChild(textarea);
-}
-
-function indicateCopied(button) {
-  if (!button) {
-    return;
-  }
-  const previous = button.textContent;
-  button.textContent = "Copied";
-  button.classList.add("is-copied");
-  setTimeout(() => {
-    button.textContent = previous;
-    button.classList.remove("is-copied");
-  }, 1500);
 }
 
