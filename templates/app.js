@@ -355,6 +355,76 @@ function rewriteLinks(page) {
       anchor.title = `Unresolved link: ${href}`;
     }
   });
+
+  // Rewrite image src paths
+  const images = container.querySelectorAll("img");
+  images.forEach((img) => {
+    const src = img.getAttribute("src");
+    if (!src || src.startsWith("http") || src.startsWith("data:")) {
+      return;
+    }
+
+    // For wiki-style images, resolve the path relative to the page
+    if (img.classList.contains("wiki-image")) {
+      const resolvedPath = resolveImagePath(page.dirPath, src);
+      if (resolvedPath) {
+        img.src = resolvedPath;
+      } else {
+        img.classList.add("is-broken-image");
+        img.alt = `Missing image: ${src}`;
+        img.title = `Image not found: ${src}`;
+      }
+    } else {
+      // Standard markdown images with relative paths
+      const joined = joinPaths(page.dirPath, src);
+      const normalized = normalizePath(joined);
+      img.src = normalized;
+    }
+  });
+}
+
+function resolveImagePath(dirPath, imageName) {
+  // First try in the same directory as the page
+  let candidate = joinPaths(dirPath, imageName);
+  if (checkAssetExists(candidate)) {
+    return candidate;
+  }
+
+  // Try in a graphics subdirectory
+  candidate = joinPaths(dirPath, "graphics", imageName);
+  if (checkAssetExists(candidate)) {
+    return candidate;
+  }
+
+  // Try in root graphics directory
+  candidate = joinPaths("graphics", imageName);
+  if (checkAssetExists(candidate)) {
+    return candidate;
+  }
+
+  // Search all directories for this asset
+  for (const dir of Object.values(state.site.directories || {})) {
+    if (dir.assetPaths && dir.assetPaths.length > 0) {
+      for (const assetPath of dir.assetPaths) {
+        const assetName = assetPath.split("/").pop();
+        if (assetName === imageName || assetPath.endsWith("/" + imageName)) {
+          return assetPath;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+function checkAssetExists(path) {
+  // Check if this asset exists in any directory's assetPaths
+  for (const dir of Object.values(state.site.directories || {})) {
+    if (dir.assetPaths && dir.assetPaths.includes(path)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function navigateTo(pageId) {

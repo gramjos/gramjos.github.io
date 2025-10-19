@@ -322,9 +322,29 @@ body > * {
 
 .page img {
   max-width: 100%;
+  width: auto;
   height: auto;
+  display: block;
+  margin: 1.5em auto;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+  object-fit: contain;
+}
+
+.page img.wiki-image {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.page img.is-broken-image {
+  border: 2px dashed rgba(239, 68, 68, 0.5);
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 20px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .page a {

@@ -251,6 +251,22 @@ class MarkdownConverter:
                 local_links.append(url)
             return f"<a href=\"{html_escape(url, quote=True)}\">{label}</a>"
 
+        def replace_wiki_image(match: re.Match[str]) -> str:
+            """Handle Obsidian-style image embeds: ![[image.png]] or ![[image.png|alt text]]"""
+            target = match.group(1).strip()
+            alias = match.group(2).strip() if match.group(2) else ""
+            # Extract just the filename if it's a path
+            filename = target.split('/')[-1]
+            # Track as local link for potential asset resolution
+            local_links.append(target)
+            # Use alias as alt text if provided, otherwise use filename without extension
+            alt_text = alias if alias else Path(filename).stem
+            return (
+                f"<img src=\"{html_escape(target, quote=True)}\" "
+                f"alt=\"{html_escape(alt_text)}\" "
+                f"class=\"wiki-image\" loading=\"lazy\" decoding=\"async\">"
+            )
+
         def replace_wiki(match: re.Match[str]) -> str:
             target = match.group(1).strip()
             alias = match.group(2).strip() if match.group(2) else target
@@ -260,7 +276,10 @@ class MarkdownConverter:
                 f"{html_escape(alias)}</a>"
             )
 
-        rendered = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", replace_image, escaped)
+        # Process wiki-style images first: ![[image.png]] or ![[image.png|alt text]]
+        rendered = re.sub(r"!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", replace_wiki_image, escaped)
+        # Then standard Markdown images: ![alt](url)
+        rendered = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", replace_image, rendered)
         rendered = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", replace_link, rendered)
         rendered = re.sub(r"\*\*([^*]+)\*\*", replace_bold, rendered)
         rendered = re.sub(r"__([^_]+)__", replace_bold, rendered)
