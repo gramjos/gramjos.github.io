@@ -44,6 +44,8 @@
     "root": "README.md",
     "scared to show this": "poetry/poet/scared to show this.md",
     "scared to show this.md": "poetry/poet/scared to show this.md",
+    "silver file": "physics/silver file.md",
+    "silver file.md": "physics/silver file.md",
     "stary": "Astro/Stary.md",
     "stary.md": "Astro/Stary.md",
     "stream controller.excalidraw": "Flutter_Cookbook_Simone/Stream_controller.excalidraw.md",
@@ -161,7 +163,8 @@
       "assetPaths": [],
       "name": "physics",
       "pageIds": [
-        "physics/golden_file.md"
+        "physics/golden_file.md",
+        "physics/silver file.md"
       ],
       "parent": ".",
       "path": "physics",
@@ -215,7 +218,7 @@
       "subdirectories": []
     }
   },
-  "generatedAt": "2025-10-19T04:57:21.418848+00:00",
+  "generatedAt": "2025-10-19T14:00:39.090249+00:00",
   "homePageId": "README.md",
   "pages": {
     "Astro/README.md": {
@@ -395,8 +398,8 @@
     },
     "Flutter_Cookbook_Simone/Everything is a Widget.md": {
       "aliases": [
-        "Everything Is A Widget",
         "Everything is a Widget",
+        "Everything Is A Widget",
         "Everything is a Widget.md"
       ],
       "dirPath": "Flutter_Cookbook_Simone",
@@ -755,12 +758,12 @@
     },
     "homie.md": {
       "aliases": [
-        "Homie",
         "homie",
+        "Homie",
         "homie.md"
       ],
       "dirPath": ".",
-      "html": "<p>Direction. More focus. Mo testing here Do i want gifs on repeat? <a href=\"https://archive.org/\">See my blog</a> to read more thoughts <a href=\"https://gramjos.github.io/about\">blog abouts pg</a> thoughts from blog to blog</p>\n<pre><code class=\"language-rust\">\nfn happyTime()\n\n</code></pre>\n<p>WELCOME BACK TO TP!! CAMP! \ud83e\udee5homie time from \ud83c\udfe0\ud83d\udc7b</p>\n<p>the title is always in the url</p>\n<p><img src=\"graphics/img1.png\" alt=\"img1\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>",
+      "html": "<p>Direction. More focus. Mo testing <a class=\"wikilink\" data-wikilink-target=\"README\" href=\"#\">README</a> Do i want gifs on repeat? <a href=\"https://archive.org/\">See my blog</a> to read more thoughts <a href=\"https://gramjos.github.io/about\">blog abouts pg</a> thoughts from blog to blog</p>\n<pre><code class=\"language-rust\">\nfn happyTime()\n\n</code></pre>\n<p>WELCOME BACK TO TP!! CAMP! \ud83e\udee5homie time from \ud83c\udfe0\ud83d\udc7b</p>\n<p>the title is always in the url</p>\n<p><img src=\"graphics/img1.png\" alt=\"img1\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>",
       "id": "homie.md",
       "links": {
         "external": [
@@ -770,7 +773,9 @@
         "local": [
           "graphics/img1.png"
         ],
-        "wiki": []
+        "wiki": [
+          "README"
+        ]
       },
       "relPath": "homie.md",
       "title": "Homie",
@@ -778,8 +783,8 @@
     },
     "physics/README.md": {
       "aliases": [
-        "physics",
         "Physics",
+        "physics",
         "README",
         "README.md"
       ],
@@ -802,21 +807,43 @@
         "golden_file.md"
       ],
       "dirPath": "physics",
-      "html": "<p>this is the gold file</p>",
+      "html": "<p>this is the gold file that links to the <a class=\"wikilink\" data-wikilink-target=\"silver file\" href=\"#\">silver file</a></p>",
       "id": "physics/golden_file.md",
       "links": {
         "external": [],
         "local": [],
-        "wiki": []
+        "wiki": [
+          "silver file"
+        ]
       },
       "relPath": "physics/golden_file.md",
       "title": "Golden File",
       "type": "page"
     },
+    "physics/silver file.md": {
+      "aliases": [
+        "silver file",
+        "Silver File",
+        "silver file.md"
+      ],
+      "dirPath": "physics",
+      "html": "<p>wow great silver here <a class=\"wikilink\" data-wikilink-target=\"Stary\" href=\"#\">Stary</a></p>",
+      "id": "physics/silver file.md",
+      "links": {
+        "external": [],
+        "local": [],
+        "wiki": [
+          "Stary"
+        ]
+      },
+      "relPath": "physics/silver file.md",
+      "title": "Silver File",
+      "type": "page"
+    },
     "poetry/poet/README.md": {
       "aliases": [
-        "poet",
         "Poet",
+        "poet",
         "README",
         "README.md"
       ],
@@ -834,8 +861,8 @@
     },
     "poetry/poet/scared to show this.md": {
       "aliases": [
-        "scared to show this",
         "Scared To Show This",
+        "scared to show this",
         "scared to show this.md"
       ],
       "dirPath": "poetry/poet",
@@ -937,12 +964,13 @@
     "homie.md": "homie.md",
     "physics/README.md": "physics/README.md",
     "physics/golden_file.md": "physics/golden_file.md",
+    "physics/silver file.md": "physics/silver file.md",
     "poetry/poet/README.md": "poetry/poet/README.md",
     "poetry/poet/scared to show this.md": "poetry/poet/scared to show this.md",
     "testing123/README.md": "testing123/README.md",
     "testing123/t1/README.md": "testing123/t1/README.md",
     "testing123/t1/deep file.md": "testing123/t1/deep file.md"
   },
-  "siteTitle": "What is up with the qb build script!",
+  "siteTitle": "try_hosting_Vault",
   "sourcePath": "/Users/gramjos/Documents/try_hosting_Vault"
 }

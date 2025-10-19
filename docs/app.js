@@ -256,14 +256,8 @@ function renderFilePanel(page) {
   const dirInfo = state.site.directories?.[page.dirPath] || { pageIds: [], readmeId: null };
   const entries = [];
 
-  if (dirInfo.readmeId) {
-    const readmePage = state.site.pages[dirInfo.readmeId];
-    entries.push({
-      id: dirInfo.readmeId,
-      label: readmePage?.title || "Directory overview",
-    });
-  }
-
+  // Don't add README to the file panel - it's shown when clicking the directory
+  // Only show regular pages in this directory
   (dirInfo.pageIds || []).forEach((id) => {
     const filePage = state.site.pages[id];
     entries.push({

@@ -447,8 +447,10 @@ class VaultBuilder:
             # Use filename as primary title, heading is available in page content
             title = self._title_from_filename(path.name)
 
-        if is_readme and rel_path.as_posix().lower() == "readme.md" and first_heading:
-            self.site_title = first_heading
+        # Set site title to vault name, not README heading
+        if is_readme and rel_path.as_posix().lower() == "readme.md":
+            # Use the vault directory name as site title
+            self.site_title = self.source.name
 
         aliases = self._default_aliases(rel_path, title, is_readme=is_readme)
         page = PageRecord(
