@@ -388,7 +388,11 @@ class VaultSiteBuilder:
         page_id = self._rel_to_id(rel_path)
         parent_id = None if page_id == "root" else self._rel_to_id(rel_path.parent)
         base_path = self._rel_to_base(rel_path)
-        title = self._title_from_markdown(readme_md) or self._default_title(directory, page_id)
+        # For root page, always use "Home" instead of extracting from markdown
+        if page_id == "root":
+            title = "Home"
+        else:
+            title = self._title_from_markdown(readme_md) or self._default_title(directory, page_id)
         content, source_path, aliases = self._resolve_page_content(
             rel_dir=rel_path,
             html_path=readme_html,
@@ -577,8 +581,8 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
         "-o",
         "--output",
         type=Path,
-        default=Path("dist"),
-        help="Directory to write the generated site (defaults to ./dist).",
+        default=Path("docs"),
+        help="Directory to write the generated site (defaults to ./docs).",
     )
     return parser.parse_args(list(argv))
 

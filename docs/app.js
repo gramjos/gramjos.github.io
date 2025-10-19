@@ -179,17 +179,18 @@ function renderBreadcrumbs(page) {
       separator.textContent = " / ";
       frag.appendChild(separator);
     }
+    const label = pageLabel(crumb);
     if (index === trail.length - 1) {
       const span = document.createElement("span");
       span.className = "breadcrumb-current";
-      span.textContent = crumb.title;
+      span.textContent = label;
       frag.appendChild(span);
       return;
     }
     const button = document.createElement("button");
     button.type = "button";
     button.className = "breadcrumb-link";
-    button.textContent = crumb.title;
+    button.textContent = label;
     button.addEventListener("click", () => requestPage(crumb.id));
     frag.appendChild(button);
   });
@@ -332,6 +333,16 @@ function isHashLink(value) {
 
 function isAbsoluteUrl(value) {
   return /^(?:[a-z]+:)?\/\//i.test(value) || /^(?:[a-z]+:)/i.test(value) || value.startsWith("/");
+}
+
+function pageLabel(page) {
+  if (!page || !page.sourcePath) {
+    return page ? page.title : "";
+  }
+  const parts = normalizePath(page.sourcePath).split("/");
+  const last = parts[parts.length - 1] || "";
+  const stem = last.replace(/\.[^.]+$/, "");
+  return stem || page.title;
 }
 
 function enhanceCodeBlocks(container) {

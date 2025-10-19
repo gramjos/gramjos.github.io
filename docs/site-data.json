@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2025-10-19T01:32:28.202660+00:00",
+  "generatedAt": "2025-10-19T02:10:05.678925+00:00",
   "source": "/Users/gramjos/Documents/try_hosting_Vault",
-  "siteTitle": "What is up with the `qb` build script!",
+  "siteTitle": "Home",
   "homePageId": "root",
   "aboutPageId": null,
   "pages": {
@@ -156,7 +156,7 @@
     "root": {
       "id": "root",
       "type": "directory",
-      "title": "What is up with the `qb` build script!",
+      "title": "Home",
       "content": "<p>this is the first line of the page</p>\n<p><code>build.sh</code> is working $Hi there$</p>\n<h1>What is up with the <code>qb</code> build script!</h1>\n<p>Free Speech is 🔥 $$2+2$$ This is your new <em>vault</em>. by G. Joseph J.</p>\n<p>Make a note of something, <a href=\"create%20a%20link\">create a link</a>, or try <a href=\"https://help.obsidian.md/Plugins/Importer\" target=\"_blank\" rel=\"noopener\">the Importer</a>!</p>\n<p>When you're ready, delete this note and make the vault your own.</p>",
       "directories": [
         "Astro",
