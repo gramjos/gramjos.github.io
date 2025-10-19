@@ -251,20 +251,6 @@ body > * {
   margin: 0;
 }
 
-.page .math-block {
-  margin: 1.5em 0;
-  padding: 18px 20px;
-  border-radius: 12px;
-  background: rgba(36, 59, 83, 0.08);
-  border-left: 4px solid rgba(36, 59, 83, 0.35);
-  font-family: var(--font-mono);
-  font-size: 1.05rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  text-align: center;
-  overflow-x: auto;
-}
-
 .page code {
   font-family: var(--font-mono);
   background: rgba(36, 59, 83, 0.08);
@@ -349,6 +335,16 @@ body > * {
   max-width: 100%;
   width: auto;
   height: auto;
+}
+
+.page .math-latex {
+  display: inline;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  vertical-align: baseline;
 }
 
 .page-download {
@@ -509,12 +505,6 @@ body > * {
 
   .page pre {
     background: rgba(5, 14, 30, 0.9);
-  }
-
-  .page .math-block {
-    background: rgba(110, 156, 255, 0.12);
-    border-left-color: rgba(110, 156, 255, 0.5);
-    color: #e2e9ff;
   }
 
   .copy-code-button {

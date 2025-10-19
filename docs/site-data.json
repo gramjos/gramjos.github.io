@@ -976,7 +976,7 @@
       "subdirectories": []
     }
   },
-  "generatedAt": "2025-10-19T15:04:41.631471+00:00",
+  "generatedAt": "2025-10-19T15:22:07.080194+00:00",
   "homePageId": "README.md",
   "pages": {
     "Computing/CommandLine/Convert.md": {
@@ -1233,8 +1233,8 @@
     },
     "Computing/CommandLine/ctags.md": {
       "aliases": [
-        "ctags",
         "Ctags",
+        "ctags",
         "ctags.md"
       ],
       "dirPath": "Computing/CommandLine",
@@ -1314,8 +1314,8 @@
     },
     "Computing/Data/DocAI_course/intro.md": {
       "aliases": [
-        "Intro",
         "intro",
+        "Intro",
         "intro.md"
       ],
       "dirPath": "Computing/Data/DocAI_course",
@@ -1372,8 +1372,8 @@
     },
     "Computing/Data/NoBlackBox_Radu/JS Lang.md": {
       "aliases": [
-        "JS Lang",
         "Js Lang",
+        "JS Lang",
         "JS Lang.md"
       ],
       "dirPath": "Computing/Data/NoBlackBox_Radu",
@@ -1439,8 +1439,8 @@
     },
     "Computing/Data/NoBlackBox_Radu/quick draw data engineering.md": {
       "aliases": [
-        "quick draw data engineering",
         "Quick Draw Data Engineering",
+        "quick draw data engineering",
         "quick draw data engineering.md"
       ],
       "dirPath": "Computing/Data/NoBlackBox_Radu",
@@ -1463,7 +1463,7 @@
         "Parametric and Non-parametric Algorithms.md"
       ],
       "dirPath": "Computing/Data",
-      "html": "<p>--- tags: [data, algorithm, machine_learning] --- <a href=\"https://machinelearningmastery.com/parametric-and-nonparametric-machine-learning-algorithms/\">Source</a></p>\n<h5><em>Machine learning can be summarized as learning a function $(f)$ that maps input variables $(X)$ to output variables $(Y)$.</em></h5>\n<div class=\"math-block\" data-math=\"display\">Y = f(x)</div>\n<p>An algorithm learns this target mapping function from training data. The form of the function is unknown, so our job as machine learning practitioners is to evaluate different machine learning algorithms and see which is better at approximating the underlying function.</p>\n<h2>Parametric Machine Learning Algorithms</h2>\n<p>Assumptions can greatly simplify the learning process, but can also limit what can be learned. Algorithms that simplify the function to a known form are called parametric machine learning algorithms.</p>\n<blockquote>\n<p>[!info]+ \u2014\u00a0<a href=\"https://amzn.to/2Y0QDox\">Artificial Intelligence: A Modern Approach</a>, page 737</p>\n<p>A learning model that summarizes data with a set of parameters of fixed size (independent of the number of training examples) is called a parametric model. No matter how much data you throw at a parametric model, it won\u2019t change its mind about how many parameters it needs.</p>\n</blockquote>\n<p>The algorithms involve two steps</p>\n<ol>\n  <li>Select a form for the function.</li>\n  <li>Learn the coefficients for the function\u00a0from the training data.</li>\n<p>An easy to understand functional form for the mapping function is a line, as is used in linear regression:</p>\n</ol>\n<div class=\"math-block\" data-math=\"display\">b_{0} + b_{1}*x_{1} + b_{2}*x_{2} = 0</div>\n<p>Where $b<em>{0}, b</em>{1} \\scriptstyle{\\text{ \\&amp; }} b<em>{2}$ are the coefficients of the line that control the intercept and slope, and $x</em>{1} \\text{ \\&amp; } x<em>{2}$ are two input variables. Assuming the functional form of a line greatly simplifies the learning process. Now, all we need to do\u00a0is estimate the coefficients of the line equation and we have a predictive model for the problem. Often the assumed functional form is a linear combination of the input variables and as such parametric machine learning algorithms are often also called\u00a0\u201c</em>linear machine learning algorithms_\u201c. The problem is, the actual unknown underlying function may not be a linear function like a line. It could be almost a line and require some minor transformation of the input data to work right. Or it could be nothing like a line in which case the assumption is wrong and the approach will produce poor results. Some more examples of parametric machine learning algorithms include:</p>\n<ul>\n  <li>Logistic Regression</li>\n  <li>Linear Discriminant Analysis</li>\n  <li>Perceptron</li>\n  <li>Naive Bayes</li>\n  <li>Simple Neural Networks</li>\n</ul>\n<h2>Nonparametric Machine Learning Algorithms</h2>\n<p>Algorithms that do not make strong assumptions about the form of the mapping function are called nonparametric machine learning algorithms. By not making assumptions, they are free to learn any functional form from the training data.</p>\n<blockquote>\n<p>[!info]+ <a href=\"https://amzn.to/2Y0QDox\">Artificial Intelligence: A Modern Approach</a>, page 757</p>\n<p>Nonparametric methods are good when you have a lot of data and no prior knowledge, and when you don\u2019t want to worry too much about choosing just the right features. Nonparametric methods seek to best fit the training data in constructing the mapping function, whilst maintaining some ability to generalize to unseen data. As such, they are able to fit a large number of functional forms.</p>\n</blockquote>\n<p>An easy to understand nonparametric model is the k-nearest neighbors algorithm that makes predictions based on the k most similar training patterns for a new data instance. The method does not assume anything about the form of the mapping function other than patterns that are close are likely to have a similar output variable. Some more examples of popular nonparametric machine learning algorithms are:</p>\n<ul>\n  <li>k-Nearest Neighbors</li>\n  <li>Decision Trees like CART and C4.5</li>\n  <li>Support Vector Machines</li>\n</ul>",
+      "html": "<p>--- tags: [data, algorithm, machine_learning] --- <a href=\"https://machinelearningmastery.com/parametric-and-nonparametric-machine-learning-algorithms/\">Source</a></p>\n<h5><em>Machine learning can be summarized as learning a function $(f)$ that maps input variables $(X)$ to output variables $(Y)$.</em></h5>\n<p><span class=\"math-latex\" data-latex=\"Y = f(x)\">\\(Y = f(x)\\)</span> An algorithm learns this target mapping function from training data. The form of the function is unknown, so our job as machine learning practitioners is to evaluate different machine learning algorithms and see which is better at approximating the underlying function.</p>\n<h2>Parametric Machine Learning Algorithms</h2>\n<p>Assumptions can greatly simplify the learning process, but can also limit what can be learned. Algorithms that simplify the function to a known form are called parametric machine learning algorithms.</p>\n<blockquote>\n<p>[!info]+ \u2014\u00a0<a href=\"https://amzn.to/2Y0QDox\">Artificial Intelligence: A Modern Approach</a>, page 737</p>\n<p>A learning model that summarizes data with a set of parameters of fixed size (independent of the number of training examples) is called a parametric model. No matter how much data you throw at a parametric model, it won\u2019t change its mind about how many parameters it needs.</p>\n</blockquote>\n<p>The algorithms involve two steps</p>\n<ol>\n  <li>Select a form for the function.</li>\n  <li>Learn the coefficients for the function\u00a0from the training data.</li>\n<p>An easy to understand functional form for the mapping function is a line, as is used in linear regression: <span class=\"math-latex\" data-latex=\"b_{0} + b_{1}*x_{1} + b_{2}*x_{2} = 0\">\\(b_{0} + b_{1}*x_{1} + b_{2}*x_{2} = 0\\)</span> Where $b<em>{0}, b</em>{1} \\scriptstyle{\\text{ \\&amp; }} b<em>{2}$ are the coefficients of the line that control the intercept and slope, and $x</em>{1} \\text{ \\&amp; } x<em>{2}$ are two input variables. Assuming the functional form of a line greatly simplifies the learning process. Now, all we need to do\u00a0is estimate the coefficients of the line equation and we have a predictive model for the problem. Often the assumed functional form is a linear combination of the input variables and as such parametric machine learning algorithms are often also called\u00a0\u201c</em>linear machine learning algorithms_\u201c. The problem is, the actual unknown underlying function may not be a linear function like a line. It could be almost a line and require some minor transformation of the input data to work right. Or it could be nothing like a line in which case the assumption is wrong and the approach will produce poor results. Some more examples of parametric machine learning algorithms include:</p>\n<ul>\n  <li>Logistic Regression</li>\n  <li>Linear Discriminant Analysis</li>\n  <li>Perceptron</li>\n  <li>Naive Bayes</li>\n  <li>Simple Neural Networks</li>\n</ul>\n</ol>\n<h2>Nonparametric Machine Learning Algorithms</h2>\n<p>Algorithms that do not make strong assumptions about the form of the mapping function are called nonparametric machine learning algorithms. By not making assumptions, they are free to learn any functional form from the training data.</p>\n<blockquote>\n<p>[!info]+ <a href=\"https://amzn.to/2Y0QDox\">Artificial Intelligence: A Modern Approach</a>, page 757</p>\n<p>Nonparametric methods are good when you have a lot of data and no prior knowledge, and when you don\u2019t want to worry too much about choosing just the right features. Nonparametric methods seek to best fit the training data in constructing the mapping function, whilst maintaining some ability to generalize to unseen data. As such, they are able to fit a large number of functional forms.</p>\n</blockquote>\n<p>An easy to understand nonparametric model is the k-nearest neighbors algorithm that makes predictions based on the k most similar training patterns for a new data instance. The method does not assume anything about the form of the mapping function other than patterns that are close are likely to have a similar output variable. Some more examples of popular nonparametric machine learning algorithms are:</p>\n<ul>\n  <li>k-Nearest Neighbors</li>\n  <li>Decision Trees like CART and C4.5</li>\n  <li>Support Vector Machines</li>\n</ul>",
       "id": "Computing/Data/Parametric and Non-parametric Algorithms.md",
       "links": {
         "external": [
@@ -1523,7 +1523,7 @@
         "Fundamentals.md"
       ],
       "dirPath": "Computing/Data/Vision Pytorch Reddy",
-      "html": "<p>--- tags: [data,] --- <strong>Universal Approximation</strong> <em>there is always a largest enough neural network architecture with the right weights that can exactly predict any output given an input</em>  Artificial Neural Networks (ANNs) replace the <strong>Expert System</strong>, which specific rules (tricks) that aid in classification. The amount of rules can be exponential. ANN, mathematically, are a function that take one more tensors as input and output one or more tensors</p>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn_tmp 1.excalidraw.md#^group=9juKSsyXnCk80bYB4YOfc\" alt=\"999\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>\n<h6>To Single Out</h6>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn<em>tmp 1.excalidraw.md#^group=tGYufZ18EKlRWwTPRlHeO\" alt=\"nn</em>tmp 1.excalidraw\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>\n<h6>Then Zoom In</h6>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn<em>tmp 1.excalidraw.md#^group=FkycBYcQ5Hlxz6HH4BwUX\" alt=\"nn</em>tmp 1.excalidraw\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>\n<div class=\"math-block\" data-math=\"display\">a = f\\left(w_0 + \\sum_{i=1}^{n} w_i x_i\\right)</div>\n<p>Where <code>n</code> is the number of inputs.</p>",
+      "html": "<p>--- tags: [data,] --- <strong>Universal Approximation</strong> <em>there is always a largest enough neural network architecture with the right weights that can exactly predict any output given an input</em>  Artificial Neural Networks (ANNs) replace the <strong>Expert System</strong>, which specific rules (tricks) that aid in classification. The amount of rules can be exponential. ANN, mathematically, are a function that take one more tensors as input and output one or more tensors</p>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn_tmp 1.excalidraw.md#^group=9juKSsyXnCk80bYB4YOfc\" alt=\"999\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>\n<h6>To Single Out</h6>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn<em>tmp 1.excalidraw.md#^group=tGYufZ18EKlRWwTPRlHeO\" alt=\"nn</em>tmp 1.excalidraw\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>\n<h6>Then Zoom In</h6>\n<p><img src=\"Computing/Data/Vision Pytorch Reddy/nn<em>tmp 1.excalidraw.md#^group=FkycBYcQ5Hlxz6HH4BwUX\" alt=\"nn</em>tmp 1.excalidraw\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"> <span class=\"math-latex\" data-latex=\"a = f\\left(w_0 + \\sum_{i=1}^{n} w_i x_i\\right)\">\\(a = f\\left(w_0 + \\sum_{i=1}^{n} w_i x_i\\right)\\)</span> Where <code>n</code> is the number of inputs.</p>",
       "id": "Computing/Data/Vision Pytorch Reddy/Fundamentals.md",
       "links": {
         "external": [],
@@ -1819,8 +1819,8 @@
     },
     "Computing/web_dev/Ajays Modern Web dev/CSS Layouts.md": {
       "aliases": [
-        "Css Layouts",
         "CSS Layouts",
+        "Css Layouts",
         "CSS Layouts.md"
       ],
       "dirPath": "Computing/web_dev/Ajays Modern Web dev",
@@ -1950,8 +1950,8 @@
     },
     "Computing/web_dev/Ajays Modern Web dev/intro.md": {
       "aliases": [
-        "Intro",
         "intro",
+        "Intro",
         "intro.md"
       ],
       "dirPath": "Computing/web_dev/Ajays Modern Web dev",
@@ -2048,8 +2048,8 @@
     },
     "Computing/web_dev/Flutter/Flutter_Cookbook_Simone/Builtins or Reserved Words.md": {
       "aliases": [
-        "Builtins or Reserved Words",
         "Builtins Or Reserved Words",
+        "Builtins or Reserved Words",
         "Builtins or Reserved Words.md"
       ],
       "dirPath": "Computing/web_dev/Flutter/Flutter_Cookbook_Simone",
@@ -2117,8 +2117,8 @@
     },
     "Computing/web_dev/Flutter/Flutter_Cookbook_Simone/Everything is a Widget.md": {
       "aliases": [
-        "Everything is a Widget",
         "Everything Is A Widget",
+        "Everything is a Widget",
         "Everything is a Widget.md"
       ],
       "dirPath": "Computing/web_dev/Flutter/Flutter_Cookbook_Simone",
@@ -2767,8 +2767,8 @@
     },
     "Interviewing/Ask the Interviewer.md": {
       "aliases": [
-        "Ask The Interviewer",
         "Ask the Interviewer",
+        "Ask The Interviewer",
         "Ask the Interviewer.md"
       ],
       "dirPath": "Interviewing",
@@ -2786,8 +2786,8 @@
     },
     "Interviewing/Asking for the job.md": {
       "aliases": [
-        "Asking For The Job",
         "Asking for the job",
+        "Asking For The Job",
         "Asking for the job.md"
       ],
       "dirPath": "Interviewing",
@@ -2957,8 +2957,8 @@
     },
     "Interviewing/technical questions/GIS.md": {
       "aliases": [
-        "Gis",
         "GIS",
+        "Gis",
         "GIS.md"
       ],
       "dirPath": "Interviewing/technical questions",
@@ -3016,8 +3016,8 @@
     },
     "Interviewing/technical questions/Python's GIL.md": {
       "aliases": [
-        "Python'S Gil",
         "Python's GIL",
+        "Python'S Gil",
         "Python's GIL.md"
       ],
       "dirPath": "Interviewing/technical questions",
@@ -3039,8 +3039,8 @@
       "aliases": [
         "README",
         "README.md",
-        "technical questions",
-        "Technical Questions"
+        "Technical Questions",
+        "technical questions"
       ],
       "dirPath": "Interviewing/technical questions",
       "html": "",
@@ -3103,7 +3103,7 @@
         "Root"
       ],
       "dirPath": ".",
-      "html": "<h1>Hi</h1>\n<p>this is the first line of the page</p>\n<p><code>build.sh</code> is working $Hi there$</p>\n<h1>What is up with the <code>qb</code> build script!</h1>\n<p>Free Speech is \ud83d\udd25 Here is inline latex $Log$ which kinda like math italics and here is the full formatted mode $$2+2$$ This is your new <em>vault</em>. by G. Joseph J.</p>\n<p>Make a note of something, <a class=\"wikilink\" data-wikilink-target=\"create a link\" href=\"#\">create a link</a>, or try <a href=\"https://help.obsidian.md/Plugins/Importer\">the Importer</a>!</p>\n<p>When you&#x27;re ready, delete this note and make the vault your own. look at the map <img src=\"map.png\" alt=\"map\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>",
+      "html": "<h1>Hi</h1>\n<p>this is the first line of the page</p>\n<p><code>build.sh</code> is working $Hi there$</p>\n<h1>What is up with the <code>qb</code> build script!</h1>\n<p>Free Speech is \ud83d\udd25 Here is inline latex $Log$ which kinda like math italics and here is the full formatted mode  <span class=\"math-latex\" data-latex=\"2+2\">\\(2+2\\)</span> This is your new <em>vault</em>. by G. Joseph J.</p>\n<p>Make a note of something, <a class=\"wikilink\" data-wikilink-target=\"create a link\" href=\"#\">create a link</a>, or try <a href=\"https://help.obsidian.md/Plugins/Importer\">the Importer</a>!</p>\n<p>When you&#x27;re ready, delete this note and make the vault your own. look at the map <img src=\"map.png\" alt=\"map\" class=\"wiki-image\" loading=\"lazy\" decoding=\"async\"></p>",
       "id": "README.md",
       "links": {
         "external": [
@@ -3116,7 +3116,7 @@
           "create a link"
         ]
       },
-      "markdown": "# Hi\nthis is the first line of the page\n\n`build.sh` is working $Hi there$ \n\n# What is up with the `qb` build script!\nFree Speech is \ud83d\udd25\nHere is inline latex $Log$ which kinda like math italics\nand here is the full formatted mode $$2+2$$\nThis is your new *vault*. by G. Joseph J.\n\nMake a note of something, [[create a link]], or try [the Importer](https://help.obsidian.md/Plugins/Importer)!\n\nWhen you're ready, delete this note and make the vault your own.\nlook at the map\n![[map.png]]\n",
+      "markdown": "# Hi\nthis is the first line of the page\n\n`build.sh` is working $Hi there$ \n\n# What is up with the `qb` build script!\nFree Speech is \ud83d\udd25\nHere is inline latex $Log$ which kinda like math italics\nand here is the full formatted mode \n$$2+2$$\nThis is your new *vault*. by G. Joseph J.\n\nMake a note of something, [[create a link]], or try [the Importer](https://help.obsidian.md/Plugins/Importer)!\n\nWhen you're ready, delete this note and make the vault your own.\nlook at the map\n![[map.png]]\n",
       "relPath": "README.md",
       "title": "Hi",
       "type": "readme"

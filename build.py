@@ -82,8 +82,6 @@ class MarkdownConverter:
         external_links: List[str] = []
         code_lang: Optional[str] = None
         in_code_block = False
-        in_math_block = False
-        math_buffer: List[str] = []
         current_paragraph: List[str] = []
         blockquote_stack: List[int] = []
         first_heading: Optional[str] = None
@@ -108,47 +106,6 @@ class MarkdownConverter:
 
         for raw_line in lines:
             line = raw_line.rstrip("\n")
-            stripped = line.strip()
-
-            # Handle MathJax-style display blocks $$ ... $$
-            if in_math_block:
-                if stripped.endswith("$$"):
-                    content_part = stripped[:-2].rstrip()
-                    if content_part:
-                        math_buffer.append(content_part)
-                    math_html = "\n".join(math_buffer).strip()
-                    html_lines.append(
-                        f"<div class=\"math-block\" data-math=\"display\">{html_escape(math_html)}</div>"
-                    )
-                    math_buffer.clear()
-                    in_math_block = False
-                else:
-                    math_buffer.append(line)
-                continue
-
-            if stripped.startswith("$$"):
-                close_paragraph()
-                close_lists()
-                close_blockquotes()
-
-                if stripped == "$$":
-                    in_math_block = True
-                    math_buffer.clear()
-                    continue
-
-                if stripped.count("$$") >= 2 and stripped.endswith("$$"):
-                    content = stripped[2:-2].strip()
-                    html_lines.append(
-                        f"<div class=\"math-block\" data-math=\"display\">{html_escape(content)}</div>"
-                    )
-                    continue
-
-                # Fallback to starting block when closing marker missing
-                in_math_block = True
-                remainder = stripped[2:]
-                if remainder:
-                    math_buffer.append(remainder)
-                continue
 
             fence_match = self.fence_pattern.match(line)
             if fence_match:
@@ -235,15 +192,6 @@ class MarkdownConverter:
 
             current_paragraph.append(line)
 
-        if in_math_block and math_buffer:
-            math_html = "\n".join(math_buffer).strip()
-            if math_html:
-                html_lines.append(
-                    f"<div class=\"math-block\" data-math=\"display\">{html_escape(math_html)}</div>"
-                )
-            math_buffer.clear()
-            in_math_block = False
-
         close_paragraph()
         close_lists()
         close_blockquotes()
@@ -265,17 +213,38 @@ class MarkdownConverter:
         external_links: List[str],
     ) -> str:
         code_spans: List[str] = []
+        math_spans: List[str] = []
 
         def stash_code(match: re.Match[str]) -> str:
             code_spans.append(html_escape(match.group(1)))
             return f"\u0000CODE{len(code_spans) - 1}\u0000"
 
         text = re.sub(r"`([^`]+)`", stash_code, text)
+
+        def stash_math(match: re.Match[str]) -> str:
+            math_spans.append(match.group(1))
+            return f"\u0000MATH{len(math_spans) - 1}\u0000"
+
+        text = re.sub(r"\$\$([\s\S]+?)\$\$", stash_math, text)
         escaped = html_escape(text)
 
         def restore_code_segments(rendered: str) -> str:
             for idx, code in enumerate(code_spans):
                 rendered = rendered.replace(f"\u0000CODE{idx}\u0000", f"<code>{code}</code>")
+            return rendered
+
+        def restore_math_segments(rendered: str) -> str:
+            for idx, expression in enumerate(math_spans):
+                expr = expression.strip()
+                if not expr:
+                    replacement = ""
+                else:
+                    expr_html = html_escape(expr)
+                    data_attr = html_escape(expr, quote=True)
+                    replacement = (
+                        f"<span class=\"math-latex\" data-latex=\"{data_attr}\">\\({expr_html}\\)</span>"
+                    )
+                rendered = rendered.replace(f"\u0000MATH{idx}\u0000", replacement)
             return rendered
 
         def replace_bold(match: re.Match[str]) -> str:
@@ -347,6 +316,7 @@ class MarkdownConverter:
         rendered = re.sub(r"<u>([^<]+)</u>", replace_underline, rendered)
         rendered = re.sub(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", replace_wiki, rendered)
 
+        rendered = restore_math_segments(rendered)
         rendered = restore_code_segments(rendered)
         return rendered
 

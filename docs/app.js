@@ -152,6 +152,7 @@ function renderCurrentPage() {
   rewriteLinks(page);
   addCopyButtonsToCodeBlocks();
   renderDownloadButton(page);
+  queueMathTypeset();
 }
 
 function renderBreadcrumbs(page) {
@@ -344,6 +345,28 @@ function renderDownloadButton(page) {
   section.appendChild(caption);
   section.appendChild(button);
   container.appendChild(section);
+}
+
+function queueMathTypeset() {
+  if (typeof window === "undefined") {
+    return;
+  }
+  const mathJax = window.MathJax;
+  if (!mathJax || !dom.pageContent) {
+    return;
+  }
+
+  if (typeof mathJax.typesetPromise === "function") {
+    const target = [dom.pageContent];
+    if (typeof mathJax.typesetClear === "function") {
+      mathJax.typesetClear(target);
+    }
+    mathJax.typesetPromise(target).catch((error) => {
+      console.warn("MathJax typeset failed", error);
+    });
+  } else if (mathJax.Hub && mathJax.Hub.Queue) {
+    mathJax.Hub.Queue(["Typeset", mathJax.Hub, dom.pageContent]);
+  }
 }
 
 function rewriteLinks(page) {
