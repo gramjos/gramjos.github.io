@@ -37,9 +37,10 @@ class PageRecord:
     wiki_links: List[str] = field(default_factory=list)
     local_links: List[str] = field(default_factory=list)
     external_links: List[str] = field(default_factory=list)
+    markdown: Optional[str] = None
 
     def as_dict(self) -> Dict[str, object]:
-        return {
+        data = {
             "id": self.page_id,
             "title": self.title,
             "relPath": self.rel_path,
@@ -53,6 +54,11 @@ class PageRecord:
                 "external": self.external_links,
             },
         }
+
+        if self.markdown is not None:
+            data["markdown"] = self.markdown
+
+        return data
 
 
 class MarkdownConverter:
@@ -76,6 +82,8 @@ class MarkdownConverter:
         external_links: List[str] = []
         code_lang: Optional[str] = None
         in_code_block = False
+        in_math_block = False
+        math_buffer: List[str] = []
         current_paragraph: List[str] = []
         blockquote_stack: List[int] = []
         first_heading: Optional[str] = None
@@ -100,6 +108,47 @@ class MarkdownConverter:
 
         for raw_line in lines:
             line = raw_line.rstrip("\n")
+            stripped = line.strip()
+
+            # Handle MathJax-style display blocks $$ ... $$
+            if in_math_block:
+                if stripped.endswith("$$"):
+                    content_part = stripped[:-2].rstrip()
+                    if content_part:
+                        math_buffer.append(content_part)
+                    math_html = "\n".join(math_buffer).strip()
+                    html_lines.append(
+                        f"<div class=\"math-block\" data-math=\"display\">{html_escape(math_html)}</div>"
+                    )
+                    math_buffer.clear()
+                    in_math_block = False
+                else:
+                    math_buffer.append(line)
+                continue
+
+            if stripped.startswith("$$"):
+                close_paragraph()
+                close_lists()
+                close_blockquotes()
+
+                if stripped == "$$":
+                    in_math_block = True
+                    math_buffer.clear()
+                    continue
+
+                if stripped.count("$$") >= 2 and stripped.endswith("$$"):
+                    content = stripped[2:-2].strip()
+                    html_lines.append(
+                        f"<div class=\"math-block\" data-math=\"display\">{html_escape(content)}</div>"
+                    )
+                    continue
+
+                # Fallback to starting block when closing marker missing
+                in_math_block = True
+                remainder = stripped[2:]
+                if remainder:
+                    math_buffer.append(remainder)
+                continue
 
             fence_match = self.fence_pattern.match(line)
             if fence_match:
@@ -185,6 +234,15 @@ class MarkdownConverter:
                 continue
 
             current_paragraph.append(line)
+
+        if in_math_block and math_buffer:
+            math_html = "\n".join(math_buffer).strip()
+            if math_html:
+                html_lines.append(
+                    f"<div class=\"math-block\" data-math=\"display\">{html_escape(math_html)}</div>"
+                )
+            math_buffer.clear()
+            in_math_block = False
 
         close_paragraph()
         close_lists()
@@ -464,6 +522,7 @@ class VaultBuilder:
             wiki_links=metadata["wiki_links"],
             local_links=metadata["local_links"],
             external_links=metadata["external_links"],
+            markdown=markdown_text,
         )
 
         self._register_page(page)

@@ -151,6 +151,7 @@ function renderCurrentPage() {
   renderFooter();
   rewriteLinks(page);
   addCopyButtonsToCodeBlocks();
+  renderDownloadButton(page);
 }
 
 function renderBreadcrumbs(page) {
@@ -297,6 +298,52 @@ function renderFooter() {
   const timestamp = generated && !Number.isNaN(generated.valueOf()) ? generated.toLocaleString() : "unknown date";
   const source = state.site.sourcePath || "unspecified";
   dom.footerMeta.textContent = `Generated ${timestamp} • Source vault: ${source}`;
+}
+
+function renderDownloadButton(page) {
+  const container = dom.pageContent;
+  if (!container || !page) {
+    return;
+  }
+
+  // Remove any existing download section before adding a new one
+  const existing = container.querySelector(".page-download");
+  if (existing) {
+    existing.remove();
+  }
+
+  if (typeof page.markdown !== "string" || !page.markdown.length) {
+    return;
+  }
+
+  const section = document.createElement("div");
+  section.className = "page-download";
+
+  const caption = document.createElement("p");
+  caption.className = "page-download__caption";
+  caption.textContent = "Need the original Markdown?";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "page-download__button";
+  button.textContent = "Download Markdown";
+
+  button.addEventListener("click", () => {
+    const filename = (page.relPath ? page.relPath.split("/").pop() : null) || `${page.title || "page"}.md`;
+    const blob = new Blob([page.markdown], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  section.appendChild(caption);
+  section.appendChild(button);
+  container.appendChild(section);
 }
 
 function rewriteLinks(page) {

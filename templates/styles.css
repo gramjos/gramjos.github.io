@@ -251,6 +251,20 @@ body > * {
   margin: 0;
 }
 
+.page .math-block {
+  margin: 1.5em 0;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: rgba(36, 59, 83, 0.08);
+  border-left: 4px solid rgba(36, 59, 83, 0.35);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  text-align: center;
+  overflow-x: auto;
+}
+
 .page code {
   font-family: var(--font-mono);
   background: rgba(36, 59, 83, 0.08);
@@ -335,6 +349,50 @@ body > * {
   max-width: 100%;
   width: auto;
   height: auto;
+}
+
+.page-download {
+  margin: 32px 0 0;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-accent-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-download__caption {
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+}
+
+.page-download__button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--bg-accent);
+  color: var(--fg-invert);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.page-download__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(36, 59, 83, 0.25);
+}
+
+.page-download__button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 18px rgba(36, 59, 83, 0.2);
+}
+
+.page-download__button:focus-visible {
+  outline: 2px solid var(--fg-invert);
+  outline-offset: 2px;
 }
 
 .page img.is-broken-image {
@@ -451,6 +509,12 @@ body > * {
 
   .page pre {
     background: rgba(5, 14, 30, 0.9);
+  }
+
+  .page .math-block {
+    background: rgba(110, 156, 255, 0.12);
+    border-left-color: rgba(110, 156, 255, 0.5);
+    color: #e2e9ff;
   }
 
   .copy-code-button {
