@@ -1,0 +1,256 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #1f1f1f;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+}
+
+.app-shell {
+  width: min(960px, 100%);
+  background: #ffffff;
+  border-radius: 24px;
+  border: 2px solid #d9d9d9;
+  padding: 1.5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: center;
+}
+
+.primary-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-button {
+  padding: 0.5rem 1.75rem;
+  border-radius: 999px;
+  border: 1px solid #b5b5b5;
+  background: #fdfdfd;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.nav-button:hover,
+.nav-button:focus-visible {
+  border-color: #2d2d2d;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+  outline: none;
+}
+
+.nav-button.active {
+  background: #212121;
+  color: #ffffff;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.breadcrumb {
+  font-size: 0.95rem;
+  color: #5a5a5a;
+}
+
+.breadcrumb-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus-visible {
+  color: #1f1f1f;
+  outline: none;
+}
+
+.breadcrumb-current {
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: #a0a0a0;
+}
+
+.page-content {
+  min-height: 220px;
+  border: 1px solid #dcdcdc;
+  border-radius: 16px;
+  padding: 1.5rem;
+  background: linear-gradient(180deg, rgba(252, 252, 252, 0.94), #ffffff 70%);
+  overflow-wrap: anywhere;
+}
+
+.page-content pre {
+  position: relative;
+  margin: 0;
+  padding: 1.5rem 1.25rem 1.25rem;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  overflow-x: auto;
+}
+
+.page-content code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.meta-panel {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.panel {
+  border: 1px solid #dcdcdc;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  background: #fafafa;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.panel-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.panel-list button {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.panel-list button:hover,
+.panel-list button:focus-visible {
+  border-color: #2d2d2d;
+  outline: none;
+}
+
+.panel-list button.is-active {
+  background: #212121;
+  color: #ffffff;
+}
+
+.panel-list .empty-state {
+  padding: 0.5rem;
+  color: #7a7a7a;
+  font-style: italic;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.page-content figure.code-block {
+  position: relative;
+  margin: 0 0 1rem;
+}
+
+.page-content figure.code-block:last-child {
+  margin-bottom: 0;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.75rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.7);
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.copy-button:hover,
+.copy-button:focus-visible {
+  outline: none;
+  background: rgba(15, 23, 42, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.15);
+}
+
+.copy-button.is-copied {
+  background: #22c55e;
+  border-color: #16a34a;
+  color: #0f172a;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e3e3e3;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  .app-shell {
+    padding: 1rem 1.25rem 1.5rem;
+    border-radius: 18px;
+  }
+
+  .page-content {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "generatedAt": "2025-10-19T01:32:28.202660+00:00",
+  "source": "/Users/gramjos/Documents/try_hosting_Vault",
+  "siteTitle": "What is up with the `qb` build script!",
+  "homePageId": "root",
+  "aboutPageId": null,
+  "pages": {
+    "Astro/Stary": {
+      "id": "Astro/Stary",
+      "type": "file",
+      "title": "Stary",
+      "content": "<figure class=\"image-block\"><img src=\"fold.png\" alt=\"fold\" /></figure>\n<figure class=\"code-block\"><button type=\"button\" class=\"copy-button\" data-target-id=\"code-block-1\">Copy</button><pre id=\"code-block-1\" data-language=\"python\"><code class=\"code-block language-python\">import torch</code></pre></figure>",
+      "directories": [],
+      "files": [],
+      "parent": "Astro",
+      "basePath": "Astro",
+      "sourcePath": "Astro/Stary.md",
+      "aliases": [
+        "Astro/Stary.html"
+      ]
+    },
+    "Astro": {
+      "id": "Astro",
+      "type": "directory",
+      "title": "Astro",
+      "content": "",
+      "directories": [],
+      "files": [
+        "Astro/Stary"
+      ],
+      "parent": "root",
+      "basePath": "Astro",
+      "sourcePath": "Astro/README.md",
+      "aliases": [
+        "Astro/README.html"
+      ]
+    },
+    "physics/golden_file": {
+      "id": "physics/golden_file",
+      "type": "file",
+      "title": "Golden File",
+      "content": "<p>this is the gold file</p>",
+      "directories": [],
+      "files": [],
+      "parent": "physics",
+      "basePath": "physics",
+      "sourcePath": "physics/golden_file.md",
+      "aliases": [
+        "physics/golden_file.html"
+      ]
+    },
+    "physics": {
+      "id": "physics",
+      "type": "directory",
+      "title": "Physics",
+      "content": "<p>here</p>",
+      "directories": [],
+      "files": [
+        "physics/golden_file"
+      ],
+      "parent": "root",
+      "basePath": "physics",
+      "sourcePath": "physics/README.md",
+      "aliases": [
+        "physics/README.html"
+      ]
+    },
+    "poetry/poet/scared to show this": {
+      "id": "poetry/poet/scared to show this",
+      "type": "file",
+      "title": "Scared To Show This",
+      "content": "",
+      "directories": [],
+      "files": [],
+      "parent": "poetry/poet",
+      "basePath": "poetry/poet",
+      "sourcePath": "poetry/poet/scared to show this.md",
+      "aliases": [
+        "poetry/poet/scared to show this.html"
+      ]
+    },
+    "poetry/poet": {
+      "id": "poetry/poet",
+      "type": "directory",
+      "title": "Poet",
+      "content": "",
+      "directories": [],
+      "files": [
+        "poetry/poet/scared to show this"
+      ],
+      "parent": "poetry",
+      "basePath": "poetry/poet",
+      "sourcePath": "poetry/poet/README.md",
+      "aliases": [
+        "poetry/poet/README.html"
+      ]
+    },
+    "testing123/t1": {
+      "id": "testing123/t1",
+      "type": "directory",
+      "title": "T1",
+      "content": "<figure class=\"image-block\"><img src=\"tp_map.png\" alt=\"tp_map\" /></figure>",
+      "directories": [],
+      "files": [],
+      "parent": "testing123",
+      "basePath": "testing123/t1",
+      "sourcePath": "testing123/t1/README.md",
+      "aliases": [
+        "testing123/t1/README.html"
+      ]
+    },
+    "testing123": {
+      "id": "testing123",
+      "type": "directory",
+      "title": "Testing123",
+      "content": "",
+      "directories": [
+        "testing123/t1"
+      ],
+      "files": [],
+      "parent": "root",
+      "basePath": "testing123",
+      "sourcePath": "testing123/README.md",
+      "aliases": [
+        "testing123/README.html"
+      ]
+    },
+    "about page": {
+      "id": "about page",
+      "type": "file",
+      "title": "About Page",
+      "content": "<p>here is where i write aobut adfaf dfads afd ads fads</p>\n<p>asdfadsf</p>",
+      "directories": [],
+      "files": [],
+      "parent": "root",
+      "basePath": "",
+      "sourcePath": "about page.md",
+      "aliases": [
+        "about page.html"
+      ]
+    },
+    "homie": {
+      "id": "homie",
+      "type": "file",
+      "title": "Homie",
+      "content": "<p>Direction. More focus. Mo testing here Do i want gifs on repeat? <a href=\"https://archive.org/\" target=\"_blank\" rel=\"noopener\">See my blog</a> to read more thoughts <a href=\"https://gramjos.github.io/about\" target=\"_blank\" rel=\"noopener\">blog abouts pg</a> thoughts from blog to blog</p>\n<figure class=\"code-block\"><button type=\"button\" class=\"copy-button\" data-target-id=\"code-block-2\">Copy</button><pre id=\"code-block-2\" data-language=\"rust\"><code class=\"code-block language-rust\">fn happyTime()</code></pre></figure>\n<p>WELCOME BACK TO TP!! CAMP! 🫥homie time from 🏠👻</p>\n<p>the title is always in the url</p>\n<figure class=\"image-block\"><img src=\"graphics/img1.png\" alt=\"img1\" /></figure>",
+      "directories": [],
+      "files": [],
+      "parent": "root",
+      "basePath": "",
+      "sourcePath": "homie.md",
+      "aliases": [
+        "homie.html"
+      ]
+    },
+    "root": {
+      "id": "root",
+      "type": "directory",
+      "title": "What is up with the `qb` build script!",
+      "content": "<p>this is the first line of the page</p>\n<p><code>build.sh</code> is working $Hi there$</p>\n<h1>What is up with the <code>qb</code> build script!</h1>\n<p>Free Speech is 🔥 $$2+2$$ This is your new <em>vault</em>. by G. Joseph J.</p>\n<p>Make a note of something, <a href=\"create%20a%20link\">create a link</a>, or try <a href=\"https://help.obsidian.md/Plugins/Importer\" target=\"_blank\" rel=\"noopener\">the Importer</a>!</p>\n<p>When you're ready, delete this note and make the vault your own.</p>",
+      "directories": [
+        "Astro",
+        "physics",
+        "testing123"
+      ],
+      "files": [
+        "about page",
+        "homie"
+      ],
+      "parent": null,
+      "basePath": "",
+      "sourcePath": "README.md",
+      "aliases": [
+        "README.html"
+      ]
+    }
+  }
+}
