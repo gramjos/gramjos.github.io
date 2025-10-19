@@ -179,7 +179,7 @@ function renderBreadcrumbs(page) {
       separator.textContent = " / ";
       frag.appendChild(separator);
     }
-    const label = pageLabel(crumb);
+    const label = getBreadcrumbLabel(crumb, index);
     if (index === trail.length - 1) {
       const span = document.createElement("span");
       span.className = "breadcrumb-current";
@@ -195,6 +195,47 @@ function renderBreadcrumbs(page) {
     frag.appendChild(button);
   });
   replaceChildren(elements.breadcrumb, frag);
+}
+
+// Breadcrumb naming follows repo guidance: root is "Root", directories adopt their folder name.
+function getBreadcrumbLabel(page, index) {
+  if (index === 0) {
+    return "Root";
+  }
+  if (isReadmeSource(page.sourcePath)) {
+    const folderName = extractFolderName(page.sourcePath);
+    if (folderName) {
+      return humanizeSegment(folderName);
+    }
+  }
+  return page.title;
+}
+
+function isReadmeSource(path) {
+  if (!path) {
+    return false;
+  }
+  const lower = path.toLowerCase();
+  return lower.endsWith("readme.md") || lower.endsWith("readme.html");
+}
+
+function extractFolderName(path) {
+  const segments = path.split("/").filter(Boolean);
+  if (segments.length < 2) {
+    return "";
+  }
+  return segments[segments.length - 2];
+}
+
+function humanizeSegment(segment) {
+  if (!segment) {
+    return segment;
+  }
+  return segment
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function buildBreadcrumbTrail(page) {
