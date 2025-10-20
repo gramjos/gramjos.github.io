@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plain Vanilla SPA</title>
+    <link rel="stylesheet" href="./styles.css">
+    <!-- Preserve deep links when served from static hosts such as GitHub Pages -->
+    <script>
+        window.originalHref = window.location.href;
+        (function (l) {
+            if (l.search[1] === '/') {
+                var decoded = l.search.slice(1).split('&').map(function (s) {
+                    return s.replace(/~and~/g, '&');
+                }).join('?');
+                window.history.replaceState(null, null,
+                    l.pathname.slice(0, -1) + decoded + l.hash
+                );
+            }
+        }(window.location));
+    </script>
+</head>
+<body>
+    <noscript class="noscript-warning">This application needs JavaScript to run.</noscript>
+
+    <header class="site-header">
+        <div class="brand">
+            <span class="brand__accent">Plain</span> Vanilla SPA
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+            <a href="/">Home</a>
+            <a href="/guides">Guides</a>
+        </nav>
+    </header>
+
+    <main id="app" class="view-container" aria-live="polite"></main>
+
+    <footer class="site-footer">
+        Built with the History API and a sprinkle of standard DOM APIs.
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
