@@ -38,6 +38,7 @@ class PageRecord:
     local_links: List[str] = field(default_factory=list)
     external_links: List[str] = field(default_factory=list)
     markdown: Optional[str] = None
+    excalidraw_data: Optional[Dict[str, Any]] = None
 
     def as_dict(self) -> Dict[str, object]:
         data = {
@@ -57,6 +58,9 @@ class PageRecord:
 
         if self.markdown is not None:
             data["markdown"] = self.markdown
+        
+        if self.excalidraw_data is not None:
+            data["excalidrawData"] = self.excalidraw_data
 
         return data
 
@@ -282,6 +286,17 @@ class MarkdownConverter:
             """Handle Obsidian-style image embeds: ![[image.png]] or ![[image.png|alt text]]"""
             target = match.group(1).strip()
             alias = match.group(2).strip() if match.group(2) else ""
+            
+            # Check if this is an Excalidraw embed
+            if target.endswith('.excalidraw') or target.endswith('.excalidraw.md'):
+                # Track as local link for potential asset resolution
+                local_links.append(target)
+                # Create a placeholder div for Excalidraw rendering
+                return (
+                    f"<div class=\"excalidraw-embed\" "
+                    f"data-excalidraw-target=\"{html_escape(target, quote=True)}\"></div>"
+                )
+            
             # Extract just the filename if it's a path
             filename = target.split('/')[-1]
             # Track as local link for potential asset resolution
@@ -461,6 +476,15 @@ class VaultBuilder:
         rel_path = path.relative_to(self.source)
         page_id = rel_path.as_posix()
         markdown_text = path.read_text(encoding="utf-8")
+        
+        # Check if this is an Excalidraw file
+        is_excalidraw = path.name.endswith('.excalidraw.md') or path.name.endswith('.excalidraw')
+        excalidraw_data = None
+        
+        if is_excalidraw:
+            # Extract JSON data from code block
+            excalidraw_data = self._extract_excalidraw_json(markdown_text)
+        
         html_body, metadata = self.converter.convert(markdown_text)
 
         first_heading = metadata["headings"][0] if metadata["headings"] else None
@@ -481,18 +505,28 @@ class VaultBuilder:
             self.site_title = self.source.name
 
         aliases = self._default_aliases(rel_path, title, is_readme=is_readme)
+        
+        # Determine page type
+        if is_excalidraw:
+            page_type = "excalidraw"
+        elif is_readme:
+            page_type = "readme"
+        else:
+            page_type = "page"
+        
         page = PageRecord(
             page_id=page_id,
             title=title,
             rel_path=rel_path.as_posix(),
             dir_path=(rel_path.parent.as_posix() if rel_path.parent != Path(".") else "."),
-            page_type="readme" if is_readme else "page",
+            page_type=page_type,
             html=html_body,
             aliases=aliases,
             wiki_links=metadata["wiki_links"],
             local_links=metadata["local_links"],
             external_links=metadata["external_links"],
             markdown=markdown_text,
+            excalidraw_data=excalidraw_data,
         )
 
         self._register_page(page)
@@ -608,6 +642,27 @@ class VaultBuilder:
         match = re.search(r"<title>(.*?)</title>", html_body, flags=re.IGNORECASE | re.DOTALL)
         if match:
             return match.group(1).strip()
+        return None
+    
+    @staticmethod
+    def _extract_excalidraw_json(markdown_text: str) -> Optional[Dict[str, Any]]:
+        """Extract Excalidraw JSON data from a markdown file.
+        
+        Looks for a ```json code block and attempts to parse it as Excalidraw data.
+        """
+        # Match code blocks with optional 'json' language specifier
+        code_block_pattern = re.compile(r'^```(?:json)?\s*\n(.*?)\n```', re.MULTILINE | re.DOTALL)
+        matches = code_block_pattern.findall(markdown_text)
+        
+        for block_content in matches:
+            try:
+                data = json.loads(block_content.strip())
+                # Validate that it looks like Excalidraw data
+                if isinstance(data, dict) and ('elements' in data or 'type' in data):
+                    return data
+            except json.JSONDecodeError:
+                continue
+        
         return None
 
 
