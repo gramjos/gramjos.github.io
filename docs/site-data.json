@@ -84,7 +84,7 @@
       "subdirectories": []
     }
   },
-  "generatedAt": "2025-10-20T04:17:44.975162+00:00",
+  "generatedAt": "2025-10-20T04:23:43.573853+00:00",
   "homePageId": "README.md",
   "pages": {
     "README.md": {
@@ -165,8 +165,8 @@
     },
     "projects/System Architecture.excalidraw.md": {
       "aliases": [
-        "System Architecture.excalidraw",
         "System Architecture.Excalidraw",
+        "System Architecture.excalidraw",
         "System Architecture.excalidraw.md"
       ],
       "dirPath": "projects",
@@ -282,8 +282,8 @@
     },
     "projects/notes/dailies.md": {
       "aliases": [
-        "Dailies",
         "dailies",
+        "Dailies",
         "dailies.md"
       ],
       "dirPath": "projects/notes",
@@ -324,8 +324,8 @@
     },
     "projects/overview.md": {
       "aliases": [
-        "overview",
         "Overview",
+        "overview",
         "overview.md"
       ],
       "dirPath": "projects",
@@ -345,8 +345,8 @@
     },
     "projects/spec.md": {
       "aliases": [
-        "Spec",
         "spec",
+        "Spec",
         "spec.md"
       ],
       "dirPath": "projects",

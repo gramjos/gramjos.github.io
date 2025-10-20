@@ -650,18 +650,20 @@ class VaultBuilder:
         
         Looks for a ```json code block and attempts to parse it as Excalidraw data.
         """
-        # Match code blocks with optional 'json' language specifier
-        code_block_pattern = re.compile(r'^```(?:json)?\s*\n(.*?)\n```', re.MULTILINE | re.DOTALL)
+        # Match code blocks with language specifier and content
+        code_block_pattern = re.compile(r'```(\w*)\n(.*?)\n```', re.DOTALL)
         matches = code_block_pattern.findall(markdown_text)
         
-        for block_content in matches:
-            try:
-                data = json.loads(block_content.strip())
-                # Validate that it looks like Excalidraw data
-                if isinstance(data, dict) and ('elements' in data or 'type' in data):
-                    return data
-            except json.JSONDecodeError:
-                continue
+        for lang, block_content in matches:
+            # Only process blocks with no language or 'json' language
+            if lang == '' or lang == 'json':
+                try:
+                    data = json.loads(block_content.strip())
+                    # Validate that it looks like Excalidraw data
+                    if isinstance(data, dict) and ('elements' in data or 'type' in data):
+                        return data
+                except json.JSONDecodeError:
+                    continue
         
         return None
 
