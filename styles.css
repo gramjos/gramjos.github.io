@@ -1,3 +1,4 @@
+/* Design tokens keep light/dark theming centralized. */
 :root {
     color-scheme: light dark;
     --bg: #fdfdfd;
@@ -30,6 +31,7 @@ body {
     text-align: center;
 }
 
+/* Sticky shell keeps navigation visible for SPA transitions. */
 .site-header {
     display: flex;
     justify-content: space-between;
@@ -52,6 +54,7 @@ body {
     color: var(--accent);
 }
 
+/* Horizontal navigation doubles as our active route indicator. */
 .site-nav {
     display: flex;
     gap: 1rem;
@@ -88,6 +91,7 @@ body {
     background: var(--accent);
 }
 
+/* Constrain readable width and let sections stack vertically. */
 .view-container {
     flex: 1;
     width: min(100%, calc(var(--max-width) + 2rem));
@@ -140,6 +144,7 @@ a:focus-visible {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+/* Cards reuse the same surface styling as primary sections. */
 .card {
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -161,6 +166,7 @@ a:focus-visible {
     font-weight: 600;
 }
 
+/* Dark code blocks emphasise the instructional snippets. */
 .code-block {
     font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
     background: #0f172a;
@@ -178,6 +184,7 @@ a:focus-visible {
     text-align: center;
 }
 
+/* Respect OS dark mode, reusing the token palette above. */
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #020617;
