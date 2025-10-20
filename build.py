@@ -64,7 +64,7 @@ class PageRecord:
 class MarkdownConverter:
     """Very small Markdown renderer with Obsidian-style wiki link support."""
 
-    fence_pattern = re.compile(r"^```(\w+)?\s*$")
+    fence_pattern = re.compile(r"^```([\w-]+)?\s*$")
     heading_pattern = re.compile(r"^(#{1,6})\s*(.+?)\s*$")
     ulist_pattern = re.compile(r"^(?P<indent>\s*)[-+*]\s+(?P<content>.+)$")
     olist_pattern = re.compile(r"^(?P<indent>\s*)(?P<index>\d+)[\.)]\s+(?P<content>.+)$")
@@ -119,6 +119,9 @@ class MarkdownConverter:
                 else:
                     in_code_block = True
                     code_lang = fence_match.group(1)
+                    # Strip "run-" prefix if present (e.g., run-python -> python)
+                    if code_lang and code_lang.startswith("run-"):
+                        code_lang = code_lang[4:]  # Remove "run-" prefix
                     lang_attr = f" class=\"language-{html_escape(code_lang)}\"" if code_lang else ""
                     html_lines.append(f"<pre><code{lang_attr}>")
                 continue

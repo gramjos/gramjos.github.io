@@ -16,13 +16,18 @@
     "spec": "projects/spec.md",
     "spec.md": "projects/spec.md",
     "summary": "projects/notes/summary.md",
-    "summary.md": "projects/notes/summary.md"
+    "summary.md": "projects/notes/summary.md",
+    "test code snippets": "test-code-snippets.md",
+    "test-code-snippets": "test-code-snippets.md",
+    "test-code-snippets.md": "test-code-snippets.md"
   },
   "directories": {
     ".": {
       "assetPaths": [],
       "name": "Root",
-      "pageIds": [],
+      "pageIds": [
+        "test-code-snippets.md"
+      ],
       "parent": null,
       "path": ".",
       "readmeId": "README.md",
@@ -78,7 +83,7 @@
       "subdirectories": []
     }
   },
-  "generatedAt": "2025-10-20T03:53:04.685345+00:00",
+  "generatedAt": "2025-10-20T03:54:27.257873+00:00",
   "homePageId": "README.md",
   "pages": {
     "README.md": {
@@ -182,8 +187,8 @@
     },
     "projects/notes/dailies.md": {
       "aliases": [
-        "Dailies",
         "dailies",
+        "Dailies",
         "dailies.md"
       ],
       "dirPath": "projects/notes",
@@ -242,6 +247,25 @@
       "relPath": "projects/spec.md",
       "title": "Spec",
       "type": "page"
+    },
+    "test-code-snippets.md": {
+      "aliases": [
+        "Test Code Snippets",
+        "test-code-snippets",
+        "test-code-snippets.md"
+      ],
+      "dirPath": ".",
+      "html": "<h1>Code Snippet Tests</h1>\n<h2>Regular Python Snippet</h2>\n<pre><code class=\"language-python\">\ndef hello_world():\n\n    print(&quot;Hello, World!&quot;)\n\n</code></pre>\n<h2>Run-Python Snippet</h2>\n<pre><code class=\"language-python\">\nfrom typing import List\n\n\n\ndef findPrime(N) -&gt; List[int] :\n\n\tfor i in range(1, int(N**(0.5))):\n\n\t\tif N%i==0: print(i)\n\n\treturn [1,2]\n\n\n\nprint(findPrime(78))\n\n</code></pre>\n<h2>Run-JavaScript Snippet</h2>\n<pre><code class=\"language-javascript\">\nfunction greet(name) {\n\n    console.log(`Hello, ${name}!`);\n\n}\n\ngreet(&quot;World&quot;);\n\n</code></pre>\n<h2>Regular JavaScript Snippet</h2>\n<pre><code class=\"language-javascript\">\nconst add = (a, b) =&gt; a + b;\n\nconsole.log(add(2, 3));\n\n</code></pre>",
+      "id": "test-code-snippets.md",
+      "links": {
+        "external": [],
+        "local": [],
+        "wiki": []
+      },
+      "markdown": "# Code Snippet Tests\n\n## Regular Python Snippet\n\n```python\ndef hello_world():\n    print(\"Hello, World!\")\n```\n\n## Run-Python Snippet\n\n```run-python\nfrom typing import List\n\ndef findPrime(N) -> List[int] :\n\tfor i in range(1, int(N**(0.5))):\n\t\tif N%i==0: print(i)\n\treturn [1,2]\n\nprint(findPrime(78))\n```\n\n## Run-JavaScript Snippet\n\n```run-javascript\nfunction greet(name) {\n    console.log(`Hello, ${name}!`);\n}\ngreet(\"World\");\n```\n\n## Regular JavaScript Snippet\n\n```javascript\nconst add = (a, b) => a + b;\nconsole.log(add(2, 3));\n```\n",
+      "relPath": "test-code-snippets.md",
+      "title": "Test Code Snippets",
+      "type": "page"
     }
   },
   "pathIndex": {
@@ -251,7 +275,8 @@
     "projects/notes/README.md": "projects/notes/README.md",
     "projects/notes/dailies.md": "projects/notes/dailies.md",
     "projects/notes/summary.md": "projects/notes/summary.md",
-    "projects/spec.md": "projects/spec.md"
+    "projects/spec.md": "projects/spec.md",
+    "test-code-snippets.md": "test-code-snippets.md"
   },
   "siteTitle": "sample-vault",
   "sourcePath": "/home/runner/work/gramjos.github.io/gramjos.github.io/examples/sample-vault"
