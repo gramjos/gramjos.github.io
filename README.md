@@ -1,3 +1,22 @@
+### Summary of Key Technical Pieces
+app.js: The "main" function. It defines the Route Table (the map of paths to functions) and starts the router.
+
+router.js: The "engine".
+
+createRoute: A compiler that turns path strings into efficient RegEx matchers.
+
+onLinkClick: An event delegate that "hijacks" navigation.
+
+history.pushState: The browser API to change the URL.
+
+onLocationChange: The central dispatcher that resolves the current path against the route table and triggers the render.
+
+popstate listener: The handler for the browser's back/forward buttons.
+
+views/index.js: The "functional rendering" layer. A set of functions that simply take state (context) and return HTML. They are "dumb" and don't know why they are being called, which is a good design.
+
+---
+
 This system is a great example of a client-side router. Its main job is to map browser URL paths to specific JavaScript functions that render content, all without requesting a new page from the server. This creates a Single-Page Application (SPA) experience.
 
 Here are the concepts, in logical order, that describe its functionality.
