@@ -8,6 +8,7 @@
     <!-- Preserve deep links when served from static hosts such as GitHub Pages -->
     <script>
         window.originalHref = window.location.href;
+		console.log(window.location);
         (function restoreDeepLink(location) {
             // GitHub Pages hands 404s to index with the path tucked into the query.
             if (!location.search || location.search[1] !== '/') return;
