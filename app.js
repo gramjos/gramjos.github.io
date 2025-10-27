@@ -13,5 +13,6 @@ const router = createRouter({
     ],
 });
 
-// Sync the initial URL and attach listeners.
+// This call attaches the global click/popstate listeners
+// and runs the first route match to render the initial page.
 router.start();
