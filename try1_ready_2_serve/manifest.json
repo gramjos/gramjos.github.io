@@ -1,0 +1,76 @@
+{
+  "source": "/Users/gramjos/Documents/try1",
+  "output": "/Users/gramjos/Computation/vanilla_web_dev/gramjos.github.io/try1_ready_2_serve",
+  "generatedAt": "2025-10-30T21:02:18.952147+00:00",
+  "version": 1,
+  "root": {
+    "type": "directory",
+    "name": "try1",
+    "title": "Notes",
+    "slug": "",
+    "slugPath": "",
+    "readme": {
+      "source": "README.md",
+      "html": "README.html"
+    },
+    "breadcrumbs": [],
+    "directories": [
+      {
+        "type": "directory",
+        "name": "stuff1",
+        "title": "Stuff1",
+        "slug": "stuff1",
+        "slugPath": "stuff1",
+        "readme": {
+          "source": "stuff1/README.md",
+          "html": "stuff1/README.html"
+        },
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ],
+        "directories": [],
+        "files": [
+          {
+            "type": "file",
+            "name": "stuffy.md",
+            "title": "Stuffy",
+            "slug": "stuffy",
+            "slugPath": "stuff1/stuffy",
+            "source": "stuff1/stuffy.md",
+            "html": "stuff1/stuffy.html",
+            "breadcrumbs": [
+              {
+                "title": "Notes",
+                "slugPath": ""
+              },
+              {
+                "title": "Stuff1",
+                "slugPath": "stuff1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "file",
+        "name": "Welcome.md",
+        "title": "Welcome",
+        "slug": "welcome",
+        "slugPath": "welcome",
+        "source": "Welcome.md",
+        "html": "Welcome.html",
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ]
+      }
+    ]
+  }
+}

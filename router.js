@@ -193,13 +193,20 @@ export function createRouter({ mountNode, routes }) {
 function compileRoute(template) {
     // Turn parameterised templates into regexes with named groups.
     const cleaned = template === '/' ? '/' : template.replace(/\/+$/, '');
-    const paramRegex = /:([A-Za-z0-9_]+)/g;
+    const paramRegex = /:([A-Za-z0-9_]+)(\*)?/g;
     let pattern = '';
     let cursor = 0;
     let match;
     while ((match = paramRegex.exec(cleaned)) !== null) {
         pattern += escapeRegExp(cleaned.slice(cursor, match.index));
-        pattern += `(?<${match[1]}>[^/]+)`;
+        const paramName = match[1];
+        const isSplat = Boolean(match[2]);
+        if (isSplat && paramRegex.lastIndex !== cleaned.length) {
+            throw new Error('Wildcard parameters (e.g. :slug*) are only supported at the end of a route template.');
+        }
+        pattern += isSplat
+            ? `(?<${paramName}>.+)`
+            : `(?<${paramName}>[^/]+)`;
         cursor = match.index + match[0].length;
     }
     pattern += escapeRegExp(cleaned.slice(cursor));

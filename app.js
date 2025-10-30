@@ -1,6 +1,6 @@
 // Entry point wires the router to the DOM mount point.
 import { createRoute, createRouter } from './router.js';
-import { renderGuideDetail, renderGuides, renderHome, renderNotFound } from './views/index.js';
+import { renderNoteDetail, renderGuideDetail, renderGuides, renderNotes, renderHome, renderNotFound } from './views/index.js';
 
 // Wire up the view functions to URL templates.
 const router = createRouter({
@@ -8,7 +8,9 @@ const router = createRouter({
     routes: [
         createRoute('/', renderHome),
         createRoute('/guides', renderGuides),
+        createRoute('/notes', renderNotes),
         createRoute('/guides/:slug', renderGuideDetail),
+        createRoute('/notes/:path*', renderNoteDetail),
         createRoute('*', renderNotFound),
     ],
 });
