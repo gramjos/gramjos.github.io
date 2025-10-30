@@ -20,6 +20,8 @@ Rules implemented here mirror the product requirements:
 
 import argparse
 import json
+import os
+import posixpath
 import re
 import shutil
 from dataclasses import dataclass
@@ -66,6 +68,7 @@ def main() -> None:
     manifest = {
         "source": str(source_root),
         "output": str(output_root),
+        "publicPath": f"/{output_root.name}",
         "generatedAt": datetime.now(timezone.utc).isoformat(),
         "version": 1,
         "root": manifest_root,
@@ -179,14 +182,16 @@ def copy_file(source: Path, ctx: BuildContext, relative_dir: Path) -> None:
 def convert_markdown_file(ctx: BuildContext, source: Path) -> str:
     relative_dir = source.parent.relative_to(ctx.source_root)
     destination = ctx.output_root / relative_dir / f"{source.stem}.html"
-    html = render_markdown(source.read_text(encoding="utf-8"))
+    html = render_markdown(ctx, source, source.read_text(encoding="utf-8"))
     destination.write_text(html, encoding="utf-8")
     return posix_path(destination.relative_to(ctx.output_root))
 
 
-def render_markdown(text: str) -> str:
+def render_markdown(ctx: BuildContext, source: Path, text: str) -> str:
     html_lines: List[str] = []
     paragraph_buffer: List[str] = []
+    source_dir = source.parent
+    relative_dir = source_dir.relative_to(ctx.source_root)
 
     def flush_paragraph() -> None:
         if paragraph_buffer:
@@ -213,21 +218,85 @@ def render_markdown(text: str) -> str:
         if image_match:
             flush_paragraph()
             alt = escape_html(image_match.group(1))
-            src = escape_html(image_match.group(2))
-            html_lines.append(f'<figure><img src="{src}" alt="{alt}"></figure>')
+            src = normalise_image_src(ctx, source_dir, relative_dir, image_match.group(2))
+            html_lines.append(f'<figure><img src="{escape_html(src)}" alt="{alt}"></figure>')
             continue
 
         obsidian_image_match = re.match(r"^!\[\[(.+?)\]\]\s*$", stripped)
         if obsidian_image_match:
             flush_paragraph()
-            src = escape_html(obsidian_image_match.group(1))
-            html_lines.append(f'<figure><img src="{src}" alt=""></figure>')
+            target = obsidian_image_match.group(1)
+            reference = target.split("|", 1)[0]
+            src = normalise_image_src(ctx, source_dir, relative_dir, reference)
+            html_lines.append(f'<figure><img src="{escape_html(src)}" alt=""></figure>')
             continue
 
         paragraph_buffer.append(stripped)
 
     flush_paragraph()
     return "\n".join(html_lines)
+
+
+def normalise_image_src(ctx: BuildContext, source_dir: Path, relative_dir: Path, raw_reference: str) -> str:
+    reference = (raw_reference or "").strip()
+    if not reference:
+        return ""
+
+    resolved = resolve_asset_reference(ctx, source_dir, reference)
+    if not resolved:
+        return reference
+
+    asset_relative = resolved.relative_to(ctx.source_root)
+    try:
+        relative_path = posix_relpath(asset_relative, relative_dir)
+    except ValueError:
+        relative_path = asset_relative.as_posix()
+    return relative_path
+
+
+def resolve_asset_reference(ctx: BuildContext, source_dir: Path, reference: str) -> Optional[Path]:
+    normalised = reference.replace("\\", "/")
+    source_dir = source_dir.resolve()
+
+    direct_candidate = (source_dir / normalised).resolve()
+    if direct_candidate.exists() and direct_candidate.is_file() and is_within(direct_candidate, ctx.source_root):
+        return direct_candidate
+
+    if "/" in normalised:
+        return None
+
+    candidate = (source_dir / normalised).resolve()
+    if candidate.exists() and candidate.is_file() and is_within(candidate, ctx.source_root):
+        return candidate
+
+    current = source_dir
+    while True:
+        graphics_dir = current / "graphics"
+        candidate = (graphics_dir / normalised).resolve()
+        if candidate.exists() and candidate.is_file() and is_within(candidate, ctx.source_root):
+            return candidate
+        if current == ctx.source_root:
+            break
+        current = current.parent
+
+    return None
+
+
+def is_within(path: Path, ancestor: Path) -> bool:
+    try:
+        path.relative_to(ancestor)
+        return True
+    except ValueError:
+        return False
+
+
+def posix_relpath(target: Path, start: Path) -> str:
+    target_str = target.as_posix()
+    start_str = start.as_posix()
+    if not start_str or start_str == ".":
+        start_str = "."
+    result = posixpath.relpath(target_str, start_str)
+    return result.replace("\\", "/")
 
 
 def escape_html(value: str) -> str:

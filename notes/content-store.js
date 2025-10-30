@@ -3,6 +3,8 @@ const CONTENT_BASE = '/try1_ready_2_serve';
 const MANIFEST_URL = `${CONTENT_BASE}/manifest.json`;
 
 let manifestPromise;
+let manifestData;
+let contentBase = CONTENT_BASE;
 const htmlCache = new Map();
 
 export function loadManifest() {
@@ -14,6 +16,13 @@ export function loadManifest() {
                 }
                 return response.json();
             })
+            .then((data) => {
+                manifestData = data;
+                if (data && typeof data.publicPath === 'string') {
+                    contentBase = normaliseBasePath(data.publicPath);
+                }
+                return (manifestData = data);
+            })
             .catch((error) => {
                 manifestPromise = undefined;
                 throw error;
@@ -23,7 +32,7 @@ export function loadManifest() {
 }
 
 export async function resolveNode(slugSegments) {
-    const manifest = await loadManifest();
+    const manifest = manifestData || await loadManifest();
     const segments = slugSegments.filter(Boolean);
     if (segments.length === 0) {
         return { node: manifest.root, kind: 'directory' };
@@ -40,13 +49,17 @@ export function fetchHtml(relativePath) {
     if (htmlCache.has(normalised)) {
         return htmlCache.get(normalised);
     }
-    const url = `${CONTENT_BASE}/${normalised}`;
+    const url = buildContentUrl(normalised);
     const promise = fetch(url)
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Unable to fetch HTML fragment (${response.status}).`);
             }
             return response.text();
+        })
+        .then((html) => {
+            const rewritten = rewriteRelativeUrls(html, normalised);
+            return rewritten;
         })
         .catch((error) => {
             htmlCache.delete(normalised);
@@ -77,4 +90,48 @@ export function toNotesHref(slugPath) {
         return '/notes';
     }
     return `/notes/${slugPath}`;
+}
+
+function getContentBase() {
+    return contentBase;
+}
+
+function buildContentUrl(relativePath) {
+    const base = getContentBase();
+    const trimmed = relativePath.replace(/^\/+/, '');
+    if (!base) {
+        return `/${trimmed}`;
+    }
+    return `${base}/${trimmed}`.replace(/\/+/g, '/');
+}
+
+function rewriteRelativeUrls(html, relativePath) {
+    const base = getContentBase();
+    if (!base) {
+        return html;
+    }
+    const dirSegments = relativePath.split('/').slice(0, -1).filter(Boolean);
+    const prefix = dirSegments.length > 0
+        ? `${base}/${dirSegments.join('/')}`.replace(/\/+/g, '/')
+        : base;
+    return html.replace(/(<img\b[^>]*\ssrc\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
+        const trimmedSrc = src.trim();
+        if (/^(?:[a-z]+:|data:|\/)/i.test(trimmedSrc)) {
+            return match;
+        }
+        const cleaned = trimmedSrc.replace(/^\.\//, '').replace(/^\/+/, '');
+        const full = `${prefix}/${cleaned}`.replace(/\/+/g, '/');
+        return `${start}${full}${end}`;
+    });
+}
+
+function normaliseBasePath(value) {
+    if (!value) {
+        return CONTENT_BASE;
+    }
+    let base = value.trim();
+    if (!base.startsWith('/')) {
+        base = `/${base}`;
+    }
+    return base.replace(/\/+$/, '');
 }

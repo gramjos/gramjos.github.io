@@ -1,7 +1,8 @@
 {
   "source": "/Users/gramjos/Documents/try1",
   "output": "/Users/gramjos/Computation/vanilla_web_dev/gramjos.github.io/try1_ready_2_serve",
-  "generatedAt": "2025-10-30T22:21:22.058202+00:00",
+  "publicPath": "/try1_ready_2_serve",
+  "generatedAt": "2025-10-30T22:55:28.448259+00:00",
   "version": 1,
   "root": {
     "type": "directory",
