@@ -2,7 +2,7 @@
   "source": "/Users/gramjos/Documents/try1",
   "output": "/Users/gramjos/Computation/vanilla_web_dev/gramjos.github.io/try1_ready_2_serve",
   "publicPath": "/try1_ready_2_serve",
-  "generatedAt": "2025-10-31T14:26:03.963232+00:00",
+  "generatedAt": "2025-10-31T17:49:52.159713+00:00",
   "version": 1,
   "root": {
     "type": "directory",
@@ -50,6 +50,93 @@
               {
                 "title": "Adventure",
                 "slugPath": "adventure"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "poet",
+        "title": "Poet",
+        "slug": "poet",
+        "slugPath": "poet",
+        "readme": {
+          "source": "poet/README.md",
+          "html": "poet/README.html"
+        },
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ],
+        "directories": [
+          {
+            "type": "directory",
+            "name": "p2",
+            "title": "P2",
+            "slug": "p2",
+            "slugPath": "poet/p2",
+            "readme": {
+              "source": "poet/p2/README.md",
+              "html": "poet/p2/README.html"
+            },
+            "breadcrumbs": [
+              {
+                "title": "Notes",
+                "slugPath": ""
+              },
+              {
+                "title": "Poet",
+                "slugPath": "poet"
+              }
+            ],
+            "directories": [],
+            "files": [
+              {
+                "type": "file",
+                "name": "the p2 page.md",
+                "title": "The P2 Page",
+                "slug": "the-p2-page",
+                "slugPath": "poet/p2/the-p2-page",
+                "source": "poet/p2/the p2 page.md",
+                "html": "poet/p2/the p2 page.html",
+                "breadcrumbs": [
+                  {
+                    "title": "Notes",
+                    "slugPath": ""
+                  },
+                  {
+                    "title": "Poet",
+                    "slugPath": "poet"
+                  },
+                  {
+                    "title": "P2",
+                    "slugPath": "poet/p2"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "files": [
+          {
+            "type": "file",
+            "name": "a love poem.md",
+            "title": "A Love Poem",
+            "slug": "a-love-poem",
+            "slugPath": "poet/a-love-poem",
+            "source": "poet/a love poem.md",
+            "html": "poet/a love poem.html",
+            "breadcrumbs": [
+              {
+                "title": "Notes",
+                "slugPath": ""
+              },
+              {
+                "title": "Poet",
+                "slugPath": "poet"
               }
             ]
           }
