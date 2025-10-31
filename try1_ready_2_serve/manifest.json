@@ -2,7 +2,7 @@
   "source": "/Users/gramjos/Documents/try1",
   "output": "/Users/gramjos/Computation/vanilla_web_dev/gramjos.github.io/try1_ready_2_serve",
   "publicPath": "/try1_ready_2_serve",
-  "generatedAt": "2025-10-30T22:55:28.448259+00:00",
+  "generatedAt": "2025-10-31T14:26:03.963232+00:00",
   "version": 1,
   "root": {
     "type": "directory",
@@ -16,6 +16,45 @@
     },
     "breadcrumbs": [],
     "directories": [
+      {
+        "type": "directory",
+        "name": "adventure",
+        "title": "Adventure",
+        "slug": "adventure",
+        "slugPath": "adventure",
+        "readme": {
+          "source": "adventure/README.md",
+          "html": "adventure/README.html"
+        },
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ],
+        "directories": [],
+        "files": [
+          {
+            "type": "file",
+            "name": "journey.md",
+            "title": "Journey",
+            "slug": "journey",
+            "slugPath": "adventure/journey",
+            "source": "adventure/journey.md",
+            "html": "adventure/journey.html",
+            "breadcrumbs": [
+              {
+                "title": "Notes",
+                "slugPath": ""
+              },
+              {
+                "title": "Adventure",
+                "slugPath": "adventure"
+              }
+            ]
+          }
+        ]
+      },
       {
         "type": "directory",
         "name": "stuff1",
@@ -76,6 +115,21 @@
       }
     ],
     "files": [
+      {
+        "type": "file",
+        "name": "cool new page.md",
+        "title": "Cool New Page",
+        "slug": "cool-new-page",
+        "slugPath": "cool-new-page",
+        "source": "cool new page.md",
+        "html": "cool new page.html",
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ]
+      },
       {
         "type": "file",
         "name": "Welcome.md",
