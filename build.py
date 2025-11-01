@@ -25,9 +25,9 @@ The script will:
     the entire navigable structure of the processed notes for the SPA to use.
 """
 
-import argparse
 import json
 import shutil
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -42,20 +42,18 @@ def main() -> None:
 
     Parses arguments, prepares directories, and initiates the manifest build.
     """
-    parser = argparse.ArgumentParser(description="Convert an Obsidian vault into SPA-friendly content.")
-    parser.add_argument("vault_root", type=Path, help="Path to the Obsidian vault root directory")
-    parser.add_argument("--out", type=Path, help="Optional output directory (defaults to <vault>_ready_2_serve)")
-    parser.add_argument("--keep", action="store_true", help="Keep an existing output directory instead of replacing it")
-    args = parser.parse_args()
+    if len(sys.argv) != 2:
+        raise SystemExit(f"Usage: python {sys.argv[0]} /path/to/your/vault")
 
-    source_root = args.vault_root.expanduser().resolve()
+    vault_path = sys.argv[1]
+    source_root = Path(vault_path).resolve()
+
     if not source_root.exists() or not source_root.is_dir():
-        raise SystemExit(f"Vault root does not exist or is not a directory: {source_root}")
+        raise SystemExit(f"Error: Vault path not found or is not a directory.\nProvided path: {source_root}")
 
-    output_root = (args.out.expanduser().resolve() if args.out
-                   else (Path.cwd() / f"{source_root.name}{DEFAULT_OUTPUT_SUFFIX}").resolve())
+    output_root = (source_root.parent / f"{source_root.name}{DEFAULT_OUTPUT_SUFFIX}").resolve()
 
-    if output_root.exists() and not args.keep:
+    if output_root.exists():
         print(f"Removing existing output directory: {output_root}")
         shutil.rmtree(output_root)
     output_root.mkdir(parents=True, exist_ok=True)

@@ -8,8 +8,10 @@ HTML-escaped to be displayed as-is. This ensures a consistent and predictable
 output for the SPA to consume.
 """
 
+from curses.ascii import alt
 import re
 from pathlib import Path
+from turtle import ht
 from typing import List
 
 from .assets import normalise_image_src
@@ -21,8 +23,10 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
     """
     Converts a string of Markdown into an HTML fragment.
 
-    This function iterates through the text line by line, converting supported
-    elements (headings, images) to HTML and wrapping other text in <p> tags.
+    This function iterates through the text line by line. It handles block-level
+    elements like headings separately. For paragraph content, it processes each
+    line to find and replace any inline image references (both standard and
+    Obsidian-style) with their corresponding HTML `<img>` tags.
 
     Args:
         ctx: The build context, needed for resolving image paths.
@@ -33,54 +37,36 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
         A string containing the generated HTML fragment.
     """
     html_lines: List[str] = []
-    paragraph_buffer: List[str] = []
-    source_dir = source_file.parent
-    relative_dir = source_dir.relative_to(ctx.source_root)
 
-    def flush_paragraph() -> None:
-        """Combines buffered lines into a single <p> tag."""
-        if paragraph_buffer:
-            content = " ".join(paragraph_buffer)
-            html_lines.append(f"<p>{escape_html(content)}</p>")
-            paragraph_buffer.clear()
-
-    for raw_line in markdown_text.splitlines():
-        line = raw_line.rstrip()
-        stripped = line.strip()
-        if not stripped:
-            flush_paragraph()
+    x = markdown_text.splitlines()
+    for raw_line in x:
+        line = raw_line.strip() # Strip leading/trailing whitespace
+        if not line.strip(): # if line empty
             continue
 
-        # Match H1 to H5
-        heading_match = re.match(r"^(#{1,5})\s+(.*)$", stripped)
+        # Markdown processing:
+        ## artifacts that occurs to the whole line VERSUS to an element within the line
+        # - Source ParsingRules.md
+
+        # Is Heading
+        heading_match = re.match(r"^(#{1,5})\s+(.*)$", line)
         if heading_match:
-            flush_paragraph()
             level = len(heading_match.group(1))
             content = escape_html(heading_match.group(2).strip())
             html_lines.append(f"<h{level}>{content}</h{level}>")
             continue
 
-        # Match standard Markdown image ![]()
-        image_match = re.match(r"^!\[(.*?)\]\((.+?)\)\s*$", stripped)
-        if image_match:
-            flush_paragraph()
-            alt_text = escape_html(image_match.group(1))
-            src_path = normalise_image_src(ctx, source_dir, relative_dir, image_match.group(2))
-            html_lines.append(f'<figure><img src="{escape_html(src_path)}" alt="{alt_text}"></figure>')
+        # Is Img
+        image_pattern = re.compile(r"!\[\[(.+?)\]\]|!\[(.*?)\]\((.+?)\)")
+        img_matches = image_pattern.findall(line)
+        clean_img_matches = [m for m in img_matches if m != '']
+        if clean_img_matches:
+            for img_match in clean_img_matches:
+                html_template = f'<img src="graphics/{img_match[0]}" alt="{img_match[1]}"/>'
+                html_lines.append(html_template)
             continue
+        # Is Paragraph
+        # catch all is paragraph
+        html_lines.append(f"<p>{line}</p>")
 
-        # Match Obsidian-style image ![[...]]
-        obsidian_image_match = re.match(r"^!\[\[(.+?)\]\]\s*$", stripped)
-        if obsidian_image_match:
-            flush_paragraph()
-            target = obsidian_image_match.group(1)
-            # Handle aliases like ![[image.png|alt text]]
-            reference = target.split("|", 1)[0]
-            src_path = normalise_image_src(ctx, source_dir, relative_dir, reference)
-            html_lines.append(f'<figure><img src="{escape_html(src_path)}" alt=""></figure>')
-            continue
-
-        paragraph_buffer.append(stripped)
-
-    flush_paragraph()
     return "\n".join(html_lines)
