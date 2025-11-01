@@ -51,7 +51,7 @@ def main() -> None:
     if not source_root.exists() or not source_root.is_dir():
         raise SystemExit(f"Error: Vault path not found or is not a directory.\nProvided path: {source_root}")
 
-    output_root = (source_root.parent / f"{source_root.name}{DEFAULT_OUTPUT_SUFFIX}").resolve()
+    output_root = Path(f"{source_root.name}{DEFAULT_OUTPUT_SUFFIX}").resolve()
 
     if output_root.exists():
         print(f"Removing existing output directory: {output_root}")
