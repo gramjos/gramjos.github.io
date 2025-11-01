@@ -8,12 +8,9 @@ HTML-escaped to be displayed as-is. This ensures a consistent and predictable
 output for the SPA to consume.
 """
 
-from curses.ascii import alt
 import re
 from pathlib import Path
-from turtle import ht
 from typing import List
-
 from .assets import normalise_image_src
 from .models import BuildContext
 from .utils import escape_html
@@ -59,11 +56,25 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
         # Is Img
         image_pattern = re.compile(r"!\[\[(.+?)\]\]|!\[(.*?)\]\((.+?)\)")
         img_matches = image_pattern.findall(line)
-        clean_img_matches = [m for m in img_matches if m != '']
-        if clean_img_matches:
-            for img_match in clean_img_matches:
-                html_template = f'<img src="graphics/{img_match[0]}" alt="{img_match[1]}"/>'
-                html_lines.append(html_template)
+        if img_matches:
+            for img_match in img_matches:
+                obsidian_style_match = img_match[0]
+                markdown_style_alt = img_match[1]
+                markdown_style_src = img_match[2]
+
+                src = obsidian_style_match or markdown_style_src
+                alt = markdown_style_alt
+
+                if src.lower().endswith(".excalidraw"):
+                    # Handle Excalidraw files
+                    # Note: This assumes excalidraw files are treated like other assets
+                    # and copied to a location accessible via a relative path.
+                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
+                    html_lines.append(f'<iframe src="{asset_path}" width="100%" height="500px" frameborder="0"></iframe>')
+                else:
+                    # Handle regular images
+                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
+                    html_lines.append(f'<img src="{asset_path}" alt="{escape_html(alt)}"/>')
             continue
         # Is Paragraph
         # catch all is paragraph
