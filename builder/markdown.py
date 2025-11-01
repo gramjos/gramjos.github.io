@@ -70,11 +70,11 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
                     # Note: This assumes excalidraw files are treated like other assets
                     # and copied to a location accessible via a relative path.
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
-                    html_lines.append(f'<iframe src="{asset_path}" width="100%" height="500px" frameborder="0"></iframe>')
+                    html_lines.append(f'<iframe src="graphics/{asset_path}" width="100%" height="500px" frameborder="0"></iframe>')
                 else:
                     # Handle regular images
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
-                    html_lines.append(f'<img src="{asset_path}" alt="{escape_html(alt)}"/>')
+                    html_lines.append(f'<img src="graphics/{asset_path}" alt="{escape_html(alt)}"/>')
             continue
         # Is Paragraph
         # catch all is paragraph
