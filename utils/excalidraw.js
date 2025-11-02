@@ -105,7 +105,7 @@ async function renderExcalidraw(container, excalidrawPath) {
     // Get the Excalidraw component from the global ExcalidrawLib
     const Excalidraw = window.ExcalidrawLib.Excalidraw;
     
-    // Create Excalidraw component with initial data
+    // Create Excalidraw component with initial data and API callback
     const excalidrawElement = React.createElement(Excalidraw, {
       initialData: {
         elements: excalidrawData.elements || [],
@@ -114,7 +114,20 @@ async function renderExcalidraw(container, excalidrawPath) {
       },
       viewModeEnabled: true, // Set to view-only mode by default
       zenModeEnabled: false,
-      gridModeEnabled: false
+      gridModeEnabled: false,
+      excalidrawAPI: (api) => {
+        // Once the API is ready, center and fit the content to viewport
+        if (api && api.scrollToContent) {
+          // Use setTimeout to ensure the scene is fully loaded
+          setTimeout(() => {
+            api.scrollToContent(null, {
+              fitToViewport: true,
+              viewportZoomFactor: 0.9, // Use 90% of viewport (more breathing room)
+              animate: false
+            });
+          }, 100);
+        }
+      }
     });
     
     // Render the Excalidraw component
