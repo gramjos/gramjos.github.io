@@ -67,11 +67,8 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
 
                 # Check if this is an Excalidraw file
                 if src.lower().endswith('.excalidraw') or src.lower().endswith('.excalidraw.md'):
-                    # Add .md extension if needed
-                    if not src.lower().endswith('.md'):
-                        src = src + '.md'
-                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
-                    html_lines.append(f'<div data-excalidraw-file="{asset_path}"></div>')
+                    # TODO: Handle Excalidraw files specificallyV
+                    print(f"Excalidraw file detected: {src} (handling not implemented)")
                 else:
                     # Handle regular images
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)

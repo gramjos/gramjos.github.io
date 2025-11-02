@@ -1,1 +1,3 @@
 go hard
+this is the greatness pic...
+![[unnamed.jpg]]

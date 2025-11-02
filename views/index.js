@@ -2,7 +2,6 @@
 import { guides, guidesBySlug } from '../guides.js';
 import { resolveNode, fetchHtml, toNotesHref } from '../notes/content-store.js';
 import { codeBlock, escapeHtml } from '../utils/rendering.js';
-import { initExcalidrawDiagrams } from '../utils/excalidraw.js';
 
 export function renderHome(ctx) {
     document.title = 'Plain Vanilla SPA';
@@ -78,7 +77,6 @@ function renderNotesPath(ctx, segments) {
                 if (ctx.location.path !== requestPath) return;
                 document.title = directoryTitle(result.node);
                 ctx.mount.innerHTML = buildDirectoryMarkup(result.node, readmeHtml);
-                initExcalidrawDiagrams();
                 return;
             }
 
@@ -86,7 +84,6 @@ function renderNotesPath(ctx, segments) {
             if (ctx.location.path !== requestPath) return;
             document.title = fileTitle(result.node);
             ctx.mount.innerHTML = buildFileMarkup(result.node, fileHtml);
-            initExcalidrawDiagrams();
         })
         .catch((error) => {
             console.error(error);
