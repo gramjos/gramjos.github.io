@@ -313,3 +313,26 @@ a:focus-visible {
 .notes-content figure {
     margin: 0;
 }
+
+/* Excalidraw embeds */
+.excalidraw-embed {
+    width: 100%;
+    min-height: 600px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    margin: 1rem 0;
+}
+
+.excalidraw-loading {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+}
+
+.excalidraw-embed .excalidraw {
+    width: 100%;
+    height: 100%;
+}

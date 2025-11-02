@@ -89,6 +89,12 @@ def resolve_asset_reference(ctx: BuildContext, source_dir: Path, reference: str)
     candidate_in_same_dir = (source_dir / normalised_ref).resolve()
     if candidate_in_same_dir.exists() and candidate_in_same_dir.is_file() and is_within(candidate_in_same_dir, ctx.source_root):
         return candidate_in_same_dir
+    
+    # Rule 2b: If no extension, try adding .excalidraw extension
+    if "." not in normalised_ref:
+        excalidraw_candidate = (source_dir / f"{normalised_ref}.excalidraw").resolve()
+        if excalidraw_candidate.exists() and excalidraw_candidate.is_file() and is_within(excalidraw_candidate, ctx.source_root):
+            return excalidraw_candidate
 
     # Rule 3: Search in 'graphics' subdirectories up the tree.
     current_dir = source_dir
@@ -97,6 +103,13 @@ def resolve_asset_reference(ctx: BuildContext, source_dir: Path, reference: str)
         candidate_in_graphics = (graphics_dir / normalised_ref).resolve()
         if candidate_in_graphics.exists() and candidate_in_graphics.is_file() and is_within(candidate_in_graphics, ctx.source_root):
             return candidate_in_graphics
+        
+        # Rule 3b: Also try with .excalidraw extension in graphics directories
+        if "." not in normalised_ref:
+            excalidraw_in_graphics = (graphics_dir / f"{normalised_ref}.excalidraw").resolve()
+            if excalidraw_in_graphics.exists() and excalidraw_in_graphics.is_file() and is_within(excalidraw_in_graphics, ctx.source_root):
+                return excalidraw_in_graphics
+        
         if current_dir == ctx.source_root:
             # Stop searching once we've checked the root.
             break

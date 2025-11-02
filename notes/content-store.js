@@ -114,7 +114,9 @@ function rewriteRelativeUrls(html, relativePath) {
     const prefix = dirSegments.length > 0
         ? `${base}/${dirSegments.join('/')}`.replace(/\/+/g, '/')
         : base;
-    return html.replace(/(<img\b[^>]*\ssrc\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
+    
+    // Rewrite img src attributes
+    let result = html.replace(/(<img\b[^>]*\ssrc\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
         const trimmedSrc = src.trim();
         if (/^(?:[a-z]+:|data:|\/)/i.test(trimmedSrc)) {
             return match;
@@ -123,6 +125,19 @@ function rewriteRelativeUrls(html, relativePath) {
         const full = `${prefix}/${cleaned}`.replace(/\/+/g, '/');
         return `${start}${full}${end}`;
     });
+    
+    // Rewrite data-excalidraw-src attributes
+    result = result.replace(/(data-excalidraw-src\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
+        const trimmedSrc = src.trim();
+        if (/^(?:[a-z]+:|data:|\/)/i.test(trimmedSrc)) {
+            return match;
+        }
+        const cleaned = trimmedSrc.replace(/^\.\//, '').replace(/^\/+/, '');
+        const full = `${prefix}/${cleaned}`.replace(/\/+/g, '/');
+        return `${start}${full}${end}`;
+    });
+    
+    return result;
 }
 
 function normaliseBasePath(value) {

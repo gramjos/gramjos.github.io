@@ -65,10 +65,35 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
                 src = obsidian_style_match or markdown_style_src
                 alt = markdown_style_alt
 
-                # Check if this is an Excalidraw file
-                if src.lower().endswith('.excalidraw') or src.lower().endswith('.excalidraw.md'):
-                    # TODO: Handle Excalidraw files specificallyV
-                    print(f"Excalidraw file detected: {src} (handling not implemented)")
+                # First resolve the asset to get the actual file path
+                from .assets import resolve_asset_reference
+                resolved_path = resolve_asset_reference(ctx, source_file.parent, src)
+                
+                # Check if this is an Excalidraw file (either by extension in src or resolved path)
+                is_excalidraw = (src.lower().endswith('.excalidraw') or 
+                               src.lower().endswith('.excalidraw.md') or
+                               (resolved_path and resolved_path.suffix.lower() == '.excalidraw'))
+                
+                if is_excalidraw:
+                    # Handle Excalidraw files specifically
+                    # Use the resolved path's name to ensure we have the correct extension
+                    if resolved_path:
+                        excalidraw_src = resolved_path.name
+                    else:
+                        # Fallback: strip .md if present
+                        excalidraw_src = src.replace('.excalidraw.md', '.excalidraw') if src.endswith('.excalidraw.md') else src
+                    
+                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), excalidraw_src)
+                    
+                    # Generate a unique ID for this Excalidraw instance
+                    import hashlib
+                    unique_id = hashlib.md5(asset_path.encode()).hexdigest()[:8]
+                    
+                    # Create a container div with data attributes that will be picked up by the client-side JS
+                    excalidraw_html = f'''<div class="excalidraw-embed" data-excalidraw-src="{asset_path}" id="excalidraw-{unique_id}">
+    <div class="excalidraw-loading">Loading Excalidraw diagram...</div>
+</div>'''
+                    html_lines.append(excalidraw_html)
                 else:
                     # Handle regular images
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
