@@ -2,7 +2,7 @@
   "source": "/Users/gramjos/Documents/try1",
   "output": "/Users/gramjos/Computation/vanilla_web_dev/gramjos.github.io/try1_ready_2_serve",
   "publicPath": "/try1_ready_2_serve",
-  "generatedAt": "2025-11-02T22:31:40.023508+00:00",
+  "generatedAt": "2025-11-02T22:48:39.177151+00:00",
   "version": 1,
   "root": {
     "type": "directory",
@@ -16,6 +16,45 @@
     },
     "breadcrumbs": [],
     "directories": [
+      {
+        "type": "directory",
+        "name": "moss",
+        "title": "Moss",
+        "slug": "moss",
+        "slugPath": "moss",
+        "readme": {
+          "source": "moss/README.md",
+          "html": "moss/README.html"
+        },
+        "breadcrumbs": [
+          {
+            "title": "Notes",
+            "slugPath": ""
+          }
+        ],
+        "directories": [],
+        "files": [
+          {
+            "type": "file",
+            "name": "look.md",
+            "title": "Look",
+            "slug": "look",
+            "slugPath": "moss/look",
+            "source": "moss/look.md",
+            "html": "moss/look.html",
+            "breadcrumbs": [
+              {
+                "title": "Notes",
+                "slugPath": ""
+              },
+              {
+                "title": "Moss",
+                "slugPath": "moss"
+              }
+            ]
+          }
+        ]
+      },
       {
         "type": "directory",
         "name": "s1",
