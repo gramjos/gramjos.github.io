@@ -65,16 +65,21 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
                 src = obsidian_style_match or markdown_style_src
                 alt = markdown_style_alt
 
-                if src.lower().endswith(".excalidraw"):
+                if src.lower().endswith(".excalidraw") or src.lower().endswith(".excalidraw.md"):
                     # Handle Excalidraw files
-                    # Note: This assumes excalidraw files are treated like other assets
-                    # and copied to a location accessible via a relative path.
-                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
-                    html_lines.append(f'<iframe src="graphics/{asset_path}" width="100%" height="500px" frameborder="0"></iframe>')
+                    # Add .md suffix if not present for Obsidian-style excalidraw files
+                    if not src.lower().endswith(".md"):
+                        src_with_ext = src + ".md"
+                    else:
+                        src_with_ext = src
+                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src_with_ext)
+                    # Create a unique ID for the excalidraw container
+                    excalidraw_id = f"excalidraw-{abs(hash(asset_path))}"
+                    html_lines.append(f'<div id="{excalidraw_id}" class="excalidraw-wrapper" data-excalidraw-src="{asset_path}" style="width: 100%; height: 500px;"></div>')
                 else:
                     # Handle regular images
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
-                    html_lines.append(f'<img src="graphics/{asset_path}" alt="{escape_html(alt)}"/>')
+                    html_lines.append(f'<img src="{asset_path}" alt="{escape_html(alt)}"/>')
             continue
         # Is Paragraph
         # catch all is paragraph

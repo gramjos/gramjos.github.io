@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excalidraw Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .test-container {
+            border: 2px solid #333;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        h1 { margin-top: 0; }
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+        .status {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+    </style>
+    <link rel="stylesheet" href="https://esm.sh/@excalidraw/excalidraw@0.18.0/dist/excalidraw.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+    <script>
+        window.EXCALIDRAW_ASSET_PATH = "https://esm.sh/@excalidraw/excalidraw@0.18.0/dist/";
+    </script>
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+            "react-dom": "https://esm.sh/react-dom@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client"
+        }
+    }
+    </script>
+</head>
+<body>
+    <h1>Excalidraw Integration Test</h1>
+    
+    <div class="status info" id="status">
+        <strong>Status:</strong> Initializing...
+    </div>
+
+    <h2>Test 1: Direct File Path</h2>
+    <div class="test-container">
+        <p>Loading from: <code>/try1_ready_2_serve/graphics/t1.excalidraw.md</code></p>
+        <div id="test1" class="excalidraw-wrapper" 
+             data-excalidraw-src="/try1_ready_2_serve/graphics/t1.excalidraw.md" 
+             style="width: 100%; height: 500px; border: 1px solid #ccc;">
+        </div>
+    </div>
+
+    <h2>Debug Info</h2>
+    <div class="test-container">
+        <pre id="debug" style="background: #f4f4f4; padding: 1rem; overflow: auto;"></pre>
+    </div>
+
+    <script type="module">
+        const debugEl = document.getElementById('debug');
+        const statusEl = document.getElementById('status');
+        
+        function log(message, isError = false) {
+            console.log(message);
+            debugEl.textContent += message + '\n';
+            if (isError) {
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '<strong>Status:</strong> Error - ' + message;
+            }
+        }
+
+        log('1. Checking dependencies...');
+        log('   - LZString: ' + (typeof LZString !== 'undefined' ? '✓ Loaded' : '✗ Missing'));
+        log('   - Import maps: ✓ Supported');
+        
+        log('\n2. Loading Excalidraw library...');
+        
+        try {
+            const ExcalidrawLib = await import('https://esm.sh/@excalidraw/excalidraw@0.18.0');
+            log('   ✓ Excalidraw loaded');
+            
+            const React = await import('https://esm.sh/react@18.2.0');
+            log('   ✓ React loaded');
+            
+            const ReactDOM = await import('https://esm.sh/react-dom@18.2.0/client');
+            log('   ✓ ReactDOM loaded');
+            
+            log('\n3. Fetching Excalidraw file...');
+            const src = '/try1_ready_2_serve/graphics/t1.excalidraw.md';
+            const response = await fetch(src);
+            log('   - URL: ' + src);
+            log('   - Status: ' + response.status + ' ' + response.statusText);
+            
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            
+            const content = await response.text();
+            log('   - Size: ' + content.length + ' bytes');
+            log('   ✓ File loaded');
+            
+            log('\n4. Parsing Excalidraw data...');
+            const jsonMatch = content.match(/```compressed-json\n([\s\S]*?)\n```/);
+            if (!jsonMatch) {
+                throw new Error('No compressed-json block found');
+            }
+            log('   ✓ Found compressed-json block');
+            
+            const compressed = jsonMatch[1].trim();
+            log('   - Compressed size: ' + compressed.length + ' chars');
+            
+            const decompressed = LZString.decompressFromBase64(compressed);
+            if (!decompressed) {
+                throw new Error('Decompression failed');
+            }
+            log('   ✓ Decompressed (' + decompressed.length + ' bytes)');
+            
+            const sceneData = JSON.parse(decompressed);
+            log('   ✓ Parsed JSON');
+            log('   - Elements: ' + (sceneData.elements?.length || 0));
+            
+            log('\n5. Rendering Excalidraw...');
+            const container = document.getElementById('test1');
+            const { Excalidraw } = ExcalidrawLib;
+            
+            const initialData = {
+                elements: sceneData.elements || [],
+                appState: {
+                    ...(sceneData.appState || {}),
+                    viewModeEnabled: true,
+                },
+                files: sceneData.files || null,
+            };
+            
+            const root = ReactDOM.createRoot(container);
+            root.render(
+                React.createElement(Excalidraw, {
+                    initialData: initialData,
+                    viewModeEnabled: true,
+                })
+            );
+            
+            log('   ✓ Rendered successfully!');
+            statusEl.className = 'status success';
+            statusEl.innerHTML = '<strong>Status:</strong> ✓ All tests passed!';
+            
+        } catch (error) {
+            log('\n✗ ERROR: ' + error.message, true);
+            log('Stack: ' + error.stack);
+        }
+    </script>
+</body>
+</html>
