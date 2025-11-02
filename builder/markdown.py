@@ -65,17 +65,13 @@ def render_markdown(ctx: BuildContext, source_file: Path, markdown_text: str) ->
                 src = obsidian_style_match or markdown_style_src
                 alt = markdown_style_alt
 
-                if src.lower().endswith(".excalidraw") or src.lower().endswith(".excalidraw.md"):
-                    # Handle Excalidraw files
-                    # Add .md suffix if not present for Obsidian-style excalidraw files
-                    if not src.lower().endswith(".md"):
-                        src_with_ext = src + ".md"
-                    else:
-                        src_with_ext = src
-                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src_with_ext)
-                    # Create a unique ID for the excalidraw container
-                    excalidraw_id = f"excalidraw-{abs(hash(asset_path))}"
-                    html_lines.append(f'<div id="{excalidraw_id}" class="excalidraw-wrapper" data-excalidraw-src="{asset_path}" style="width: 100%; height: 500px;"></div>')
+                # Check if this is an Excalidraw file
+                if src.lower().endswith('.excalidraw') or src.lower().endswith('.excalidraw.md'):
+                    # Add .md extension if needed
+                    if not src.lower().endswith('.md'):
+                        src = src + '.md'
+                    asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)
+                    html_lines.append(f'<div data-excalidraw-file="{asset_path}"></div>')
                 else:
                     # Handle regular images
                     asset_path = normalise_image_src(ctx, source_file.parent, source_file.parent.relative_to(ctx.source_root), src)

@@ -1,211 +1,335 @@
-// Excalidraw rendering utilities for converting .excalidraw.md files into interactive diagrams
-// Uses vanilla JS with Excalidraw's browser-based integration (no bundler required)
-
-let ExcalidrawLib = null;
-
 /**
- * Lazy load the Excalidraw library
+ * Simple Excalidraw viewer for vanilla JS
+ * Uses Excalidraw's web component for easy integration
  */
-async function loadExcalidrawLibrary() {
-    if (ExcalidrawLib) {
-        return ExcalidrawLib;
-    }
+
+// Initialize all Excalidraw diagrams on the page
+export function initExcalidrawDiagrams() {
+    const containers = document.querySelectorAll('[data-excalidraw-file]');
     
-    try {
-        // Import Excalidraw from ESM CDN
-        ExcalidrawLib = await import('https://esm.sh/@excalidraw/excalidraw@0.18.0');
-        return ExcalidrawLib;
-    } catch (error) {
-        console.error('Failed to load Excalidraw library:', error);
-        throw error;
-    }
-}
-
-/**
- * Initializes all Excalidraw diagrams on the current page
- */
-export async function initExcalidrawDiagrams() {
-    const wrappers = document.querySelectorAll('.excalidraw-wrapper');
-    if (wrappers.length === 0) {
+    if (containers.length === 0) {
         return;
     }
     
-    // Load Excalidraw library once for all diagrams
-    try {
-        await loadExcalidrawLibrary();
-    } catch (error) {
-        console.error('Cannot initialize Excalidraw diagrams:', error);
-        return;
-    }
+    console.log(`[Excalidraw] Found ${containers.length} diagram(s) to render`);
     
-    // Initialize each diagram
-    wrappers.forEach((wrapper) => {
-        const src = wrapper.dataset.excalidrawSrc;
-        if (src) {
-            loadAndRenderExcalidraw(wrapper, src);
+    containers.forEach(container => {
+        const filePath = container.getAttribute('data-excalidraw-file');
+        if (filePath) {
+            loadAndRenderDiagram(container, filePath);
         }
     });
 }
 
-/**
- * Loads an Excalidraw .md file and renders it in the specified container
- */
-async function loadAndRenderExcalidraw(container, src) {
+async function loadAndRenderDiagram(container, filePath) {
     try {
-        console.log('Loading Excalidraw diagram from:', src);
-        const response = await fetch(src);
+        console.log(`[Excalidraw] Loading: ${filePath}`);
+        
+        // Fetch the .excalidraw.md file
+        const response = await fetch(filePath);
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP ${response.status}`);
         }
         
         const content = await response.text();
-        console.log('Excalidraw file loaded, size:', content.length, 'bytes');
-        const sceneData = parseExcalidrawMarkdown(content);
         
-        if (sceneData) {
-            console.log('Excalidraw scene parsed successfully, elements:', sceneData.elements?.length || 0);
-            await renderExcalidrawScene(container, sceneData);
-        } else {
-            console.error('Failed to parse Excalidraw markdown');
-            container.innerHTML = '<p class="muted">Unable to parse Excalidraw data</p>';
+        // Parse the Obsidian Excalidraw format
+        const sceneData = parseObsidianExcalidraw(content);
+        if (!sceneData) {
+            throw new Error('Failed to parse Excalidraw data');
         }
+        
+        console.log(`[Excalidraw] Parsed ${sceneData.elements?.length || 0} elements`);
+        
+        // Render using simple canvas approach
+        renderDiagramToCanvas(container, sceneData);
+        
     } catch (error) {
-        console.error('Error loading Excalidraw diagram:', error);
+        console.error('[Excalidraw] Error:', error);
         container.innerHTML = `
-            <div style="border: 2px solid #ef4444; border-radius: 8px; padding: 1rem; background: #fee;">
-                <p style="color: #991b1b; margin: 0;"><strong>Error loading diagram</strong></p>
-                <p style="color: #7f1d1d; font-size: 0.875rem; margin: 0.5rem 0 0 0;">
-                    ${error.message}<br>
-                    <code style="font-size: 0.75rem;">Source: ${src}</code>
-                </p>
+            <div style="padding: 1rem; background: #fee; border: 1px solid #fcc; border-radius: 4px; color: #c00;">
+                <strong>Failed to load diagram:</strong> ${error.message}
             </div>
         `;
     }
 }
 
-/**
- * Parses the Obsidian .excalidraw.md format to extract the JSON scene data
- */
-function parseExcalidrawMarkdown(markdown) {
-    // Look for the compressed-json code block
-    const jsonMatch = markdown.match(/```compressed-json\n([\s\S]*?)\n```/);
-    if (!jsonMatch) {
+function parseObsidianExcalidraw(markdown) {
+    // Extract the compressed-json block
+    const match = markdown.match(/```compressed-json\n([\s\S]*?)\n```/);
+    if (!match) {
+        console.error('[Excalidraw] No compressed-json block found');
         return null;
     }
     
-    const compressed = jsonMatch[1].trim();
+    // Remove all whitespace from base64 string (Obsidian wraps it across lines)
+    const compressed = match[1].replace(/\s/g, '');
     
     try {
-        // Decompress the data using LZ-String
-        const decompressed = decompressFromBase64(compressed);
-        if (!decompressed) {
+        // Check if LZString is available
+        if (typeof LZString === 'undefined') {
+            console.error('[Excalidraw] LZString library not loaded');
             return null;
         }
-        return JSON.parse(decompressed);
-    } catch (error) {
-        console.error('Error parsing Excalidraw data:', error);
-        return null;
-    }
-}
-
-/**
- * Decompression using the lz-string library
- */
-function decompressFromBase64(compressed) {
-    try {
-        // Use the global LZString library loaded from CDN
-        if (typeof LZString !== 'undefined' && LZString.decompressFromBase64) {
-            return LZString.decompressFromBase64(compressed);
+        
+        // Decompress
+        const decompressed = LZString.decompressFromBase64(compressed);
+        if (!decompressed) {
+            console.error('[Excalidraw] Decompression failed');
+            return null;
         }
         
-        console.error('LZString library not available');
-        return null;
-    } catch (e) {
-        console.error('Decompression failed:', e);
-        return null;
-    }
-}
-
-/**
- * Renders the Excalidraw scene using the actual Excalidraw viewer
- * This creates a fully interactive, read-only diagram
- */
-async function renderExcalidrawScene(container, sceneData) {
-    if (!sceneData || !sceneData.elements) {
-        container.innerHTML = '<p class="muted">No diagram elements found</p>';
-        return;
-    }
-    
-    if (!ExcalidrawLib) {
-        container.innerHTML = '<p class="muted">Excalidraw library not loaded</p>';
-        return;
-    }
-    
-    try {
-        // Import React and ReactDOM for rendering
-        const React = await import('https://esm.sh/react@18.2.0');
-        const ReactDOM = await import('https://esm.sh/react-dom@18.2.0/client');
+        // Parse JSON
+        return JSON.parse(decompressed);
         
-        // Get the Excalidraw component
-        const { Excalidraw } = ExcalidrawLib;
-        
-        // Prepare the initial data
-        const initialData = {
-            elements: sceneData.elements || [],
-            appState: {
-                ...(sceneData.appState || {}),
-                viewModeEnabled: true, // Read-only mode
-                zenModeEnabled: false,
-                gridSize: null,
-            },
-            files: sceneData.files || null,
-        };
-        
-        // Create a root and render the Excalidraw component
-        const root = ReactDOM.createRoot(container);
-        root.render(
-            React.createElement(Excalidraw, {
-                initialData: initialData,
-                viewModeEnabled: true,
-            })
-        );
-        
-        console.log('Excalidraw diagram rendered successfully');
     } catch (error) {
-        console.error('Error rendering Excalidraw scene:', error);
-        
-        // Fallback to a simple preview
-        const elements = sceneData.elements || [];
-        const textElements = elements.filter(el => el.type === 'text');
-        const shapes = elements.filter(el => ['rectangle', 'ellipse', 'diamond', 'line', 'arrow'].includes(el.type));
-        
-        const textContent = textElements
-            .map(el => el.text || el.rawText)
-            .filter(Boolean)
-            .join(' ');
-        
-        container.innerHTML = `
-            <div style="border: 2px solid var(--border); border-radius: 8px; padding: 1.5rem; background: #fafafa;">
-                <div style="margin-bottom: 0.5rem; font-weight: 600; color: var(--fg);">📊 Excalidraw Diagram (Preview Mode)</div>
-                ${textContent ? `<div style="margin: 0.75rem 0; padding: 0.75rem; background: white; border-radius: 6px; font-size: 0.95rem;">${escapeHtmlForExcalidraw(textContent)}</div>` : ''}
-                <div style="display: flex; gap: 1rem; margin-top: 0.75rem; font-size: 0.875rem; color: var(--muted);">
-                    <span>📝 ${textElements.length} text element${textElements.length !== 1 ? 's' : ''}</span>
-                    <span>⬜ ${shapes.length} shape${shapes.length !== 1 ? 's' : ''}</span>
-                    <span>✨ ${elements.length} total element${elements.length !== 1 ? 's' : ''}</span>
-                </div>
-                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted);">
-                    ⚠️ Full rendering failed: ${error.message}
-                </div>
-            </div>
-        `;
+        console.error('[Excalidraw] Parse error:', error);
+        return null;
     }
 }
 
-/**
- * Simple HTML escape for Excalidraw text content
- */
-function escapeHtmlForExcalidraw(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+function renderDiagramToCanvas(container, sceneData) {
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Set canvas size
+    const width = 800;
+    const height = 600;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = '100%';
+    canvas.style.height = 'auto';
+    canvas.style.border = '1px solid #ddd';
+    canvas.style.borderRadius = '8px';
+    canvas.style.background = '#fff';
+    
+    // Calculate bounds
+    const elements = sceneData.elements || [];
+    if (elements.length === 0) {
+        container.innerHTML = '<p>No elements in diagram</p>';
+        return;
+    }
+    
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    elements.forEach(el => {
+        if (el.x < minX) minX = el.x;
+        if (el.y < minY) minY = el.y;
+        if (el.x + el.width > maxX) maxX = el.x + el.width;
+        if (el.y + el.height > maxY) maxY = el.y + el.height;
+    });
+    
+    const contentWidth = maxX - minX;
+    const contentHeight = maxY - minY;
+    const scale = Math.min(width / contentWidth, height / contentHeight) * 0.9;
+    const offsetX = (width - contentWidth * scale) / 2 - minX * scale;
+    const offsetY = (height - contentHeight * scale) / 2 - minY * scale;
+    
+    // Simple rendering
+    ctx.save();
+    ctx.translate(offsetX, offsetY);
+    ctx.scale(scale, scale);
+    
+    elements.forEach(el => {
+        if (el.isDeleted) return;
+        
+        ctx.strokeStyle = el.strokeColor || '#000';
+        ctx.fillStyle = el.backgroundColor || 'transparent';
+        ctx.lineWidth = (el.strokeWidth || 1) / scale;
+        
+        if (el.type === 'rectangle') {
+            ctx.beginPath();
+            ctx.rect(el.x, el.y, el.width, el.height);
+            if (el.backgroundColor && el.backgroundColor !== 'transparent') {
+                ctx.fill();
+            }
+            ctx.stroke();
+        } else if (el.type === 'ellipse') {
+            ctx.beginPath();
+            ctx.ellipse(
+                el.x + el.width / 2,
+                el.y + el.height / 2,
+                Math.abs(el.width / 2),
+                Math.abs(el.height / 2),
+                0, 0, Math.PI * 2
+            );
+            if (el.backgroundColor && el.backgroundColor !== 'transparent') {
+                ctx.fill();
+            }
+            ctx.stroke();
+        } else if (el.type === 'line' || el.type === 'arrow') {
+            const points = el.points || [];
+            if (points.length > 0) {
+                ctx.beginPath();
+                ctx.moveTo(el.x + points[0][0], el.y + points[0][1]);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(el.x + points[i][0], el.y + points[i][1]);
+                }
+                ctx.stroke();
+                
+                // Simple arrow head for arrows
+                if (el.type === 'arrow' && points.length > 1) {
+                    const last = points[points.length - 1];
+                    const prev = points[points.length - 2];
+                    const angle = Math.atan2(last[1] - prev[1], last[0] - prev[0]);
+                    const headLen = 10 / scale;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(el.x + last[0], el.y + last[1]);
+                    ctx.lineTo(
+                        el.x + last[0] - headLen * Math.cos(angle - Math.PI / 6),
+                        el.y + last[1] - headLen * Math.sin(angle - Math.PI / 6)
+                    );
+                    ctx.moveTo(el.x + last[0], el.y + last[1]);
+                    ctx.lineTo(
+                        el.x + last[0] - headLen * Math.cos(angle + Math.PI / 6),
+                        el.y + last[1] - headLen * Math.sin(angle + Math.PI / 6)
+                    );
+                    ctx.stroke();
+                }
+            }
+        } else if (el.type === 'text') {
+            ctx.font = `${(el.fontSize || 20) * scale}px ${el.fontFamily || 'sans-serif'}`;
+            ctx.fillStyle = el.strokeColor || '#000';
+            ctx.fillText(el.text || '', el.x, el.y + (el.fontSize || 20));
+        }
+    });
+    
+    ctx.restore();
+    
+    // Add canvas to container
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    
+    // Add pan/zoom support
+    makeCanvasInteractive(canvas, sceneData);
+}
+
+function makeCanvasInteractive(canvas, sceneData) {
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    
+    function redraw() {
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+        ctx.translate(panX, panY);
+        ctx.scale(scale, scale);
+        
+        // Redraw all elements
+        const elements = sceneData.elements || [];
+        elements.forEach(el => {
+            if (el.isDeleted) return;
+            
+            ctx.strokeStyle = el.strokeColor || '#000';
+            ctx.fillStyle = el.backgroundColor || 'transparent';
+            ctx.lineWidth = (el.strokeWidth || 1) / scale;
+            
+            if (el.type === 'rectangle') {
+                ctx.beginPath();
+                ctx.rect(el.x, el.y, el.width, el.height);
+                if (el.backgroundColor && el.backgroundColor !== 'transparent') {
+                    ctx.fill();
+                }
+                ctx.stroke();
+            } else if (el.type === 'ellipse') {
+                ctx.beginPath();
+                ctx.ellipse(
+                    el.x + el.width / 2,
+                    el.y + el.height / 2,
+                    Math.abs(el.width / 2),
+                    Math.abs(el.height / 2),
+                    0, 0, Math.PI * 2
+                );
+                if (el.backgroundColor && el.backgroundColor !== 'transparent') {
+                    ctx.fill();
+                }
+                ctx.stroke();
+            } else if (el.type === 'line' || el.type === 'arrow') {
+                const points = el.points || [];
+                if (points.length > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(el.x + points[0][0], el.y + points[0][1]);
+                    for (let i = 1; i < points.length; i++) {
+                        ctx.lineTo(el.x + points[i][0], el.y + points[i][1]);
+                    }
+                    ctx.stroke();
+                    
+                    if (el.type === 'arrow' && points.length > 1) {
+                        const last = points[points.length - 1];
+                        const prev = points[points.length - 2];
+                        const angle = Math.atan2(last[1] - prev[1], last[0] - prev[0]);
+                        const headLen = 10 / scale;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(el.x + last[0], el.y + last[1]);
+                        ctx.lineTo(
+                            el.x + last[0] - headLen * Math.cos(angle - Math.PI / 6),
+                            el.y + last[1] - headLen * Math.sin(angle - Math.PI / 6)
+                        );
+                        ctx.moveTo(el.x + last[0], el.y + last[1]);
+                        ctx.lineTo(
+                            el.x + last[0] - headLen * Math.cos(angle + Math.PI / 6),
+                            el.y + last[1] - headLen * Math.sin(angle + Math.PI / 6)
+                        );
+                        ctx.stroke();
+                    }
+                }
+            } else if (el.type === 'text') {
+                ctx.font = `${el.fontSize || 20}px ${el.fontFamily || 'sans-serif'}`;
+                ctx.fillStyle = el.strokeColor || '#000';
+                ctx.fillText(el.text || '', el.x, el.y + (el.fontSize || 20));
+            }
+        });
+        
+        ctx.restore();
+    }
+    
+    // Mouse wheel zoom
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? 0.9 : 1.1;
+        scale *= delta;
+        scale = Math.max(0.1, Math.min(5, scale)); // Limit zoom
+        redraw();
+    });
+    
+    // Mouse drag pan
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        canvas.style.cursor = 'grabbing';
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            panX += dx;
+            panY += dy;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            redraw();
+        }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+    });
+    
+    canvas.style.cursor = 'grab';
 }

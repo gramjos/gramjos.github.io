@@ -126,8 +126,8 @@ function rewriteRelativeUrls(html, relativePath) {
         return `${start}${full}${end}`;
     });
     
-    // Rewrite data-excalidraw-src attributes for Excalidraw diagrams
-    result = result.replace(/(data-excalidraw-src\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
+    // Rewrite data-excalidraw-file attributes
+    result = result.replace(/(data-excalidraw-file\s*=\s*["'])([^"'?#]+)(["'])/gi, (match, start, src, end) => {
         const trimmedSrc = src.trim();
         if (/^(?:[a-z]+:|data:|\/)/i.test(trimmedSrc)) {
             return match;
