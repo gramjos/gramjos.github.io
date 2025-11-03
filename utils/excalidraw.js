@@ -116,15 +116,10 @@ async function renderExcalidraw(container, excalidrawPath) {
       zenModeEnabled: false,
       gridModeEnabled: false,
       excalidrawAPI: (api) => {
-        // Once the API is ready, center and fit the content to viewport
+        // Once the API is ready, scroll to content
         if (api && api.scrollToContent) {
-          // Use setTimeout to ensure the scene is fully loaded
           setTimeout(() => {
-            api.scrollToContent(null, {
-              fitToViewport: true,
-              viewportZoomFactor: 0.9, // Use 90% of viewport (more breathing room)
-              animate: false
-            });
+            api.scrollToContent();
           }, 100);
         }
       }
