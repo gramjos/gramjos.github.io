@@ -1,3 +1,4 @@
+# ;)
  ctags -R --languages=Python,JavaScript,HTML,CSS --exclude=node_modules --exclude=dist --exclude=.git --exclude='*.geojson' --exclude='*.jpg' --exclude='*.excalidraw'
 
 ### Summary of Key Technical Pieces
