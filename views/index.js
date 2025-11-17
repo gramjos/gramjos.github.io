@@ -13,6 +13,9 @@ export function renderHome(ctx) {
                 <p>
                     My musings for you.
                 </p>
+				<ul>
+					<li> To learn what it means to be Graham: </li>
+				</ul>
             </div>
             <div class="home-hero__image">
                 <img src="/assets/pro_pic_grey.jpg" alt="A picture of Graham Joss">
@@ -46,6 +49,19 @@ export function renderHome(ctx) {
         img.src = greySrc;
         root.style.setProperty('--bg', originalBg);
     });
+}
+export function renderAbout(ctx) {
+    document.title = " about - 𝔾𝓡⍲ℳ "; 
+    ctx.mount.innerHTML = `
+        <section class="">
+            <div class="">
+                <h1>What it mean to live a life worth live? </h1>
+                <p>
+					"To live is to risk it all; otherwise, you're just an inert chunk of randomly assembled molecules drifting wherever the universe blows you" - Rick C137
+                </p>
+            </div>
+        </section>
+    `;
 }
 
 export function renderGuides(ctx) {
