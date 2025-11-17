@@ -18,6 +18,13 @@ export function renderHome(ctx) {
                 <img src="/assets/pro_pic_grey.jpg" alt="A picture of Graham Joss">
             </div>
         </section>
+        <section>
+            <h2>Documents</h2>
+            <div class="card-actions">
+                <a href="/assets/Resume.pdf" target="_blank" rel="noopener noreferrer" class="button-primary">View Resume</a>
+                <a href="/assets/CoverLetter.pdf" target="_blank" rel="noopener noreferrer" class="button-secondary">View Cover Letter</a>
+            </div>
+        </section>
     `;
 
     const img = ctx.mount.querySelector('.home-hero__image img');
