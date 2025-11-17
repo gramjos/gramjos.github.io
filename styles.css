@@ -188,33 +188,6 @@ a:focus-visible {
     text-align: center;
 }
 
-/* Respect OS dark mode, reusing the token palette above. */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #020617;
-        --fg: #e2e8f0;
-        --muted: #cbd5f5;
-        --border: #1f2937;
-    }
-
-    .view-container section,
-    .card {
-        background: rgba(15, 23, 42, 0.85);
-    }
-
-    .card {
-        border-color: #1f2937;
-    }
-
-    .card:hover {
-        border-color: var(--accent);
-    }
-
-    .notes-directory-panel {
-        background: rgba(15, 23, 42, 0.85);
-        border-color: #1f2937;
-    }
-}
 
 /* Notes content experience */
 .notes-view {
