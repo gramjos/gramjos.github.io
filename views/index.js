@@ -5,14 +5,40 @@ import { codeBlock, escapeHtml } from '../utils/rendering.js';
 import { initializeExcalidrawEmbeds } from '../utils/excalidraw.js';
 
 export function renderHome(ctx) {
-    document.title = "𝔾𝓡⍲ℳ; "; 
+    document.title = " 𝔾𝓡⍲ℳ "; 
     ctx.mount.innerHTML = `
-        <section>
-            <h1>A Curious Tinkeria </h1>
-            <p>
-                My musings for you.
-            </p>
+        <section class="home-hero">
+            <div class="home-hero__text">
+                <h1>A Curious Tinkeria </h1>
+                <p>
+                    My musings for you.
+                </p>
+            </div>
+            <div class="home-hero__image">
+                <img src="/assets/pro_pic_grey.jpg" alt="A picture of Graham Joss">
+            </div>
+        </section>
     `;
+
+    const img = ctx.mount.querySelector('.home-hero__image img');
+    const greySrc = '/assets/pro_pic_grey.jpg';
+    const colorSrc = '/assets/pro_pic.jpg';
+    const root = document.documentElement;
+    const originalBg = getComputedStyle(root).getPropertyValue('--bg').trim();
+    const deepBlueBg = '#2e8aecff';
+
+    // Preload the color image to prevent a flash on first hover
+    const colorImage = new Image();
+    colorImage.src = colorSrc;
+
+    img.addEventListener('mouseenter', () => {
+        img.src = colorSrc;
+        root.style.setProperty('--bg', deepBlueBg);
+    });
+    img.addEventListener('mouseleave', () => {
+        img.src = greySrc;
+        root.style.setProperty('--bg', originalBg);
+    });
 }
 
 export function renderGuides(ctx) {
