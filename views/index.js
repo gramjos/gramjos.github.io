@@ -55,9 +55,11 @@ export function renderAbout(ctx) {
     ctx.mount.innerHTML = `
         <section class="">
             <div class="">
-                <h1>What it mean to live a life worth live? </h1>
-                <p>
+                <h1>What does it mean to live a life worth live? </h1>
 					"To live is to risk it all; otherwise, you're just an inert chunk of randomly assembled molecules drifting wherever the universe blows you" - Rick C137
+                </p>
+                <p>
+				Only those who will risk going too far can possibly find out how far one can go. -T. S. Eliot
                 </p>
             </div>
         </section>
