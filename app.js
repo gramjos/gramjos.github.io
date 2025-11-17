@@ -4,6 +4,7 @@ import { renderNoteDetail, renderGuideDetail, renderGuides, renderNotes, renderH
 import { renderProjects, renderProjectDetail } from './projects/projects-view.js';
 
 // Wire up the view functions to URL templates.
+debugger; 
 const router = createRouter({
     mountNode: document.getElementById('app'),
     routes: [
@@ -20,4 +21,5 @@ const router = createRouter({
 
 // This call attaches the global click/popstate listeners
 // and runs the first route match to render the initial page.
+debugger; 
 router.start();

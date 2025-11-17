@@ -5,34 +5,13 @@ import { codeBlock, escapeHtml } from '../utils/rendering.js';
 import { initializeExcalidrawEmbeds } from '../utils/excalidraw.js';
 
 export function renderHome(ctx) {
-    document.title = 'Plain Vanilla SPA';
+    document.title = '𝔾𝓡⍲ℳ;';
     ctx.mount.innerHTML = `
         <section>
-            <h1>Deep linking with zero frameworks</h1>
+            <h1>A Curious Tinkeria </h1>
             <p>
-                This single-page app uses nothing more than the History API and a tiny dispatcher.
-                Links stay semantic, URLs stay clean, and every view is just a function.
+                My musings for you.
             </p>
-            <ul>
-                <li>Intercept anchors and emit navigation intents</li>
-                <li>Use <code>pushState</code>/<code>replaceState</code> to keep the address bar honest</li>
-                <li>Listen to <code>popstate</code> to sync browser chrome with your views</li>
-            </ul>
-            <p>
-                Ready for the deeper dive? Browse the <a href="/guides">routing guides</a> to see each building block explained.
-            </p>
-        </section>
-        <section>
-            <h2>Route-aware rendering</h2>
-            <p>
-                The router keeps track of the current path (<strong>${escapeHtml(ctx.location.path)}</strong>)
-                and hands that information to declarative view functions. No framework magic needed.
-            </p>
-            ${codeBlock(`// a view is just a function
-function renderHome(ctx) {
-  ctx.mount.innerHTML = '<h1>Hello</h1>';
-}`)}
-        </section>
     `;
 }
 
