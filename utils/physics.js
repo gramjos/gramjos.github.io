@@ -21,6 +21,11 @@ export class PhysicsWorld {
         // Target frame time for physics scaling (60fps = ~16.67ms)
         this.targetFrameTime = 1000 / 60;
         
+        // Collision constants
+        this.collisionBuffer = 0.5;           // Small buffer to prevent re-collision
+        this.groundFriction = 0.98;           // Extra friction when on ground
+        this.particleRestitution = 0.8;       // Bounciness factor for particle-particle collisions
+        
         this.setupCanvas();
         this.bindEvents();
     }
@@ -192,7 +197,7 @@ export class PhysicsWorld {
             p.vy = -Math.abs(p.vy) * damping;
             
             // Apply extra friction when on ground to settle faster
-            p.vx *= 0.98;
+            p.vx *= this.groundFriction;
         }
     }
     
@@ -225,8 +230,8 @@ export class PhysicsWorld {
         
         // Separate particles first (prevents jitter from overlapping)
         const overlap = minDist - distance;
-        const separationX = (overlap / 2 + 0.5) * nx; // Add small buffer
-        const separationY = (overlap / 2 + 0.5) * ny;
+        const separationX = (overlap / 2 + this.collisionBuffer) * nx;
+        const separationY = (overlap / 2 + this.collisionBuffer) * ny;
         
         p1.x -= separationX;
         p1.y -= separationY;
@@ -244,7 +249,7 @@ export class PhysicsWorld {
         if (dvn > 0) return;
         
         // Calculate impulse (equal masses assumed)
-        const restitution = this.bounce * 0.8; // Slightly less bouncy for particle-particle
+        const restitution = this.bounce * this.particleRestitution;
         const impulse = -(1 + restitution) * dvn / 2;
         
         // Apply impulse
