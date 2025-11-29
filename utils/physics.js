@@ -9,13 +9,22 @@ export class PhysicsWorld {
         this.mouse = { x: 0, y: 0, isActive: false };
         this.animationId = null;
         this.isRunning = false;
+        this.lastTime = 0;
         
-        // Physics constants
+        // Physics constants (tuned for 60fps baseline, scaled by delta time)
         this.gravity = options.gravity ?? 0.3;
         this.friction = options.friction ?? 0.99;
         this.bounce = options.bounce ?? 0.7;
         this.mouseRadius = options.mouseRadius ?? 120;
         this.mouseStrength = options.mouseStrength ?? 0.15;
+        
+        // Target frame time for physics scaling (60fps = ~16.67ms)
+        this.targetFrameTime = 1000 / 60;
+        
+        // Collision constants
+        this.collisionBuffer = 0.5;           // Small buffer to prevent re-collision
+        this.groundFriction = 0.98;           // Extra friction when on ground
+        this.particleRestitution = 0.8;       // Bounciness factor for particle-particle collisions
         
         this.setupCanvas();
         this.bindEvents();
@@ -26,9 +35,26 @@ export class PhysicsWorld {
     }
     
     resize() {
-        const rect = this.canvas.parentElement.getBoundingClientRect();
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
+        // Use the actual container dimensions
+        const container = this.canvas.parentElement;
+        const rect = container.getBoundingClientRect();
+        
+        // Set canvas dimensions to match container exactly
+        // Use devicePixelRatio for crisp rendering on high-DPI displays
+        const dpr = window.devicePixelRatio || 1;
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        
+        // Scale canvas CSS to match container
+        this.canvas.style.width = rect.width + 'px';
+        this.canvas.style.height = rect.height + 'px';
+        
+        // Scale context for high-DPI rendering
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        
+        // Store logical dimensions for physics calculations
+        this.width = rect.width;
+        this.height = rect.height;
     }
     
     bindEvents() {
@@ -70,8 +96,8 @@ export class PhysicsWorld {
     
     createParticle(options = {}) {
         const particle = {
-            x: options.x ?? Math.random() * this.canvas.width,
-            y: options.y ?? Math.random() * this.canvas.height,
+            x: options.x ?? Math.random() * this.width,
+            y: options.y ?? Math.random() * this.height,
             vx: options.vx ?? (Math.random() - 0.5) * 2,
             vy: options.vy ?? (Math.random() - 0.5) * 2,
             radius: options.radius ?? Math.random() * 20 + 10,
@@ -97,61 +123,91 @@ export class PhysicsWorld {
     }
     
     redistributeParticles() {
-        this.particles.forEach((p) => {
-            if (p.x > this.canvas.width) p.x = this.canvas.width - p.radius;
-            if (p.y > this.canvas.height) p.y = this.canvas.height - p.radius;
-        });
+        // Ensure particles stay within bounds after resize
+        for (const p of this.particles) {
+            // Clamp positions to be within the new canvas bounds
+            p.x = Math.max(p.radius, Math.min(this.width - p.radius, p.x));
+            p.y = Math.max(p.radius, Math.min(this.height - p.radius, p.y));
+        }
     }
     
-    update() {
+    update(deltaTime) {
+        // Scale physics by delta time for consistent simulation
+        const timeScale = deltaTime / this.targetFrameTime;
+        
         for (const p of this.particles) {
-            // Apply gravity
-            p.vy += this.gravity;
+            // Apply gravity (scaled by time)
+            p.vy += this.gravity * timeScale;
             
             // Apply mouse interaction
             if (this.mouse.isActive) {
                 const dx = p.x - this.mouse.x;
                 const dy = p.y - this.mouse.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                const distSq = dx * dx + dy * dy;
+                const distance = Math.sqrt(distSq);
                 
                 if (distance < this.mouseRadius && distance > 0) {
                     const force = (this.mouseRadius - distance) / this.mouseRadius;
-                    const angle = Math.atan2(dy, dx);
-                    p.vx += Math.cos(angle) * force * this.mouseStrength * 10;
-                    p.vy += Math.sin(angle) * force * this.mouseStrength * 10;
+                    const nx = dx / distance;
+                    const ny = dy / distance;
+                    p.vx += nx * force * this.mouseStrength * 10 * timeScale;
+                    p.vy += ny * force * this.mouseStrength * 10 * timeScale;
                 }
             }
             
-            // Apply friction
-            p.vx *= this.friction;
-            p.vy *= this.friction;
+            // Apply friction (use power for time-correct damping)
+            const frictionFactor = Math.pow(this.friction, timeScale);
+            p.vx *= frictionFactor;
+            p.vy *= frictionFactor;
             
-            // Update position
-            p.x += p.vx;
-            p.y += p.vy;
+            // Update position (scaled by time)
+            p.x += p.vx * timeScale;
+            p.y += p.vy * timeScale;
             
-            // Boundary collision
-            if (p.x - p.radius < 0) {
-                p.x = p.radius;
-                p.vx *= -this.bounce;
-            } else if (p.x + p.radius > this.canvas.width) {
-                p.x = this.canvas.width - p.radius;
-                p.vx *= -this.bounce;
-            }
-            
-            if (p.y - p.radius < 0) {
-                p.y = p.radius;
-                p.vy *= -this.bounce;
-            } else if (p.y + p.radius > this.canvas.height) {
-                p.y = this.canvas.height - p.radius;
-                p.vy *= -this.bounce;
-            }
+            // Boundary collision with proper clamping
+            this.resolveBoundaryCollision(p);
         }
         
-        // Simple particle-particle collision
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                this.resolveCollision(this.particles[i], this.particles[j]);
+        // Particle-particle collision with improved resolution
+        this.resolveParticleCollisions();
+    }
+    
+    resolveBoundaryCollision(p) {
+        const damping = this.bounce;
+        
+        // Left wall
+        if (p.x < p.radius) {
+            p.x = p.radius;
+            p.vx = Math.abs(p.vx) * damping;
+        }
+        // Right wall
+        else if (p.x > this.width - p.radius) {
+            p.x = this.width - p.radius;
+            p.vx = -Math.abs(p.vx) * damping;
+        }
+        
+        // Top wall
+        if (p.y < p.radius) {
+            p.y = p.radius;
+            p.vy = Math.abs(p.vy) * damping;
+        }
+        // Bottom wall
+        else if (p.y > this.height - p.radius) {
+            p.y = this.height - p.radius;
+            p.vy = -Math.abs(p.vy) * damping;
+            
+            // Apply extra friction when on ground to settle faster
+            p.vx *= this.groundFriction;
+        }
+    }
+    
+    resolveParticleCollisions() {
+        const particles = this.particles;
+        const len = particles.length;
+        
+        for (let i = 0; i < len; i++) {
+            for (let j = i + 1; j < len; j++) {
+                this.resolveCollision(particles[i], particles[j]);
             }
         }
     }
@@ -159,64 +215,70 @@ export class PhysicsWorld {
     resolveCollision(p1, p2) {
         const dx = p2.x - p1.x;
         const dy = p2.y - p1.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distSq = dx * dx + dy * dy;
         const minDist = p1.radius + p2.radius;
+        const minDistSq = minDist * minDist;
         
-        if (distance < minDist && distance > 0) {
-            // Normalize collision vector
-            const nx = dx / distance;
-            const ny = dy / distance;
-            
-            // Relative velocity
-            const dvx = p1.vx - p2.vx;
-            const dvy = p1.vy - p2.vy;
-            
-            // Relative velocity along collision normal
-            const dvn = dvx * nx + dvy * ny;
-            
-            // Don't resolve if velocities are separating
-            if (dvn > 0) return;
-            
-            // Calculate impulse (simplified - assuming equal masses)
-            const restitution = this.bounce;
-            const impulse = -(1 + restitution) * dvn / 2;
-            
-            // Apply impulse
-            p1.vx += impulse * nx;
-            p1.vy += impulse * ny;
-            p2.vx -= impulse * nx;
-            p2.vy -= impulse * ny;
-            
-            // Separate particles to avoid overlap
-            const overlap = (minDist - distance) / 2;
-            p1.x -= overlap * nx;
-            p1.y -= overlap * ny;
-            p2.x += overlap * nx;
-            p2.y += overlap * ny;
-        }
+        // Early exit if not colliding
+        if (distSq >= minDistSq || distSq === 0) return;
+        
+        const distance = Math.sqrt(distSq);
+        
+        // Normalize collision vector
+        const nx = dx / distance;
+        const ny = dy / distance;
+        
+        // Separate particles first (prevents jitter from overlapping)
+        const overlap = minDist - distance;
+        const separationX = (overlap / 2 + this.collisionBuffer) * nx;
+        const separationY = (overlap / 2 + this.collisionBuffer) * ny;
+        
+        p1.x -= separationX;
+        p1.y -= separationY;
+        p2.x += separationX;
+        p2.y += separationY;
+        
+        // Relative velocity
+        const dvx = p1.vx - p2.vx;
+        const dvy = p1.vy - p2.vy;
+        
+        // Relative velocity along collision normal
+        const dvn = dvx * nx + dvy * ny;
+        
+        // Don't resolve if velocities are separating
+        if (dvn > 0) return;
+        
+        // Calculate impulse (equal masses assumed)
+        const restitution = this.bounce * this.particleRestitution;
+        const impulse = -(1 + restitution) * dvn / 2;
+        
+        // Apply impulse
+        p1.vx += impulse * nx;
+        p1.vy += impulse * ny;
+        p2.vx -= impulse * nx;
+        p2.vy -= impulse * ny;
     }
     
     draw() {
-        // Clear canvas with slight transparency for trail effect
-        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        // Clear canvas completely for clean rendering
+        this.ctx.clearRect(0, 0, this.width, this.height);
         
         // Draw particles
         for (const p of this.particles) {
+            // Draw shadow first for depth
+            this.ctx.beginPath();
+            this.ctx.arc(p.x + 2, p.y + 2, p.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            this.ctx.fill();
+            
+            // Draw main particle
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
             this.ctx.fillStyle = p.color;
             this.ctx.fill();
             
-            // Add subtle shadow for depth
-            this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            this.ctx.shadowBlur = 10;
-            this.ctx.shadowOffsetX = 2;
-            this.ctx.shadowOffsetY = 2;
-            
             // Draw label if exists
             if (p.label) {
-                this.ctx.shadowColor = 'transparent';
                 this.ctx.fillStyle = p.fontColor;
                 this.ctx.font = `bold ${p.fontSize}px Inter, sans-serif`;
                 this.ctx.textAlign = 'center';
@@ -224,12 +286,6 @@ export class PhysicsWorld {
                 this.ctx.fillText(p.label, p.x, p.y);
             }
         }
-        
-        // Reset shadow
-        this.ctx.shadowColor = 'transparent';
-        this.ctx.shadowBlur = 0;
-        this.ctx.shadowOffsetX = 0;
-        this.ctx.shadowOffsetY = 0;
         
         // Draw mouse interaction indicator
         if (this.mouse.isActive) {
@@ -241,17 +297,26 @@ export class PhysicsWorld {
         }
     }
     
-    loop() {
+    loop(currentTime) {
         if (!this.isRunning) return;
-        this.update();
+        
+        // Calculate delta time in milliseconds
+        const deltaTime = this.lastTime ? currentTime - this.lastTime : this.targetFrameTime;
+        this.lastTime = currentTime;
+        
+        // Cap delta time to prevent large jumps (e.g., when tab is backgrounded)
+        const cappedDelta = Math.min(deltaTime, this.targetFrameTime * 3);
+        
+        this.update(cappedDelta);
         this.draw();
-        this.animationId = requestAnimationFrame(() => this.loop());
+        this.animationId = requestAnimationFrame((time) => this.loop(time));
     }
     
     start() {
         if (this.isRunning) return;
         this.isRunning = true;
-        this.loop();
+        this.lastTime = 0;
+        this.animationId = requestAnimationFrame((time) => this.loop(time));
     }
     
     stop() {
@@ -306,17 +371,19 @@ export function createSkillBubbles(world, skills = []) {
     
     const items = skills.length > 0 ? skills : defaultSkills;
     
+    // Use logical dimensions
+    const centerX = world.width / 2;
+    const centerY = world.height / 2;
+    const spreadRadius = Math.min(world.width, world.height) * 0.25;
+    
     items.forEach((skill, index) => {
         const angle = (index / items.length) * Math.PI * 2;
-        const centerX = world.canvas.width / 2;
-        const centerY = world.canvas.height / 2;
-        const radius = Math.min(world.canvas.width, world.canvas.height) * 0.25;
         
         world.createParticle({
-            x: centerX + Math.cos(angle) * radius,
-            y: centerY + Math.sin(angle) * radius,
-            vx: (Math.random() - 0.5) * 3,
-            vy: (Math.random() - 0.5) * 3 - 2,
+            x: centerX + Math.cos(angle) * spreadRadius,
+            y: centerY + Math.sin(angle) * spreadRadius,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
             radius: 35 + Math.random() * 10,
             color: skill.color,
             label: skill.label,
@@ -330,10 +397,10 @@ export function createSkillBubbles(world, skills = []) {
 export function createFloatingParticles(world, count = 15) {
     for (let i = 0; i < count; i++) {
         world.createParticle({
-            x: Math.random() * world.canvas.width,
-            y: Math.random() * world.canvas.height,
+            x: Math.random() * world.width,
+            y: Math.random() * world.height,
             vx: (Math.random() - 0.5) * 2,
-            vy: (Math.random() - 0.5) * 2 - 1,
+            vy: (Math.random() - 0.5) * 2,
             radius: 8 + Math.random() * 15,
             color: world.randomColor(),
         });
