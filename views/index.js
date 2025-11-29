@@ -52,11 +52,10 @@ export function renderHome(ctx) {
     const splashContainer = document.getElementById('splash-physics');
     if (splashContainer) {
         currentPhysicsWorld = createSplashPhysics(splashContainer, {
-            gravity: 0.15,
-            friction: 0.997,
-            bounce: 0.65,
-            mouseRadius: 100,
-            mouseStrength: 0.25,
+            damping: 0.96,
+            mouseRadius: 140,
+            mouseStrength: 0.6,
+            returnStrength: 0.003,
         });
         
         // Create skill bubbles and decorative particles
