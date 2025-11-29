@@ -45,11 +45,16 @@ export class PhysicsWorld {
         this.canvas.addEventListener('touchstart', () => { this.mouse.isActive = true; });
         this.canvas.addEventListener('touchend', () => { this.mouse.isActive = false; });
         
-        // Resize handling
-        window.addEventListener('resize', () => {
-            this.resize();
-            this.redistributeParticles();
-        });
+        // Resize handling with debounce
+        let resizeTimeout;
+        this.resizeHandler = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.resize();
+                this.redistributeParticles();
+            }, 100);
+        };
+        window.addEventListener('resize', this.resizeHandler);
     }
     
     handlePointerMove(e) {
@@ -260,6 +265,10 @@ export class PhysicsWorld {
     destroy() {
         this.stop();
         this.particles = [];
+        // Clean up resize listener
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
     }
 }
 
