@@ -3,10 +3,28 @@ import { guides, guidesBySlug } from '../guides.js';
 import { resolveNode, fetchHtml, toNotesHref } from '../notes/content-store.js';
 import { codeBlock, escapeHtml } from '../utils/rendering.js';
 import { initializeExcalidrawEmbeds } from '../utils/excalidraw.js';
+import { createSplashPhysics, createSkillBubbles, createFloatingParticles } from '../utils/physics.js';
+
+// Track the physics world instance for cleanup
+let currentPhysicsWorld = null;
 
 export function renderHome(ctx) {
+    // Clean up any existing physics world
+    if (currentPhysicsWorld) {
+        currentPhysicsWorld.destroy();
+        currentPhysicsWorld = null;
+    }
+    
     document.title = " 𝔾𝓡⍲ℳ "; 
     ctx.mount.innerHTML = `
+        <section class="splash-section">
+            <div class="splash-container" id="splash-physics"></div>
+            <div class="splash-overlay">
+                <h1 class="splash-title">Graham Joss</h1>
+                <p class="splash-subtitle">A Curious Tinkerer</p>
+                <p class="splash-hint">Move your mouse to interact with the bubbles</p>
+            </div>
+        </section>
         <section class="home-hero">
             <div class="home-hero__text">
                 <h1>A Curious Tinkeria </h1>
@@ -29,6 +47,25 @@ export function renderHome(ctx) {
             </div>
         </section>
     `;
+
+    // Initialize the physics splash page
+    const splashContainer = document.getElementById('splash-physics');
+    if (splashContainer) {
+        currentPhysicsWorld = createSplashPhysics(splashContainer, {
+            gravity: 0.15,
+            friction: 0.997,
+            bounce: 0.65,
+            mouseRadius: 100,
+            mouseStrength: 0.25,
+        });
+        
+        // Create skill bubbles and decorative particles
+        createSkillBubbles(currentPhysicsWorld);
+        createFloatingParticles(currentPhysicsWorld, 10);
+        
+        // Start the physics simulation
+        currentPhysicsWorld.start();
+    }
 
     const img = ctx.mount.querySelector('.home-hero__image img');
     const greySrc = '/assets/pro_pic_grey.jpg';
