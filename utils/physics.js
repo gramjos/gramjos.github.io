@@ -15,7 +15,6 @@ export class PhysicsWorld {
         this.damping = options.damping ?? 0.98;
         this.mouseRadius = options.mouseRadius ?? 150;
         this.mouseStrength = options.mouseStrength ?? 0.8;
-        this.driftSpeed = options.driftSpeed ?? 0.3;
         this.returnStrength = options.returnStrength ?? 0.002;
         
         this.setupCanvas();
@@ -87,7 +86,11 @@ export class PhysicsWorld {
             phase: Math.random() * Math.PI * 2,
             driftAmplitude: options.driftAmplitude ?? (15 + Math.random() * 20),
             driftFrequency: options.driftFrequency ?? (0.5 + Math.random() * 0.5),
+            // Pre-compute glow color for performance
+            glowColor: null,
         };
+        // Compute glow color once
+        particle.glowColor = particle.color.replace(/[\d.]+\)$/, '0.15)');
         return this.addParticle(particle);
     }
     
@@ -139,9 +142,10 @@ export class PhysicsWorld {
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < this.mouseRadius && distance > 0) {
-                    // Smooth cubic falloff for natural feel
+                    // Smooth cubic falloff for natural feel (manual multiplication for performance)
                     const normalizedDist = distance / this.mouseRadius;
-                    const force = Math.pow(1 - normalizedDist, 2) * this.mouseStrength;
+                    const oneMinusNorm = 1 - normalizedDist;
+                    const force = oneMinusNorm * oneMinusNorm * this.mouseStrength;
                     
                     p.vx += (dx / distance) * force;
                     p.vy += (dy / distance) * force;
@@ -219,11 +223,10 @@ export class PhysicsWorld {
         
         // Draw particles with subtle glow effect
         for (const p of this.particles) {
-            // Outer glow
+            // Outer glow (use pre-computed color)
             this.ctx.beginPath();
             this.ctx.arc(p.x, p.y, p.radius + 4, 0, Math.PI * 2);
-            const glowColor = p.color.replace(/[\d.]+\)$/, '0.15)');
-            this.ctx.fillStyle = glowColor;
+            this.ctx.fillStyle = p.glowColor;
             this.ctx.fill();
             
             // Main circle
@@ -306,7 +309,6 @@ export function createSplashPhysics(container, options = {}) {
         damping: options.damping ?? 0.96,
         mouseRadius: options.mouseRadius ?? 140,
         mouseStrength: options.mouseStrength ?? 0.6,
-        driftSpeed: options.driftSpeed ?? 0.4,
         returnStrength: options.returnStrength ?? 0.003,
     });
     
