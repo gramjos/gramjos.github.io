@@ -2,6 +2,10 @@
 import { createRoute, createRouter } from './router.js';
 import { renderNoteDetail, renderGuideDetail, renderAbout, renderGuides, renderNotes, renderHome, renderNotFound } from './views/index.js';
 import { renderProjects, renderProjectDetail } from './projects/projects-view.js';
+import { initStarfield } from './utils/starfield.js';
+
+// Initialize the starfield background
+initStarfield();
 
 // Wire up the view functions to URL templates.
 debugger; 
