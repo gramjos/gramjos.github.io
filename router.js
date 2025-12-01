@@ -95,7 +95,8 @@ export function createRouter({ mountNode, routes }) {
         }
     };
 
-    // Execute the render function with a minimal context object.
+    // Execute the render function with a minimal context object,
+    // wrapped in a smooth page transition animation.
     const renderRoute = (route, params, locationState) => {
         const context = {
             mount: mountNode,
@@ -104,7 +105,50 @@ export function createRouter({ mountNode, routes }) {
             navigate,
             route: route.template,
         };
-        route.render(context);
+
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // Skip animation on initial page load (no existing content)
+        if (!mountNode.innerHTML.trim() || prefersReducedMotion) {
+            route.render(context);
+            return;
+        }
+
+        // Animation duration constants (should match CSS)
+        const leaveAnimationDuration = 200;
+        const enterAnimationDuration = 300;
+        const timeoutBuffer = 50; // Extra buffer for safety
+
+        // Animate the page transition
+        mountNode.classList.add('page-transition-leave');
+        
+        let leaveCompleted = false;
+        const onLeaveEnd = () => {
+            if (leaveCompleted) return;
+            leaveCompleted = true;
+            
+            mountNode.classList.remove('page-transition-leave');
+            
+            // Render the new content
+            route.render(context);
+            
+            // Trigger enter animation
+            mountNode.classList.add('page-transition-enter');
+            
+            let enterCompleted = false;
+            const onEnterEnd = () => {
+                if (enterCompleted) return;
+                enterCompleted = true;
+                mountNode.classList.remove('page-transition-enter');
+            };
+            mountNode.addEventListener('animationend', onEnterEnd, { once: true });
+            // Fallback timeout in case animationend doesn't fire
+            setTimeout(onEnterEnd, enterAnimationDuration + timeoutBuffer);
+        };
+        mountNode.addEventListener('animationend', onLeaveEnd, { once: true });
+        // Fallback timeout in case animationend doesn't fire
+        setTimeout(onLeaveEnd, leaveAnimationDuration + timeoutBuffer);
     };
 
     // Reflect the current route in the persistent nav menu.
