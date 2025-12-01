@@ -660,3 +660,35 @@ a:focus-visible {
         opacity: 1;
     }
 }
+
+/* ============================================
+   Magnetic Micro-Interactions
+   ============================================ */
+
+/* Base styles for magnetic elements - ensure smooth transforms */
+.button-primary,
+.button-secondary,
+.site-nav a,
+.brand a,
+.card a,
+.notes-directory-panel li a,
+.notes-backlink,
+.breadcrumb a {
+    will-change: transform;
+    transform: translate(0, 0);
+}
+
+/* Disable magnetic effects when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .button-primary,
+    .button-secondary,
+    .site-nav a,
+    .brand a,
+    .card a,
+    .notes-directory-panel li a,
+    .notes-backlink,
+    .breadcrumb a {
+        transform: none !important;
+        transition: none !important;
+    }
+}

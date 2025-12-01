@@ -1,5 +1,6 @@
 // Router primitives keep history wiring isolated from view code.
 import { escapeRegExp } from './utils/rendering.js';
+import { refreshMagneticEffects } from './utils/magnetic.js';
 
 export function createRoute(template, render) {
     // Compile templates like "/guides/:slug" into executable matchers.
@@ -112,6 +113,8 @@ export function createRouter({ mountNode, routes }) {
         // Skip animation on initial page load (no existing content)
         if (!mountNode.innerHTML.trim() || prefersReducedMotion) {
             route.render(context);
+            // Apply magnetic effects to new content
+            refreshMagneticEffects();
             return;
         }
 
@@ -132,6 +135,9 @@ export function createRouter({ mountNode, routes }) {
             
             // Render the new content
             route.render(context);
+            
+            // Apply magnetic effects to new content
+            refreshMagneticEffects();
             
             // Trigger enter animation
             mountNode.classList.add('page-transition-enter');

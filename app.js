@@ -3,9 +3,13 @@ import { createRoute, createRouter } from './router.js';
 import { renderNoteDetail, renderGuideDetail, renderAbout, renderGuides, renderNotes, renderHome, renderNotFound } from './views/index.js';
 import { renderProjects, renderProjectDetail } from './projects/projects-view.js';
 import { initStarfield } from './utils/starfield.js';
+import { initMagneticEffects } from './utils/magnetic.js';
 
 // Initialize the starfield background
 initStarfield();
+
+// Initialize magnetic effects on header navigation
+initMagneticEffects('.site-nav a, .brand a');
 
 // Wire up the view functions to URL templates.
 debugger; 
