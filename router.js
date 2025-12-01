@@ -95,7 +95,8 @@ export function createRouter({ mountNode, routes }) {
         }
     };
 
-    // Execute the render function with a minimal context object.
+    // Execute the render function with a minimal context object,
+    // wrapped in a smooth page transition animation.
     const renderRoute = (route, params, locationState) => {
         const context = {
             mount: mountNode,
@@ -104,7 +105,36 @@ export function createRouter({ mountNode, routes }) {
             navigate,
             route: route.template,
         };
-        route.render(context);
+
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // Skip animation on initial page load (no existing content)
+        if (!mountNode.innerHTML.trim() || prefersReducedMotion) {
+            route.render(context);
+            return;
+        }
+
+        // Animate the page transition
+        mountNode.classList.add('page-transition-leave');
+        
+        const onLeaveEnd = () => {
+            mountNode.removeEventListener('animationend', onLeaveEnd);
+            mountNode.classList.remove('page-transition-leave');
+            
+            // Render the new content
+            route.render(context);
+            
+            // Trigger enter animation
+            mountNode.classList.add('page-transition-enter');
+            
+            const onEnterEnd = () => {
+                mountNode.removeEventListener('animationend', onEnterEnd);
+                mountNode.classList.remove('page-transition-enter');
+            };
+            mountNode.addEventListener('animationend', onEnterEnd, { once: true });
+        };
+        mountNode.addEventListener('animationend', onLeaveEnd, { once: true });
     };
 
     // Reflect the current route in the persistent nav menu.

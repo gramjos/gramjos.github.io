@@ -549,3 +549,54 @@ a:focus-visible {
         display: none;
     }
 }
+
+/* Page transition animations */
+.view-container {
+    position: relative;
+}
+
+.view-container.page-transition-leave {
+    animation: page-leave 200ms ease-in forwards;
+}
+
+.view-container.page-transition-enter {
+    animation: page-enter 300ms ease-out forwards;
+}
+
+@keyframes page-leave {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes page-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reduced motion preference support */
+@media (prefers-reduced-motion: reduce) {
+    .view-container.page-transition-leave,
+    .view-container.page-transition-enter {
+        animation: none;
+    }
+    
+    .view-container.page-transition-leave {
+        opacity: 0;
+    }
+    
+    .view-container.page-transition-enter {
+        opacity: 1;
+    }
+}
