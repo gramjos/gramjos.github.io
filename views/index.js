@@ -40,6 +40,22 @@ export function renderHome(ctx) {
             </div>
         </section>
         <section>
+            <h2>3D Trapdoor Card</h2>
+            <p>Click the card to reveal the secret message underneath.</p>
+            <div class="trapdoor-card" id="trapdoor-card">
+                <div class="trapdoor-card__inner">
+                    <div class="trapdoor-card__back">
+                        <h3>🎉 Secret Revealed!</h3>
+                        <p>You've discovered the hidden message. This trapdoor effect uses CSS 3D transforms with a springy cubic-bezier animation.</p>
+                    </div>
+                    <div class="trapdoor-card__front">
+                        <img src="/assets/pro_pic_grey.jpg" alt="Trapdoor card image">
+                    </div>
+                </div>
+                <span class="trapdoor-card__hint">Click to open</span>
+            </div>
+        </section>
+        <section>
             <h2>Documents</h2>
             <div class="card-actions">
                 <a href="/assets/Resume.pdf" target="_blank" rel="noopener noreferrer" class="button-primary">View Resume</a>
@@ -85,6 +101,14 @@ export function renderHome(ctx) {
         img.src = greySrc;
         root.style.setProperty('--bg', originalBg);
     });
+
+    // Initialize trapdoor card click toggle
+    const trapdoorCard = document.getElementById('trapdoor-card');
+    if (trapdoorCard) {
+        trapdoorCard.addEventListener('click', () => {
+            trapdoorCard.classList.toggle('open');
+        });
+    }
 }
 export function renderAbout(ctx) {
     document.title = " about - 𝔾𝓡⍲ℳ "; 
