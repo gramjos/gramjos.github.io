@@ -959,7 +959,7 @@ a:focus-visible {
     /* Hinge from the top edge */
     transform-origin: top center;
     /* Springy animation with cubic-bezier for bounce effect */
-    transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 2;
     background: white;
 }
@@ -1025,7 +1025,7 @@ a:focus-visible {
 /* Hide hint when card is open */
 .trapdoor-card.open .trapdoor-card__hint {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.6s ease;
 }
 
 /* Reduced motion preference support */
