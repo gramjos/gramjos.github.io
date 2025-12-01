@@ -16,14 +16,26 @@ export function applyMagneticEffect(element, options = {}) {
     // Store original transition to restore on cleanup
     const originalTransition = element.style.transition;
     
-    // Find the container - use the element itself if it's a container,
-    // otherwise use its parent
-    const container = element.parentElement || element;
+    // Cache element bounds to avoid forced layout recalculation on every mouse move
+    let cachedRect = null;
+    
+    const updateCache = () => {
+        cachedRect = element.getBoundingClientRect();
+    };
+    
+    const handleMouseEnter = () => {
+        // Update cache when mouse enters
+        updateCache();
+    };
     
     const handleMouseMove = (e) => {
-        const rect = element.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+        // Use cached bounds if available, otherwise update
+        if (!cachedRect) {
+            updateCache();
+        }
+        
+        const centerX = cachedRect.left + cachedRect.width / 2;
+        const centerY = cachedRect.top + cachedRect.height / 2;
         
         // Calculate distance from center
         const deltaX = e.clientX - centerX;
@@ -39,17 +51,22 @@ export function applyMagneticEffect(element, options = {}) {
     };
     
     const handleMouseLeave = () => {
+        // Clear cached bounds
+        cachedRect = null;
+        
         // Spring back with elastic transition
         element.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
         element.style.transform = 'translate(0, 0)';
     };
     
     // Use the element itself for event listeners
+    element.addEventListener('mouseenter', handleMouseEnter);
     element.addEventListener('mousemove', handleMouseMove);
     element.addEventListener('mouseleave', handleMouseLeave);
     
     // Store cleanup function on the element
     element._magneticCleanup = () => {
+        element.removeEventListener('mouseenter', handleMouseEnter);
         element.removeEventListener('mousemove', handleMouseMove);
         element.removeEventListener('mouseleave', handleMouseLeave);
         element.style.transition = originalTransition;
