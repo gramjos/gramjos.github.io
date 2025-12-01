@@ -49,7 +49,7 @@ export function renderHome(ctx) {
                         <p>You've discovered the hidden message. This trapdoor effect uses CSS 3D transforms with a springy cubic-bezier animation.</p>
                     </div>
                     <div class="trapdoor-card__front">
-                        <img src="/assets/pro_pic_grey.jpg" alt="Trapdoor card image">
+                        <img src="/assets/pro_pic_grey.jpg" alt="A picture of Graham Joss">
                     </div>
                 </div>
                 <span class="trapdoor-card__hint">Click to open</span>

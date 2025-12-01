@@ -1037,4 +1037,8 @@ a:focus-visible {
     .trapdoor-card.open .trapdoor-card__front {
         transform: rotateX(-90deg);
     }
+    
+    .trapdoor-card.open .trapdoor-card__hint {
+        transition: none;
+    }
 }
