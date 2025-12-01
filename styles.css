@@ -291,6 +291,98 @@ body {
     background: var(--accent);
 }
 
+/* ============================================
+   Hamburger Menu Toggle Button
+   ============================================ */
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+}
+
+.nav-toggle__bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--fg);
+    border-radius: 2px;
+    transition: transform 250ms ease, opacity 250ms ease;
+}
+
+/* Hamburger to X transformation when menu is open */
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ============================================
+   Responsive Navigation - Mobile First
+   ============================================ */
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: flex;
+    }
+
+    .site-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transition: max-height 300ms ease, opacity 250ms ease, visibility 0ms 300ms;
+    }
+
+    .site-nav.nav-open {
+        max-height: 300px;
+        opacity: 1;
+        visibility: visible;
+        transition: max-height 300ms ease, opacity 250ms ease, visibility 0ms;
+    }
+
+    .site-nav a {
+        padding: 0.75rem 0.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .site-nav a:last-child {
+        border-bottom: none;
+    }
+
+    .site-nav a::after {
+        display: none;
+    }
+
+    .site-nav a[data-active="true"] {
+        background: rgba(37, 99, 235, 0.08);
+        border-radius: 6px;
+    }
+}
+
 /* Constrain readable width and let sections stack vertically. */
 .view-container {
     position: relative;
