@@ -40,6 +40,38 @@ function initBrandClickAnimation() {
 
 initBrandClickAnimation();
 
+// Initialize mobile navigation toggle
+function initMobileNavToggle() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const siteNav = document.querySelector('.site-nav');
+    
+    if (!navToggle || !siteNav) return;
+    
+    navToggle.addEventListener('click', () => {
+        const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', !isOpen);
+        siteNav.classList.toggle('nav-open', !isOpen);
+    });
+    
+    // Close menu when a link is clicked
+    siteNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navToggle.setAttribute('aria-expanded', 'false');
+            siteNav.classList.remove('nav-open');
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+            navToggle.setAttribute('aria-expanded', 'false');
+            siteNav.classList.remove('nav-open');
+        }
+    });
+}
+
+initMobileNavToggle();
+
 // Wire up the view functions to URL templates.
 debugger; 
 const router = createRouter({
