@@ -115,11 +115,19 @@ export function createRouter({ mountNode, routes }) {
             return;
         }
 
+        // Animation duration constants (should match CSS)
+        const leaveAnimationDuration = 200;
+        const enterAnimationDuration = 300;
+        const timeoutBuffer = 50; // Extra buffer for safety
+
         // Animate the page transition
         mountNode.classList.add('page-transition-leave');
         
+        let leaveCompleted = false;
         const onLeaveEnd = () => {
-            mountNode.removeEventListener('animationend', onLeaveEnd);
+            if (leaveCompleted) return;
+            leaveCompleted = true;
+            
             mountNode.classList.remove('page-transition-leave');
             
             // Render the new content
@@ -128,13 +136,19 @@ export function createRouter({ mountNode, routes }) {
             // Trigger enter animation
             mountNode.classList.add('page-transition-enter');
             
+            let enterCompleted = false;
             const onEnterEnd = () => {
-                mountNode.removeEventListener('animationend', onEnterEnd);
+                if (enterCompleted) return;
+                enterCompleted = true;
                 mountNode.classList.remove('page-transition-enter');
             };
             mountNode.addEventListener('animationend', onEnterEnd, { once: true });
+            // Fallback timeout in case animationend doesn't fire
+            setTimeout(onEnterEnd, enterAnimationDuration + timeoutBuffer);
         };
         mountNode.addEventListener('animationend', onLeaveEnd, { once: true });
+        // Fallback timeout in case animationend doesn't fire
+        setTimeout(onLeaveEnd, leaveAnimationDuration + timeoutBuffer);
     };
 
     // Reflect the current route in the persistent nav menu.
