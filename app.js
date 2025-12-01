@@ -11,6 +11,35 @@ initStarfield();
 // Initialize magnetic effects on header navigation
 initMagneticEffects('.site-nav a, .brand a');
 
+// Initialize brand click animation
+function initBrandClickAnimation() {
+    const brandLink = document.querySelector('.brand a');
+    if (!brandLink) return;
+    
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+    
+    brandLink.addEventListener('click', (e) => {
+        // Remove class if already present (from a previous click)
+        brandLink.classList.remove('brand--clicked');
+        
+        // Force reflow to restart animation
+        void brandLink.offsetWidth;
+        
+        // Add class to trigger animation
+        brandLink.classList.add('brand--clicked');
+        
+        // Remove class after animation completes
+        setTimeout(() => {
+            brandLink.classList.remove('brand--clicked');
+        }, 600); // Match animation duration
+    });
+}
+
+initBrandClickAnimation();
+
 // Wire up the view functions to URL templates.
 debugger; 
 const router = createRouter({
