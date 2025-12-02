@@ -956,10 +956,10 @@ a:focus-visible {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    /* Hinge from the top edge */
-    transform-origin: top center;
+    /* Hinge from the left vertical edge for a door-like swing */
+    transform-origin: left center;
     /* Springy animation with cubic-bezier for bounce effect */
-    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 2;
     background: white;
 }
@@ -1003,10 +1003,10 @@ a:focus-visible {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Open state - front swings upward like a trapdoor */
+/* Open state - front swings outward like a door from the left edge */
 .trapdoor-card.open .trapdoor-card__front {
-    transform: rotateX(-105deg);
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+    transform: rotateY(-120deg);
+    box-shadow: 5px 0 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Hint text for user interaction */
@@ -1035,7 +1035,7 @@ a:focus-visible {
     }
     
     .trapdoor-card.open .trapdoor-card__front {
-        transform: rotateX(-90deg);
+        transform: rotateY(-90deg);
     }
     
     .trapdoor-card.open .trapdoor-card__hint {
