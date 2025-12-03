@@ -1,6 +1,16 @@
- azzk
 # ;)
- ctags -R --languages=Python,JavaScript,HTML,CSS --exclude=node_modules --exclude=dist --exclude=.git --exclude='*.geojson' --exclude='*.jpg' --exclude='*.excalidraw'
+#### Utilities:
+```zsh
+ctags -R --languages=Python,JavaScript,HTML,CSS --exclude=node_modules --exclude=dist --exclude=.git --exclude='*.geojson' --exclude='*.jpg' --exclude='*.excalidraw'
+```
+
+```zsh
+de () {            
+	git add .
+	git commit -m "${1:-'quick update'}"
+	git push
+}
+```
 
 ### Summary of Key Technical Pieces
 app.js: The "main" function. It defines the Route Table (the map of paths to functions) and starts the router.

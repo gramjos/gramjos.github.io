@@ -14,6 +14,19 @@ export const projects = [
             'Responsive design with FAB controls'
         ]
     },
+    {
+        id: 'obsidian-semantic-map',
+        title: 'Obsidian Semantic Map',
+        description: 'A 3D visualization of Obsidian notes using semantic mapping to explore connections and clusters within the knowledge base.',
+        url: '/semantic-search-notes/obsidian_semantic_map.html',
+        tags: ['visualization', '3d', 'obsidian', 'semantic-search'],
+        features: [
+            'Interactive 3D graph visualization',
+            'Semantic clustering of notes',
+            'Fullscreen exploration mode',
+            'Node interaction and details'
+        ]
+    },
     // Future projects can be added here
 ];
 

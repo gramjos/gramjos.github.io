@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Converts a subset of an Obsidian vault into static HTML fragments plus a
 navigable manifest for the Notes tab of the SPA.
